@@ -245,6 +245,52 @@
   .ios-step-text{font-size:12px;color:var(--text-secondary);line-height:1.6}
   .ios-step-text strong{color:var(--text-primary)}
   .ios-close-btn{width:100%;padding:12px;background:var(--accent-blue);color:white;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:6px}
+
+  /* ===== CALIBRATION ===== */
+  .cal-overlay{position:fixed;inset:0;background:rgba(10,14,23,0.97);z-index:8000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+  .cal-box{background:var(--bg-card);border:2px solid var(--border);border-radius:var(--radius);padding:20px;width:100%;max-width:420px}
+  .cal-title{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--accent-cyan);margin-bottom:4px;text-align:center;letter-spacing:1px;text-transform:uppercase}
+  .cal-subtitle{font-size:11px;color:var(--text-muted);text-align:center;margin-bottom:16px}
+  .cal-step-row{display:flex;gap:8px;margin-bottom:14px;align-items:stretch}
+  .cal-step{flex:1;background:var(--bg-secondary);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;transition:border-color .3s}
+  .cal-step.done{border-color:var(--accent-green)}
+  .cal-step.active{border-color:var(--accent-cyan)}
+  .cal-swatch{width:44px;height:44px;border-radius:8px;margin:0 auto 6px;border:2px solid var(--border)}
+  .cal-step-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+  .cal-step-val{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-secondary);line-height:1.4;min-height:28px}
+  .cal-step-status{font-size:10px;font-weight:700;margin-top:4px}
+  .cal-img-wrap{position:relative;width:100%;aspect-ratio:4/3;background:#000;border-radius:8px;overflow:hidden;cursor:crosshair;touch-action:none;margin-bottom:10px}
+  .cal-img-wrap img{width:100%;height:100%;object-fit:contain;pointer-events:none}
+  .cal-upload-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-muted);font-size:12px;gap:6px}
+  .cal-pick-marker{position:absolute;width:28px;height:28px;border:2px solid white;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;display:none;box-shadow:0 0 0 1px rgba(0,0,0,0.5)}
+  .cal-actions{display:flex;gap:6px;margin-top:4px}
+  .cal-btn{flex:1;padding:10px;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-secondary);border-radius:var(--radius-sm);font-size:12px;font-family:inherit;cursor:pointer;transition:all .2s;font-weight:600}
+  .cal-btn.primary{background:var(--gradient-blue);color:white;border:none}
+  .cal-btn.success{background:linear-gradient(135deg,#10b981,#059669);color:white;border:none}
+  .cal-btn.danger{background:transparent;border-color:var(--accent-red);color:var(--accent-red)}
+  .cal-result{background:var(--bg-secondary);border:1px solid var(--border);border-radius:8px;padding:10px;margin-top:10px;font-size:11px;color:var(--text-secondary);line-height:1.8;text-align:center}
+  .cal-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700}
+  .cal-badge.ok{background:rgba(16,185,129,0.15);color:var(--accent-green);border:1px solid rgba(16,185,129,0.3)}
+  .cal-badge.warn{background:rgba(245,158,11,0.15);color:var(--accent-amber);border:1px solid rgba(245,158,11,0.3)}
+  .cal-badge.none{background:rgba(148,163,184,0.1);color:var(--text-muted);border:1px solid var(--border)}
+  /* Cal status strip ใน mode-toggle */
+  .cal-status-strip{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;font-size:11px}
+  .cal-status-left{display:flex;align-items:center;gap:6px;color:var(--text-secondary)}
+  /* Picker summary card (top of picker mode) */
+  .picker-summary-card{background:var(--bg-card);border:2px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px;display:none;animation:slideUp .3s ease}
+  .picker-summary-card.visible{display:block}
+  .psc-row{display:flex;align-items:center;gap:12px}
+  .psc-pct{font-family:'JetBrains Mono',monospace;font-size:40px;font-weight:700;line-height:1;min-width:88px}
+  .psc-right{flex:1}
+  .psc-verdict{font-size:12px;font-weight:700;padding:3px 12px;border-radius:12px;display:inline-block;margin-bottom:6px}
+  .psc-bar-track{height:7px;background:var(--border);border-radius:4px;overflow:hidden}
+  .psc-bar-fill{height:100%;border-radius:4px;transition:width .4s ease}
+  .psc-swatches{display:flex;align-items:center;gap:6px;flex-shrink:0}
+  .psc-swatch{width:32px;height:32px;border-radius:8px;border:2px solid var(--border)}
+  .psc-details{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:8px}
+  .psc-chip{background:var(--bg-secondary);border:1px solid var(--border);border-radius:6px;padding:5px 7px;text-align:center}
+  .psc-chip-label{font-size:8px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px}
+  .psc-chip-val{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--text-primary)}
 </style>
 </head>
 <body>
@@ -424,6 +470,35 @@
 
     <!-- MODE: PICKER -->
     <div id="mode-picker" class="mode-panel">
+      <!-- Calibration status strip -->
+      <div class="cal-status-strip" id="calStatusStrip">
+        <div class="cal-status-left">
+          <span id="calStatusIcon">⚙️</span>
+          <span id="calStatusText">ยังไม่ได้ Calibrate</span>
+        </div>
+        <button onclick="openCal()" style="padding:5px 12px;border:1px solid var(--accent-cyan);background:transparent;color:var(--accent-cyan);border-radius:6px;font-size:11px;font-family:inherit;cursor:pointer;font-weight:600">🎯 Calibrate</button>
+      </div>
+      <!-- Picker Summary Card (% ความเหมือน) -->
+      <div class="picker-summary-card" id="pickerSummaryCard">
+        <div class="psc-row">
+          <div class="psc-pct" id="pscPct">—</div>
+          <div class="psc-right">
+            <div class="psc-verdict" id="pscVerdict"></div>
+            <div class="psc-bar-track"><div class="psc-bar-fill" id="pscBarFill" style="width:0%"></div></div>
+          </div>
+          <div class="psc-swatches">
+            <div class="psc-swatch" id="pscSwStd"></div>
+            <span style="font-size:13px;color:var(--text-muted)">→</span>
+            <div class="psc-swatch" id="pscSwSmp"></div>
+          </div>
+        </div>
+        <div class="psc-details">
+          <div class="psc-chip"><div class="psc-chip-label">ΔE*76</div><div class="psc-chip-val" id="pscDE">—</div></div>
+          <div class="psc-chip"><div class="psc-chip-label">ΔL*</div><div class="psc-chip-val" id="pscDL">—</div></div>
+          <div class="psc-chip"><div class="psc-chip-label">Δa*</div><div class="psc-chip-val" id="pscDA">—</div></div>
+          <div class="psc-chip"><div class="psc-chip-label">Δb*</div><div class="psc-chip-val" id="pscDB">—</div></div>
+        </div>
+      </div>
       <div class="compare-grid">
         <!-- Picker STD -->
         <div class="picker-container">
@@ -1359,10 +1434,27 @@ function copyHex(t){const hex=document.getElementById('hx'+Cap(t)).textContent;t
 let _lastLoggedPt=null;
 function checkPt(){
   const sec=document.getElementById('ptResult');
-  if(!S.pStdLab||!S.pSmpLab){sec.classList.remove('visible');return}
+  if(!S.pStdLab||!S.pSmpLab){sec.classList.remove('visible');document.getElementById('pickerSummaryCard').classList.remove('visible');return}
   sec.classList.add('visible');
-  const dE=dE76(S.pStdLab,S.pSmpLab),sim=Math.max(0,Math.min(100,100-dE)),v=getV(dE);
-  const _pdesc=getDeltaDescriptor(S.pStdLab,S.pSmpLab);
+  // Apply calibration offset before comparison
+  const labStdCal = applyCalibration(S.pStdLab);
+  const labSmpCal = applyCalibration(S.pSmpLab);
+  const dE=dE76(labStdCal,labSmpCal),sim=Math.max(0,Math.min(100,100-dE)),v=getV(dE);
+  const _pdesc=getDeltaDescriptor(labStdCal,labSmpCal);
+  // ---- UPDATE PICKER SUMMARY CARD (top) ----
+  const card=document.getElementById('pickerSummaryCard');
+  if(card){
+    card.classList.add('visible');
+    const _pp=document.getElementById('pscPct'); if(_pp){_pp.textContent=sim.toFixed(1)+'%';_pp.style.color=v.color;}
+    const _pv=document.getElementById('pscVerdict'); if(_pv){_pv.textContent=v.text;_pv.className='psc-verdict '+v.cls;}
+    const _pf=document.getElementById('pscBarFill'); if(_pf){_pf.style.width=sim.toFixed(1)+'%';_pf.style.background=v.color;}
+    const _ps=document.getElementById('pscSwStd'); if(_ps) _ps.style.background=`rgb(${S.pStdRGB.join(',')})`;
+    const _pm=document.getElementById('pscSwSmp'); if(_pm) _pm.style.background=`rgb(${S.pSmpRGB.join(',')})`;
+    const _de2=document.getElementById('pscDE'); if(_de2) _de2.textContent=dE.toFixed(2);
+    const _dl2=document.getElementById('pscDL'); if(_dl2){_dl2.textContent=(_pdesc.dL>0?'+':'')+_pdesc.dL;_dl2.style.color=parseFloat(_pdesc.dL)>0?'var(--accent-amber)':parseFloat(_pdesc.dL)<0?'var(--accent-purple)':'var(--text-muted)';}
+    const _da2=document.getElementById('pscDA'); if(_da2){_da2.textContent=(_pdesc.da>0?'+':'')+_pdesc.da;_da2.style.color=parseFloat(_pdesc.da)>0?'var(--accent-red)':'var(--accent-green)';}
+    const _db2=document.getElementById('pscDB'); if(_db2) _db2.textContent=(_pdesc.db>0?'+':'')+_pdesc.db;
+  }
   document.getElementById('pcSwStd').style.background=`rgb(${S.pStdRGB.join(',')})`;
   document.getElementById('pcSwSmp').style.background=`rgb(${S.pSmpRGB.join(',')})`;
   document.getElementById('pcScore').innerHTML=`<span style="color:${v.color}">${sim.toFixed(1)}%</span>`;
@@ -1601,6 +1693,237 @@ function dismissPWA(){
   document.getElementById('pwaBanner').classList.add('hidden');
   try{localStorage.setItem('pwa_dismissed','1');}catch(e){}
 }
+
+// ===== CALIBRATION SYSTEM =====
+const CAL = {
+  phase: 'black',
+  black: null,
+  white: null,
+  offset: null,
+  imgSrc: null,
+  pickedLab: null,
+  pickedRGB: null,
+};
+
+function openCal() {
+  CAL.phase = 'black'; CAL.black = null; CAL.white = null; CAL.offset = null;
+  CAL.imgSrc = null; CAL.pickedLab = null; CAL.pickedRGB = null;
+  try {
+    const saved = JSON.parse(localStorage.getItem('qc_cal') || 'null');
+    if(saved) { CAL.black = saved.black; CAL.white = saved.white; CAL.offset = saved.offset; }
+  } catch(e) {}
+  document.getElementById('calOverlay').classList.remove('hidden');
+  calRenderSteps();
+  calResetImg();
+  document.getElementById('calClearBtn').style.display = CAL.offset ? 'block' : 'none';
+}
+
+function closeCal() {
+  document.getElementById('calOverlay').classList.add('hidden');
+}
+
+function calRenderSteps() {
+  const bs = document.getElementById('calStepBlack');
+  const ws = document.getElementById('calStepWhite');
+  bs.className = 'cal-step' + (CAL.phase==='black'?' active':'') + (CAL.black?' done':'');
+  ws.className = 'cal-step' + (CAL.phase==='white'?' active':'') + (CAL.white?' done':'');
+  if(CAL.black) {
+    document.getElementById('calSwatchBlack').style.background = `rgb(${CAL.black.rgb.join(',')})`;
+    document.getElementById('calValBlack').textContent = `LAB: ${CAL.black.lab.map(v=>v.toFixed(1)).join(', ')}`;
+    document.getElementById('calStatusBlack').innerHTML = '<span style="color:var(--accent-green)">✅ วัดแล้ว</span>';
+  } else {
+    document.getElementById('calSwatchBlack').style.background = '#000';
+    document.getElementById('calValBlack').textContent = 'ยังไม่ได้วัด';
+    document.getElementById('calStatusBlack').textContent = '—';
+  }
+  if(CAL.white) {
+    document.getElementById('calSwatchWhite').style.background = `rgb(${CAL.white.rgb.join(',')})`;
+    document.getElementById('calValWhite').textContent = `LAB: ${CAL.white.lab.map(v=>v.toFixed(1)).join(', ')}`;
+    document.getElementById('calStatusWhite').innerHTML = '<span style="color:var(--accent-green)">✅ วัดแล้ว</span>';
+  } else {
+    document.getElementById('calSwatchWhite').style.background = '#fff';
+    document.getElementById('calValWhite').textContent = 'ยังไม่ได้วัด';
+    document.getElementById('calStatusWhite').textContent = '—';
+  }
+  const stepEl = document.getElementById('calCurrentStep');
+  if(!CAL.black) stepEl.textContent = 'ขั้นที่ 1: วางสีดำมาตรฐาน แล้วถ่ายหรืออัปโหลด จากนั้นแตะจุดบนสีดำ';
+  else if(!CAL.white) stepEl.textContent = 'ขั้นที่ 2: วางสีขาวมาตรฐาน แล้วถ่ายหรืออัปโหลด จากนั้นแตะจุดบนสีขาว';
+  else stepEl.textContent = '✅ วัดครบแล้ว — กด "บันทึก Calibration"';
+  document.getElementById('calMainActions').style.display = (CAL.black && CAL.white) ? 'flex' : 'none';
+  if(CAL.black && CAL.white) calShowResult();
+}
+
+function calShowResult() {
+  const dLb = 0 - CAL.black.lab[0], dab = 0 - CAL.black.lab[1], dbb = 0 - CAL.black.lab[2];
+  const dLw = 100 - CAL.white.lab[0], daw = 0 - CAL.white.lab[1], dbw = 0 - CAL.white.lab[2];
+  const dL = (dLb + dLw) / 2, da = (dab + daw) / 2, db = (dbb + dbw) / 2;
+  CAL.offset = { dL, da, db };
+  const blackDev = Math.sqrt(CAL.black.lab[0]**2 + CAL.black.lab[1]**2 + CAL.black.lab[2]**2);
+  const whiteDev = Math.sqrt((CAL.white.lab[0]-100)**2 + CAL.white.lab[1]**2 + CAL.white.lab[2]**2);
+  const quality = (blackDev < 10 && whiteDev < 10) ? 'ok' : 'warn';
+  const qualLabel = quality === 'ok' ? '✅ คุณภาพดี' : '⚠️ แสงมีผลมาก';
+  document.getElementById('calResultBox').style.display = 'block';
+  document.getElementById('calResultBox').innerHTML = `
+    <div style="margin-bottom:6px"><span class="cal-badge ${quality}">${qualLabel}</span></div>
+    <div>Offset: <b style="color:var(--accent-cyan)">ΔL*${dL>=0?'+':''}${dL.toFixed(2)} · Δa*${da>=0?'+':''}${da.toFixed(2)} · Δb*${db>=0?'+':''}${db.toFixed(2)}</b></div>
+    <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Black error: ${blackDev.toFixed(2)} | White error: ${whiteDev.toFixed(2)}</div>`;
+}
+
+function calSave() {
+  if(!CAL.black || !CAL.white || !CAL.offset) return;
+  try { localStorage.setItem('qc_cal', JSON.stringify({ black:CAL.black, white:CAL.white, offset:CAL.offset, ts:new Date().toISOString() })); } catch(e) {}
+  toast('✅ บันทึก Calibration สำเร็จ');
+  updateCalStatusStrip();
+  closeCal();
+}
+
+function calClear() {
+  if(!confirm('ล้าง Calibration ที่บันทึกไว้?')) return;
+  try { localStorage.removeItem('qc_cal'); } catch(e) {}
+  CAL.offset = null;
+  updateCalStatusStrip();
+  closeCal();
+  toast('🗑️ ล้าง Calibration แล้ว');
+}
+
+function calReset() {
+  CAL.phase = 'black'; CAL.black = null; CAL.white = null; CAL.offset = null;
+  CAL.imgSrc = null; calResetImg();
+  document.getElementById('calResultBox').style.display = 'none';
+  calRenderSteps();
+}
+
+function calResetImg() {
+  const img = document.getElementById('calImg');
+  img.style.display = 'none'; img.src = '';
+  document.getElementById('calPh').style.display = 'flex';
+  document.getElementById('calMarker').style.display = 'none';
+  const c = document.getElementById('calCanvas'); c.width = 0;
+}
+
+function calHandleFile(inp) {
+  const f = inp.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = e => {
+    CAL.imgSrc = e.target.result;
+    const img = document.getElementById('calImg');
+    img.src = CAL.imgSrc; img.style.display = 'block';
+    document.getElementById('calPh').style.display = 'none';
+    document.getElementById('calMarker').style.display = 'none';
+    const tmp = new Image();
+    tmp.onload = () => { const c=document.getElementById('calCanvas'); c.width=tmp.naturalWidth; c.height=tmp.naturalHeight; c.getContext('2d',{willReadFrequently:true}).drawImage(tmp,0,0); };
+    tmp.src = CAL.imgSrc;
+  };
+  r.readAsDataURL(f); inp.value = '';
+}
+
+function calPickAt(x, y) {
+  const c = document.getElementById('calCanvas'); if(!c.width) return;
+  const wrap = document.getElementById('calImgWrap');
+  const img = document.getElementById('calImg');
+  const wr = wrap.getBoundingClientRect();
+  const nw=img.naturalWidth, nh=img.naturalHeight;
+  const sc=Math.min(wr.width/nw, wr.height/nh);
+  const dw=nw*sc, dh=nh*sc, ox=(wr.width-dw)/2, oy=(wr.height-dh)/2;
+  const cx=Math.round((x-ox)/sc), cy=Math.round((y-oy)/sc);
+  if(cx<0||cy<0||cx>=nw||cy>=nh) return;
+  const ctx=c.getContext('2d',{willReadFrequently:true});
+  let rT=0,gT=0,bT=0,n=0;
+  for(let dx=-2;dx<=2;dx++) for(let dy=-2;dy<=2;dy++) {
+    const px=Math.max(0,Math.min(nw-1,cx+dx)), py=Math.max(0,Math.min(nh-1,cy+dy));
+    const d=ctx.getImageData(px,py,1,1).data; rT+=d[0];gT+=d[1];bT+=d[2];n++;
+  }
+  const rv=Math.round(rT/n),gv=Math.round(gT/n),bv=Math.round(bT/n);
+  const lab=rgb2lab(rv,gv,bv);
+  document.getElementById('calMarker').style.cssText += ';display:block;left:'+x+'px;top:'+y+'px';
+  if(CAL.phase==='black') {
+    CAL.black={lab,rgb:[rv,gv,bv]}; CAL.phase='white'; calResetImg();
+    toast('✅ บันทึกสีดำแล้ว — อัปโหลดภาพสีขาวต่อไป');
+  } else if(CAL.phase==='white') {
+    CAL.white={lab,rgb:[rv,gv,bv]}; CAL.phase='done';
+    toast('✅ บันทึกสีขาวแล้ว');
+  }
+  calRenderSteps();
+}
+
+function calTouch(e){e.preventDefault();const t=e.touches[0];const r=document.getElementById('calImgWrap').getBoundingClientRect();calPickAt(t.clientX-r.left,t.clientY-r.top);}
+function calTouchMove(e){e.preventDefault();}
+function calTouchEnd(){}
+function calMouse(e){if(!CAL.imgSrc)return;const r=document.getElementById('calImgWrap').getBoundingClientRect();calPickAt(e.clientX-r.left,e.clientY-r.top);}
+function calMouseMove(e){if(!CAL.imgSrc||!e.buttons)return;const r=document.getElementById('calImgWrap').getBoundingClientRect();calPickAt(e.clientX-r.left,e.clientY-r.top);}
+
+function updateCalStatusStrip() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('qc_cal')||'null');
+    const icon=document.getElementById('calStatusIcon');
+    const text=document.getElementById('calStatusText');
+    if(!icon||!text) return;
+    if(saved && saved.offset) {
+      const d=saved.offset;
+      icon.textContent='✅';
+      text.innerHTML=`<span style="color:var(--accent-green)">Calibrated</span> <span style="font-size:10px;color:var(--text-muted)">ΔL${d.dL>=0?'+':''}${d.dL.toFixed(1)} Δa${d.da>=0?'+':''}${d.da.toFixed(1)} Δb${d.db>=0?'+':''}${d.db.toFixed(1)}</span>`;
+    } else {
+      icon.textContent='⚠️'; text.textContent='ยังไม่ได้ Calibrate';
+    }
+  } catch(e) {}
+}
+
+function applyCalibration(lab) {
+  try {
+    const saved=JSON.parse(localStorage.getItem('qc_cal')||'null');
+    if(saved && saved.offset) return [lab[0]+saved.offset.dL, lab[1]+saved.offset.da, lab[2]+saved.offset.db];
+  } catch(e) {}
+  return lab;
+}
+
+window.addEventListener('DOMContentLoaded', ()=>{ updateCalStatusStrip(); });
+
 </script>
+
+<!-- ===== CALIBRATION OVERLAY ===== -->
+<div id="calOverlay" class="cal-overlay hidden">
+  <div class="cal-box">
+    <div class="cal-title">🎯 Color Calibration</div>
+    <div class="cal-subtitle">ถ่ายสีดำและสีขาวมาตรฐาน เพื่อชดเชยแสงกล้อง</div>
+    <div class="cal-step-row">
+      <div class="cal-step" id="calStepBlack">
+        <div class="cal-swatch" id="calSwatchBlack" style="background:#000"></div>
+        <div class="cal-step-label">⬛ สีดำ (Black)</div>
+        <div class="cal-step-val" id="calValBlack">ยังไม่ได้วัด</div>
+        <div class="cal-step-status" id="calStatusBlack" style="color:var(--text-muted)">—</div>
+      </div>
+      <div class="cal-step" id="calStepWhite">
+        <div class="cal-swatch" id="calSwatchWhite" style="background:#fff"></div>
+        <div class="cal-step-label">⬜ สีขาว (White)</div>
+        <div class="cal-step-val" id="calValWhite">ยังไม่ได้วัด</div>
+        <div class="cal-step-status" id="calStatusWhite" style="color:var(--text-muted)">—</div>
+      </div>
+    </div>
+    <!-- ขั้นตอนปัจจุบัน -->
+    <div style="font-size:11px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;text-align:center" id="calCurrentStep">ขั้นที่ 1: วางสีดำมาตรฐาน แล้วถ่ายภาพหรืออัปโหลด</div>
+    <div class="cal-img-wrap" id="calImgWrap"
+         ontouchstart="calTouch(event)" ontouchmove="calTouchMove(event)" ontouchend="calTouchEnd()"
+         onmousedown="calMouse(event)" onmousemove="calMouseMove(event)">
+      <img id="calImg" style="display:none;width:100%;height:100%;object-fit:contain;pointer-events:none">
+      <div class="cal-upload-ph" id="calPh"><span style="font-size:28px">📷</span><span>อัปโหลดภาพหรือถ่ายได้เลย</span></div>
+      <div class="cal-pick-marker" id="calMarker"></div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:8px">
+      <button class="cal-btn" onclick="document.getElementById('calFileInput').click()">📁 ไฟล์</button>
+      <button class="cal-btn" onclick="document.getElementById('calCamInput').click()">📷 กล้อง</button>
+      <button class="cal-btn danger" onclick="closeCal()">✕ ยกเลิก</button>
+    </div>
+    <input type="file" id="calFileInput" accept="image/*" class="hidden" onchange="calHandleFile(this)">
+    <input type="file" id="calCamInput" accept="image/*" capture="environment" class="hidden" onchange="calHandleFile(this)">
+    <div id="calResultBox" class="cal-result" style="display:none"></div>
+    <div class="cal-actions" id="calMainActions" style="display:none">
+      <button class="cal-btn success" id="calSaveBtn" onclick="calSave()">✅ บันทึก Calibration</button>
+      <button class="cal-btn danger" onclick="calReset()">🔄 เริ่มใหม่</button>
+    </div>
+    <button class="cal-btn danger" id="calClearBtn" onclick="calClear()" style="width:100%;margin-top:6px;display:none">🗑️ ล้าง Calibration ที่บันทึกไว้</button>
+  </div>
+</div>
+<canvas id="calCanvas" class="offscreen"></canvas>
+
 </body>
 </html>
