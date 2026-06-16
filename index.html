@@ -198,6 +198,8 @@
   .pin-error-msg{font-size:12px;color:#ef4444;height:18px;margin-bottom:8px;text-align:center}
   .pin-master-link{font-size:11px;color:#3b82f6;cursor:pointer;margin-top:8px;text-decoration:underline}
   .pin-setup-box{width:100%;max-width:300px;background:#111827;border:1px solid #2a3a5c;border-radius:16px;padding:20px;margin-top:8px}
+  #pinUnlockMode,#pinSetupMode{display:flex;flex-direction:column;align-items:center;text-align:center;width:100%}
+  #empIdStep,#pinStep{display:flex;flex-direction:column;align-items:center;text-align:center;width:100%}
   .pin-setup-title{font-size:13px;font-weight:600;color:#94a3b8;margin-bottom:12px;text-align:center;text-transform:uppercase;letter-spacing:1px}
   .descriptor-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.5px;margin-top:8px;flex-wrap:wrap;justify-content:center}
   .desc-pass{background:rgba(16,185,129,0.12);color:var(--accent-green);border:1px solid rgba(16,185,129,0.3)}
@@ -264,7 +266,7 @@
         oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')confirmEmpId()">
       <div class="pin-error-msg" id="empIdErr"></div>
       <button onclick="confirmEmpId()" style="padding:10px 28px;background:linear-gradient(135deg,#3b82f6,#06b6d4);color:white;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;margin-top:4px">ถัดไป →</button>
-      <div style="font-size:11px;color:#374151;margin-top:24px" id="sheetStatusMsg">กำลังตรวจสอบสิทธิ์...</div>
+      <div style="font-size:11px;color:#374151;margin-top:24px;text-align:center" id="sheetStatusMsg">กำลังตรวจสอบสิทธิ์...</div>
     </div>
     <!-- PIN input (shown after EmpID confirmed) -->
     <div id="pinStep" class="hidden">
@@ -694,18 +696,48 @@ const P = {
 // ---- SHEET FETCH ----
 async function fetchAllowlist(url) {
   if(!url) return null;
+
+  // Ensure CSV output format
+  let csvUrl = url;
+  if(!csvUrl.includes('output=csv')) {
+    csvUrl = csvUrl.replace('/pub?', '/pub?output=csv&').replace('/edit', '/pub?output=csv');
+  }
+  const ts = '_t=' + Date.now();
+  const finalUrl = csvUrl + (csvUrl.includes('?') ? '&' : '?') + ts;
+
+  // Try direct fetch first (works when CORS is allowed by Google)
   try {
-    // Convert Google Sheet publish URL to CSV export URL
-    let csvUrl = url;
-    // Handle /pub?gid=...&single=true&output=csv format directly
-    if(!csvUrl.includes('output=csv')) {
-      csvUrl = csvUrl.replace('/pub?', '/pub?output=csv&').replace('/edit', '/pub?output=csv');
+    const resp = await fetch(finalUrl, {mode:'cors'});
+    if(resp.ok) {
+      const text = await resp.text();
+      const parsed = parseSheetCSV(text);
+      if(parsed !== null) return parsed;
     }
-    const resp = await fetch(csvUrl + (csvUrl.includes('?') ? '&' : '?') + '_t=' + Date.now());
-    if(!resp.ok) return null;
-    const text = await resp.text();
-    return parseSheetCSV(text);
-  } catch(e) { return null; }
+  } catch(e) {}
+
+  // Fallback 1: allorigins.win proxy
+  try {
+    const proxy1 = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(finalUrl);
+    const r1 = await fetch(proxy1);
+    if(r1.ok) {
+      const text = await r1.text();
+      const parsed = parseSheetCSV(text);
+      if(parsed !== null) return parsed;
+    }
+  } catch(e) {}
+
+  // Fallback 2: corsproxy.io
+  try {
+    const proxy2 = 'https://corsproxy.io/?' + encodeURIComponent(finalUrl);
+    const r2 = await fetch(proxy2);
+    if(r2.ok) {
+      const text = await r2.text();
+      const parsed = parseSheetCSV(text);
+      if(parsed !== null) return parsed;
+    }
+  } catch(e) {}
+
+  return null;
 }
 
 function parseSheetCSV(text) {
@@ -759,7 +791,7 @@ async function initPinLock() {
     document.getElementById('pinSetupMode').classList.add('hidden');
   } else if(!hasMasterHash) {
     // No sheet, no master PIN → first setup
-    document.getElementById('sheetStatusMsg').textContent = 'ตั้งค่าครั้งแรก';
+    document.getElementById('sheetStatusMsg').textContent = '⚙️ ตั้งค่าครั้งแรก';
     document.getElementById('pinUnlockMode').classList.add('hidden');
     document.getElementById('pinSetupMode').classList.remove('hidden');
     P.setupPhase = 'master';
@@ -767,7 +799,7 @@ async function initPinLock() {
     document.getElementById('setupLabel').textContent = 'กรอก Master PIN 6 หลัก';
   } else {
     // No sheet but has master → offline fallback (master PIN only)
-    document.getElementById('sheetStatusMsg').textContent = '⚠ ไม่พบ Allowlist — ใช้ Master PIN';
+    document.getElementById('sheetStatusMsg').textContent = '⚠ เชื่อมต่อ Allowlist ไม่ได้ — กรอก ADMIN + Master PIN';
     document.getElementById('empIdStep').classList.add('hidden');
     document.getElementById('pinStep').classList.remove('hidden');
     document.getElementById('pinLabel').textContent = 'กรอก Master PIN (ไม่มีเน็ต)';
