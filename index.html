@@ -672,8 +672,7 @@ async function fetchAllowlist(url) {
 }
 
 function parseSheetCSV(text) {
-  const rows = text.trim().split('
-').map(r => r.split(',').map(s => s.trim().replace(/^"|"$/g,'')));
+  const rows = text.trim().split('\n').map(r => r.split(',').map(s => s.trim().replace(/^"|"$/g,'')));
   if(rows.length < 2) return [];
   // Header: EmployeeID, Name, PINHash, Active
   return rows.slice(1).filter(r => r.length >= 4 && r[0]).map(r => ({
@@ -1361,7 +1360,7 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.cla
   const manifest={
     name:'PackColor QC — Wann Cosmetics',
     short_name:'PackColor QC',
-    description:'PKG Color QC — เปรียบเทียบสีบรรจุภัณฑ์ด้วย CIE ΔE',
+    description:'PackColor QC — Packaging Color Inspector',
     start_url:'.',
     display:'standalone',
     background_color:'#0a0e17',
