@@ -859,6 +859,25 @@ async function confirmEmpId() {
   document.getElementById('empIdErr').textContent = '';
   P.buf = '';
   updateDots('pd', P.buf);
+
+  // แจ้งว่าถ้ายังไม่มี PIN ให้ตั้งใหม่ได้เลย
+  const sheetHash = emp.pinHash ? emp.pinHash.trim() : '';
+  const localHash = localStorage.getItem('qc_pin_' + id);
+  if(!sheetHash && !localHash) {
+    document.getElementById('pinLabel').textContent = '🔑 ตั้ง PIN 6 หลักของคุณ (ครั้งแรก)';
+    document.getElementById('pinErr').textContent = '';
+    // hint text
+    const hint = document.createElement('div');
+    hint.id = 'pinFirstHint';
+    hint.style.cssText = 'font-size:11px;color:#06b6d4;margin-bottom:8px;text-align:center';
+    hint.textContent = 'กรอก PIN ที่ต้องการใช้ได้เลย — ระบบจะบันทึกให้อัตโนมัติ';
+    const dotsEl = document.getElementById('pinDots');
+    if(!document.getElementById('pinFirstHint')) dotsEl.parentNode.insertBefore(hint, dotsEl);
+  } else {
+    document.getElementById('pinLabel').textContent = 'กรอก PIN 6 หลัก';
+    const old = document.getElementById('pinFirstHint');
+    if(old) old.remove();
+  }
 }
 
 function goBackEmpId() {
@@ -887,19 +906,32 @@ function pinDel() {
 
 async function checkPIN() {
   const h = await hashPIN(P.buf);
-  // Check against Sheet PIN hash for this employee
   const emp = P.sheetEntry;
-  if(emp && emp.pinHash && h === emp.pinHash) {
+  const localHash = localStorage.getItem('qc_pin_' + P.empId);
+  const sheetHash = emp && emp.pinHash ? emp.pinHash.trim() : '';
+
+  // ---- Case 1: ไม่มี PIN ทั้งใน Sheet และ local → ให้ตั้ง PIN ครั้งแรก ----
+  if(!sheetHash && !localHash) {
+    // บันทึก PIN นี้เป็น PIN แรกของ employee
+    localStorage.setItem('qc_pin_' + P.empId, h);
+    toast('✅ ตั้ง PIN สำเร็จ! ยินดีต้อนรับ ' + (P.empName || P.empId));
     unlockSuccess('pd');
     return;
   }
-  // Also check local override (if employee set their own PIN locally)
-  const localHash = localStorage.getItem('qc_pin_' + P.empId);
+
+  // ---- Case 2: มี PIN ใน Sheet → เช็คกับ Sheet ----
+  if(sheetHash && h === sheetHash) {
+    unlockSuccess('pd');
+    return;
+  }
+
+  // ---- Case 3: มี PIN ใน local (employee ตั้งเอง) → เช็ค local ----
   if(localHash && h === localHash) {
     unlockSuccess('pd');
     return;
   }
-  // Wrong PIN
+
+  // ---- Wrong PIN ----
   P.attempts++;
   flashError('pd', 6);
   const left = P.maxAttempts - P.attempts;
