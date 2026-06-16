@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>COLOR QC — Wann</title>
+<title>PackColor QC — Wann Cosmetics</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="COLOR QC">
@@ -177,6 +177,40 @@
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   .spinner{width:18px;height:18px;border:2px solid transparent;border-top-color:var(--accent-cyan);border-radius:50%;animation:spin .8s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ===== PIN LOCK ===== */
+  .pin-overlay{position:fixed;inset:0;background:#0a0e17;z-index:9000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+  .pin-logo{width:64px;height:64px;background:linear-gradient(135deg,#3b82f6,#06b6d4);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:16px;box-shadow:0 8px 32px rgba(59,130,246,0.4)}
+  .pin-app-name{font-size:20px;font-weight:700;color:#e2e8f0;margin-bottom:4px;font-family:'JetBrains Mono',monospace}
+  .pin-subtitle{font-size:12px;color:#64748b;margin-bottom:32px;letter-spacing:1px;text-transform:uppercase}
+  .pin-label{font-size:13px;color:#94a3b8;margin-bottom:16px}
+  .pin-dots{display:flex;gap:14px;margin-bottom:28px}
+  .pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid #2a3a5c;background:transparent;transition:all .15s}
+  .pin-dot.filled{background:#3b82f6;border-color:#3b82f6;box-shadow:0 0 10px rgba(59,130,246,0.5)}
+  .pin-dot.error{background:#ef4444;border-color:#ef4444;animation:shake .35s ease}
+  .pin-dot.success{background:#10b981;border-color:#10b981}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+  .pin-numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:240px;margin-bottom:16px}
+  .pin-key{height:64px;background:#1a2236;border:1px solid #2a3a5c;border-radius:14px;font-size:22px;font-weight:600;color:#e2e8f0;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;user-select:none}
+  .pin-key:active,.pin-key.pressed{background:#2563eb;border-color:#3b82f6;transform:scale(0.93)}
+  .pin-key.del{font-size:18px;color:#94a3b8}
+  .pin-key.empty{background:transparent;border:none;cursor:default}
+  .pin-error-msg{font-size:12px;color:#ef4444;height:18px;margin-bottom:8px;text-align:center}
+  .pin-master-link{font-size:11px;color:#3b82f6;cursor:pointer;margin-top:8px;text-decoration:underline}
+  .pin-setup-box{width:100%;max-width:300px;background:#111827;border:1px solid #2a3a5c;border-radius:16px;padding:20px;margin-top:8px}
+  .pin-setup-title{font-size:13px;font-weight:600;color:#94a3b8;margin-bottom:12px;text-align:center;text-transform:uppercase;letter-spacing:1px}
+  .descriptor-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.5px;margin-top:8px;flex-wrap:wrap;justify-content:center}
+  .desc-pass{background:rgba(16,185,129,0.12);color:var(--accent-green);border:1px solid rgba(16,185,129,0.3)}
+  .desc-warn{background:rgba(245,158,11,0.12);color:var(--accent-amber);border:1px solid rgba(245,158,11,0.3)}
+  .desc-fail{background:rgba(239,68,68,0.12);color:var(--accent-red);border:1px solid rgba(239,68,68,0.3)}
+  .desc-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;margin:2px 2px}
+  .desc-L-pos{background:rgba(250,204,21,0.15);color:#ca8a04}
+  .desc-L-neg{background:rgba(99,102,241,0.15);color:#6366f1}
+  .desc-a-pos{background:rgba(239,68,68,0.15);color:#dc2626}
+  .desc-a-neg{background:rgba(16,185,129,0.15);color:#059669}
+  .desc-b-pos{background:rgba(245,158,11,0.15);color:#d97706}
+  .desc-b-neg{background:rgba(59,130,246,0.15);color:#2563eb}
+  .desc-eq{background:rgba(148,163,184,0.15);color:#64748b}
   .hidden{display:none!important}
   .offscreen{position:absolute;left:-9999px;top:-9999px}
   /* PWA Install Banner */
@@ -200,12 +234,109 @@
 </head>
 <body>
 
+
+<!-- ===== PIN LOCK OVERLAY ===== -->
+<div id="pinOverlay" class="pin-overlay">
+  <div class="pin-logo">🔬</div>
+  <div class="pin-app-name">PackColor QC</div>
+  <div class="pin-subtitle">Packaging Inspector · Wann Cosmetics</div>
+
+  <!-- UNLOCK MODE -->
+  <div id="pinUnlockMode">
+    <!-- Employee ID input -->
+    <div id="empIdStep">
+      <div class="pin-label">กรอก Employee ID ของคุณ</div>
+      <input id="empIdInput" type="text" placeholder="เช่น QC001" maxlength="10"
+        style="width:200px;padding:10px 14px;background:#1a2236;border:1px solid #2a3a5c;color:#e2e8f0;border-radius:10px;font-size:16px;text-align:center;font-family:inherit;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto;text-transform:uppercase;letter-spacing:2px"
+        oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')confirmEmpId()">
+      <div class="pin-error-msg" id="empIdErr"></div>
+      <button onclick="confirmEmpId()" style="padding:10px 28px;background:linear-gradient(135deg,#3b82f6,#06b6d4);color:white;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;margin-top:4px">ถัดไป →</button>
+      <div style="font-size:11px;color:#374151;margin-top:24px" id="sheetStatusMsg">กำลังตรวจสอบสิทธิ์...</div>
+    </div>
+    <!-- PIN input (shown after EmpID confirmed) -->
+    <div id="pinStep" class="hidden">
+      <div class="pin-label" id="pinLabel">กรอก PIN 6 หลัก</div>
+      <div style="font-size:12px;color:#06b6d4;margin-bottom:12px" id="empIdDisplay"></div>
+      <div class="pin-dots" id="pinDots">
+        <div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div>
+        <div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div>
+        <div class="pin-dot" id="pd4"></div><div class="pin-dot" id="pd5"></div>
+      </div>
+      <div class="pin-error-msg" id="pinErr"></div>
+      <div class="pin-numpad" id="pinNumpad">
+        <button class="pin-key" onclick="pinKey('1')">1</button>
+        <button class="pin-key" onclick="pinKey('2')">2</button>
+        <button class="pin-key" onclick="pinKey('3')">3</button>
+        <button class="pin-key" onclick="pinKey('4')">4</button>
+        <button class="pin-key" onclick="pinKey('5')">5</button>
+        <button class="pin-key" onclick="pinKey('6')">6</button>
+        <button class="pin-key" onclick="pinKey('7')">7</button>
+        <button class="pin-key" onclick="pinKey('8')">8</button>
+        <button class="pin-key" onclick="pinKey('9')">9</button>
+        <div class="pin-key empty"></div>
+        <button class="pin-key" onclick="pinKey('0')">0</button>
+        <button class="pin-key del" onclick="pinDel()">⌫</button>
+      </div>
+      <div style="display:flex;gap:16px;justify-content:center;margin-top:4px">
+        <div class="pin-master-link" onclick="goBackEmpId()">← เปลี่ยน ID</div>
+        <div class="pin-master-link" id="pinMasterLink" onclick="showMasterInput()">ลืม PIN? ใช้ Master PIN</div>
+      </div>
+      <!-- Master PIN input (hidden) -->
+      <div id="masterInputWrap" class="hidden" style="margin-top:12px;text-align:center">
+        <div class="pin-label">กรอก Master PIN (QC Supervisor)</div>
+        <div class="pin-dots" id="masterDots">
+          <div class="pin-dot" id="md0"></div><div class="pin-dot" id="md1"></div>
+          <div class="pin-dot" id="md2"></div><div class="pin-dot" id="md3"></div>
+          <div class="pin-dot" id="md4"></div><div class="pin-dot" id="md5"></div>
+        </div>
+        <div class="pin-error-msg" id="masterErr"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIRST SETUP MODE -->
+  <div id="pinSetupMode" class="hidden">
+    <div class="pin-setup-box">
+      <div class="pin-setup-title" id="setupTitle">ตั้ง PIN ครั้งแรก</div>
+      <div class="pin-label" id="setupLabel" style="text-align:center;margin-bottom:12px">กรอก PIN 6 หลักที่ต้องการ</div>
+      <div class="pin-dots" style="justify-content:center" id="setupDots">
+        <div class="pin-dot" id="sd0"></div><div class="pin-dot" id="sd1"></div>
+        <div class="pin-dot" id="sd2"></div><div class="pin-dot" id="sd3"></div>
+        <div class="pin-dot" id="sd4"></div><div class="pin-dot" id="sd5"></div>
+      </div>
+      <div class="pin-error-msg" id="setupErr"></div>
+      <div class="pin-label" style="margin-top:8px;margin-bottom:8px;text-align:center">Master PIN (QC Supervisor)</div>
+      <div class="pin-dots" style="justify-content:center" id="masterSetupDots">
+        <div class="pin-dot" id="msd0"></div><div class="pin-dot" id="msd1"></div>
+        <div class="pin-dot" id="msd2"></div><div class="pin-dot" id="msd3"></div>
+        <div class="pin-dot" id="msd4"></div><div class="pin-dot" id="msd5"></div>
+      </div>
+      <div class="pin-error-msg" id="masterSetupErr"></div>
+      <div style="font-size:11px;color:#64748b;text-align:center;margin-top:4px">ตั้ง Master PIN แยกกับ PIN ทีม</div>
+    </div>
+    <div class="pin-numpad" style="margin-top:14px">
+      <button class="pin-key" onclick="setupKey('1')">1</button>
+      <button class="pin-key" onclick="setupKey('2')">2</button>
+      <button class="pin-key" onclick="setupKey('3')">3</button>
+      <button class="pin-key" onclick="setupKey('4')">4</button>
+      <button class="pin-key" onclick="setupKey('5')">5</button>
+      <button class="pin-key" onclick="setupKey('6')">6</button>
+      <button class="pin-key" onclick="setupKey('7')">7</button>
+      <button class="pin-key" onclick="setupKey('8')">8</button>
+      <button class="pin-key" onclick="setupKey('9')">9</button>
+      <div class="pin-key empty"></div>
+      <button class="pin-key" onclick="setupKey('0')">0</button>
+      <button class="pin-key del" onclick="setupDel()">⌫</button>
+    </div>
+  </div>
+</div>
+
 <header class="header">
   <div class="header-left">
     <div class="logo-icon">🔬</div>
     <div>
-      <div class="header-title">COLOR QC</div>
-      <div class="header-subtitle">Packaging Inspector v2.5</div>
+      <div class="header-title">PackColor QC</div>
+      <div class="header-subtitle">PackColor QC v2.8</div>
     </div>
   </div>
   <div class="header-nav">
@@ -363,6 +494,7 @@
             <div class="pc-score-label">Color Similarity</div>
             <div style="margin-top:8px"><span class="verdict-badge" id="pcVerdict"></span></div>
           </div>
+          <div id="pcDescriptor" style="text-align:center;margin-bottom:8px"></div>
           <div class="readout-grid">
             <div class="readout-chip"><div class="readout-chip-label">ΔE</div><div class="readout-chip-value" id="pcDE">—</div></div>
             <div class="readout-chip"><div class="readout-chip-label">Method</div><div class="readout-chip-value">CIE76 Point</div></div>
@@ -383,6 +515,19 @@
 
   <!-- ===== SETTINGS TAB ===== -->
   <div id="tab-settings" class="tab-content">
+    <div class="settings-group">
+      <div class="settings-title">🔐 PIN Lock & Allowlist</div>
+      <div class="setting-row"><span class="setting-label">ผู้ใช้ปัจจุบัน</span><span class="setting-value" id="pinStatus">—</span></div>
+      <div class="setting-row"><span class="setting-label">สถานะ Allowlist</span><span class="setting-value" id="sheetStatus">—</span></div>
+      <div class="setting-row" style="flex-direction:column;align-items:flex-start">
+        <span class="setting-label">Google Sheet URL (Admin เท่านั้น)</span>
+        <input type="text" class="text-input" id="sheetUrl" placeholder="วาง URL จาก Google Sheet Publish" oninput="saveSettings()">
+      </div>
+      <div class="setting-row"><span class="setting-label">ทดสอบการเชื่อมต่อ</span><button class="export-csv-btn" style="border-color:var(--accent-cyan);color:var(--accent-cyan)" onclick="testSheetConnection()">🔗 ทดสอบ</button></div>
+      <div class="setting-row"><span class="setting-label">เปลี่ยน PIN ของฉัน</span><button class="export-csv-btn" style="border-color:var(--accent-blue);color:var(--accent-blue)" onclick="changePIN()">🔑 เปลี่ยน PIN</button></div>
+      <div class="setting-row"><span class="setting-label">ล็อคแอปทันที</span><button class="export-csv-btn" style="border-color:var(--accent-amber);color:var(--accent-amber)" onclick="lockNow()">🔒 Lock</button></div>
+    </div>
+
     <div class="settings-group">
       <div class="settings-title">📦 ข้อมูล Session การตรวจ</div>
       <div class="setting-row" style="flex-direction:column;align-items:flex-start">
@@ -418,7 +563,7 @@
     </div>
     <div class="settings-group">
       <div class="settings-title">ℹ️ เกี่ยวกับ</div>
-      <div class="setting-row"><span class="setting-label">Version</span><span class="setting-value">2.5 Local Storage</span></div>
+      <div class="setting-row"><span class="setting-label">Version</span><span class="setting-value">2.8 + Descriptor</span></div>
     </div>
     <div class="settings-group">
       <div class="settings-title">🗑️ จัดการข้อมูล</div>
@@ -487,6 +632,354 @@ function saveLogs() {
     localStorage.setItem('qc_logs', JSON.stringify(S.logs));
   } catch(e) { console.warn('Storage full or unavailable'); }
 }
+
+// ===== PIN LOCK SYSTEM v2.7 — Google Sheet Allowlist =====
+
+async function hashPIN(pin) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('wann_qc_v27_' + pin));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// State
+const P = {
+  empId: '',         // current employee ID (uppercase)
+  empName: '',       // name from sheet
+  buf: '',           // PIN buffer
+  masterBuf: '',
+  setupPhase: 'team',
+  attempts: 0, maxAttempts: 5,
+  masterMode: false,
+  sheetData: null,   // parsed allowlist [{id,name,pinHash,active}]
+  sheetLoaded: false,
+  _setupConfirmBuf: ''
+};
+
+// ---- SHEET FETCH ----
+async function fetchAllowlist(url) {
+  if(!url) return null;
+  try {
+    // Convert Google Sheet publish URL to CSV export URL
+    let csvUrl = url;
+    // Handle /pub?gid=...&single=true&output=csv format directly
+    if(!csvUrl.includes('output=csv')) {
+      csvUrl = csvUrl.replace('/pub?', '/pub?output=csv&').replace('/edit', '/pub?output=csv');
+    }
+    const resp = await fetch(csvUrl + (csvUrl.includes('?') ? '&' : '?') + '_t=' + Date.now());
+    if(!resp.ok) return null;
+    const text = await resp.text();
+    return parseSheetCSV(text);
+  } catch(e) { return null; }
+}
+
+function parseSheetCSV(text) {
+  const rows = text.trim().split('
+').map(r => r.split(',').map(s => s.trim().replace(/^"|"$/g,'')));
+  if(rows.length < 2) return [];
+  // Header: EmployeeID, Name, PINHash, Active
+  return rows.slice(1).filter(r => r.length >= 4 && r[0]).map(r => ({
+    id: r[0].toUpperCase(),
+    name: r[1] || '',
+    pinHash: r[2] || '',
+    active: r[3].toUpperCase() === 'TRUE'
+  }));
+}
+
+function findEmployee(id) {
+  if(!P.sheetData) return null;
+  return P.sheetData.find(e => e.id === id.toUpperCase()) || null;
+}
+
+async function loadSheetData() {
+  const url = localStorage.getItem('qc_sheet_url') || '';
+  if(!url) { P.sheetLoaded = false; return; }
+  const data = await fetchAllowlist(url);
+  if(data) { P.sheetData = data; P.sheetLoaded = true; }
+  else { P.sheetLoaded = false; }
+}
+
+// ---- INIT ----
+async function initPinLock() {
+  document.getElementById('sheetStatusMsg').textContent = 'กำลังโหลด Allowlist...';
+  await loadSheetData();
+
+  const hasSheet = P.sheetLoaded && P.sheetData && P.sheetData.length > 0;
+  const hasMasterHash = !!localStorage.getItem('qc_master_hash');
+
+  if(hasSheet) {
+    document.getElementById('sheetStatusMsg').textContent =
+      `✅ โหลด Allowlist แล้ว (${P.sheetData.length} คน)`;
+    // Show EmpID step
+    document.getElementById('empIdStep').classList.remove('hidden');
+    document.getElementById('pinStep').classList.add('hidden');
+    document.getElementById('pinUnlockMode').classList.remove('hidden');
+    document.getElementById('pinSetupMode').classList.add('hidden');
+  } else if(!hasMasterHash) {
+    // No sheet, no master PIN → first setup
+    document.getElementById('sheetStatusMsg').textContent = 'ตั้งค่าครั้งแรก';
+    document.getElementById('pinUnlockMode').classList.add('hidden');
+    document.getElementById('pinSetupMode').classList.remove('hidden');
+    P.setupPhase = 'master';
+    document.getElementById('setupTitle').textContent = 'ตั้ง Master PIN (QC Supervisor)';
+    document.getElementById('setupLabel').textContent = 'กรอก Master PIN 6 หลัก';
+  } else {
+    // No sheet but has master → offline fallback (master PIN only)
+    document.getElementById('sheetStatusMsg').textContent = '⚠ ไม่พบ Allowlist — ใช้ Master PIN';
+    document.getElementById('empIdStep').classList.add('hidden');
+    document.getElementById('pinStep').classList.remove('hidden');
+    document.getElementById('pinLabel').textContent = 'กรอก Master PIN (ไม่มีเน็ต)';
+    document.getElementById('pinMasterLink').classList.add('hidden');
+    P.masterMode = true;
+  }
+  document.getElementById('pinMasterLink').classList.toggle('hidden', !hasMasterHash);
+}
+
+// ---- STEP 1: Employee ID ----
+async function confirmEmpId() {
+  const id = document.getElementById('empIdInput').value.trim().toUpperCase();
+  if(!id) { document.getElementById('empIdErr').textContent = 'กรุณากรอก Employee ID'; return; }
+
+  if(!P.sheetLoaded) {
+    document.getElementById('empIdErr').textContent = 'ไม่สามารถเชื่อมต่อ Allowlist ได้';
+    return;
+  }
+
+  const emp = findEmployee(id);
+  if(!emp) {
+    document.getElementById('empIdErr').textContent = `ไม่พบ ID "${id}" ใน Allowlist`;
+    return;
+  }
+  if(!emp.active) {
+    document.getElementById('empIdErr').textContent = `ID "${id}" ถูกระงับสิทธิ์การใช้งาน`;
+    // Flash red
+    const inp = document.getElementById('empIdInput');
+    inp.style.borderColor = '#ef4444';
+    setTimeout(() => { inp.style.borderColor = '#2a3a5c'; }, 1500);
+    return;
+  }
+
+  // Valid & active → go to PIN step
+  P.empId = id;
+  P.empName = emp.name;
+  P.sheetEntry = emp; // store for PIN check
+
+  document.getElementById('empIdStep').classList.add('hidden');
+  document.getElementById('pinStep').classList.remove('hidden');
+  document.getElementById('empIdDisplay').textContent = `👤 ${emp.name} (${id})`;
+  document.getElementById('empIdErr').textContent = '';
+  P.buf = '';
+  updateDots('pd', P.buf);
+}
+
+function goBackEmpId() {
+  P.empId = ''; P.empName = ''; P.buf = '';
+  document.getElementById('pinStep').classList.add('hidden');
+  document.getElementById('empIdStep').classList.remove('hidden');
+  document.getElementById('empIdInput').value = '';
+  document.getElementById('masterInputWrap').classList.add('hidden');
+  P.masterMode = false;
+  updateDots('pd','');
+}
+
+// ---- STEP 2: PIN ----
+function pinKey(n) {
+  if(P.masterMode) { masterKey(n); return; }
+  if(P.buf.length >= 6) return;
+  P.buf += n;
+  updateDots('pd', P.buf);
+  if(P.buf.length === 6) setTimeout(checkPIN, 80);
+}
+function pinDel() {
+  if(P.masterMode) { masterDel(); return; }
+  P.buf = P.buf.slice(0,-1);
+  updateDots('pd', P.buf);
+}
+
+async function checkPIN() {
+  const h = await hashPIN(P.buf);
+  // Check against Sheet PIN hash for this employee
+  const emp = P.sheetEntry;
+  if(emp && emp.pinHash && h === emp.pinHash) {
+    unlockSuccess('pd');
+    return;
+  }
+  // Also check local override (if employee set their own PIN locally)
+  const localHash = localStorage.getItem('qc_pin_' + P.empId);
+  if(localHash && h === localHash) {
+    unlockSuccess('pd');
+    return;
+  }
+  // Wrong PIN
+  P.attempts++;
+  flashError('pd', 6);
+  const left = P.maxAttempts - P.attempts;
+  document.getElementById('pinErr').textContent = left > 0
+    ? `PIN ไม่ถูกต้อง (เหลือ ${left} ครั้ง)` : 'ล็อค 30 วินาที';
+  if(P.attempts >= P.maxAttempts) lockNumpad(30, 'pinNumpad', 'pinErr');
+  setTimeout(()=>{ P.buf=''; updateDots('pd',P.buf); document.getElementById('pinErr').textContent=''; }, 800);
+}
+
+function unlockSuccess(prefix) {
+  const count = prefix==='pd'?6:6;
+  for(let i=0;i<count;i++){const d=document.getElementById(prefix+i);if(d){d.classList.remove('filled');d.classList.add('success');}}
+  P.attempts = 0;
+  // Save current user to session
+  localStorage.setItem('qc_current_user', JSON.stringify({id:P.empId, name:P.empName}));
+  setTimeout(()=>{ document.getElementById('pinOverlay').classList.add('hidden'); updatePinStatusUI(); }, 350);
+}
+
+function flashError(prefix, count) {
+  for(let i=0;i<count;i++){const d=document.getElementById(prefix+i);if(d){d.classList.remove('filled');d.classList.add('error');}}
+  setTimeout(()=>{for(let i=0;i<count;i++){const d=document.getElementById(prefix+i);if(d){d.classList.remove('error');}}},700);
+}
+
+function lockNumpad(sec, padId, errId) {
+  const btns = document.querySelectorAll('#'+padId+' .pin-key');
+  btns.forEach(b=>b.disabled=true);
+  let s=sec;
+  const iv=setInterval(()=>{ s--; document.getElementById(errId).textContent=`รอ ${s} วินาที...`;
+    if(s<=0){clearInterval(iv);btns.forEach(b=>b.disabled=false);P.attempts=0;document.getElementById(errId).textContent='';}
+  },1000);
+}
+
+function updateDots(prefix, buf, count=6) {
+  for(let i=0;i<count;i++){
+    const d=document.getElementById(prefix+i); if(!d) return;
+    d.classList.toggle('filled', i < buf.length);
+    d.classList.remove('error','success');
+  }
+}
+
+// ---- MASTER PIN ----
+function showMasterInput() {
+  P.masterMode = true; P.masterBuf = '';
+  document.getElementById('masterInputWrap').classList.remove('hidden');
+  document.getElementById('pinMasterLink').classList.add('hidden');
+}
+function masterKey(n) {
+  if(P.masterBuf.length >= 6) return;
+  P.masterBuf += n; updateDots('md', P.masterBuf);
+  if(P.masterBuf.length === 6) setTimeout(checkMaster, 80);
+}
+function masterDel() { P.masterBuf=P.masterBuf.slice(0,-1); updateDots('md',P.masterBuf); }
+async function checkMaster() {
+  const h = await hashPIN(P.masterBuf);
+  if(h === localStorage.getItem('qc_master_hash')) {
+    P.empId = 'ADMIN'; P.empName = 'QC Supervisor';
+    localStorage.setItem('qc_current_user', JSON.stringify({id:'ADMIN',name:'QC Supervisor'}));
+    unlockSuccess('md');
+  } else {
+    flashError('md',6); document.getElementById('masterErr').textContent='Master PIN ไม่ถูกต้อง';
+    setTimeout(()=>{ P.masterBuf=''; updateDots('md',P.masterBuf); document.getElementById('masterErr').textContent=''; },800);
+  }
+}
+
+// ---- FIRST SETUP (Master PIN only) ----
+let _masterConfirm = '';
+function setupKey(n) {
+  if(P.setupPhase==='master') {
+    if(!_masterConfirm) {
+      if(P.masterBuf.length>=6) return;
+      P.masterBuf += n; updateDots('msd',P.masterBuf);
+      if(P.masterBuf.length===6) {
+        _masterConfirm = P.masterBuf; P.masterBuf='';
+        document.getElementById('setupLabel').textContent='กรอก Master PIN อีกครั้งเพื่อยืนยัน';
+        updateDots('msd',P.masterBuf);
+      }
+    } else {
+      if(P.masterBuf.length>=6) return;
+      P.masterBuf+=n; updateDots('msd',P.masterBuf);
+      if(P.masterBuf.length===6) setTimeout(confirmMasterSetup,80);
+    }
+  }
+}
+function setupDel() { P.masterBuf=P.masterBuf.slice(0,-1); updateDots('msd',P.masterBuf); }
+async function confirmMasterSetup() {
+  if(P.masterBuf !== _masterConfirm) {
+    flashError('msd',6); document.getElementById('masterSetupErr').textContent='PIN ไม่ตรงกัน ลองใหม่';
+    setTimeout(()=>{ P.masterBuf=''; _masterConfirm=''; document.getElementById('setupLabel').textContent='กรอก Master PIN 6 หลัก'; updateDots('msd',P.masterBuf); document.getElementById('masterSetupErr').textContent=''; },800);
+    return;
+  }
+  const mh = await hashPIN(P.masterBuf);
+  localStorage.setItem('qc_master_hash', mh);
+  for(let i=0;i<6;i++){const d=document.getElementById('msd'+i);if(d){d.classList.add('success');d.classList.remove('filled');}}
+  toast('✅ ตั้ง Master PIN สำเร็จ! ตั้งค่า Google Sheet ใน Settings');
+  P.empId='ADMIN'; P.empName='QC Supervisor';
+  localStorage.setItem('qc_current_user', JSON.stringify({id:'ADMIN',name:'QC Supervisor'}));
+  setTimeout(()=>{ document.getElementById('pinOverlay').classList.add('hidden'); updatePinStatusUI(); },500);
+}
+
+// ---- SETTINGS ACTIONS ----
+function lockNow() {
+  P.empId=''; P.empName=''; P.buf=''; P.masterBuf=''; P.masterMode=false; P.attempts=0;
+  localStorage.removeItem('qc_current_user');
+  document.getElementById('pinOverlay').classList.remove('hidden');
+  document.getElementById('empIdInput').value='';
+  document.getElementById('empIdErr').textContent='';
+  document.getElementById('pinErr').textContent='';
+  document.getElementById('masterErr').textContent='';
+  document.getElementById('masterInputWrap').classList.add('hidden');
+  document.getElementById('empIdStep').classList.remove('hidden');
+  document.getElementById('pinStep').classList.add('hidden');
+  updateDots('pd',''); updateDots('md','');
+  initPinLock();
+}
+
+function changePIN() {
+  // Employee changes their own local PIN
+  const id = P.empId;
+  if(!id || id==='ADMIN') { toast('⚠ เข้าสู่ระบบก่อนเปลี่ยน PIN'); return; }
+  const np = prompt(`ตั้ง PIN ใหม่ 6 หลักสำหรับ ${id}:`);
+  if(!np || np.length!==6 || !/^\d+$/.test(np)) { toast('❌ PIN ต้องเป็นตัวเลข 6 หลัก'); return; }
+  const np2 = prompt('กรอกอีกครั้งเพื่อยืนยัน:');
+  if(np !== np2) { toast('❌ PIN ไม่ตรงกัน'); return; }
+  hashPIN(np).then(h => {
+    localStorage.setItem('qc_pin_' + id, h);
+    toast('✅ เปลี่ยน PIN สำเร็จ');
+  });
+}
+
+async function testSheetConnection() {
+  const url = document.getElementById('sheetUrl').value.trim();
+  if(!url) { toast('⚠ กรุณากรอก URL ก่อน'); return; }
+  toast('🔗 กำลังทดสอบ...');
+  const data = await fetchAllowlist(url);
+  if(data && data.length > 0) {
+    P.sheetData = data; P.sheetLoaded = true;
+    toast(`✅ เชื่อมต่อสำเร็จ พบ ${data.length} รายชื่อ`);
+    document.getElementById('sheetStatus').textContent = `✅ ${data.length} คน Active: ${data.filter(e=>e.active).length}`;
+    document.getElementById('sheetStatus').style.color = 'var(--accent-green)';
+    localStorage.setItem('qc_sheet_url', url);
+  } else {
+    toast('❌ เชื่อมต่อไม่ได้ — ตรวจสอบ URL และการ Publish');
+    document.getElementById('sheetStatus').textContent = '❌ เชื่อมต่อไม่ได้';
+    document.getElementById('sheetStatus').style.color = 'var(--accent-red)';
+  }
+}
+
+function updatePinStatusUI() {
+  const user = JSON.parse(localStorage.getItem('qc_current_user') || 'null');
+  const el = document.getElementById('pinStatus');
+  if(el) {
+    el.textContent = user ? `👤 ${user.name} (${user.id})` : '—';
+    el.style.color = user ? 'var(--accent-green)' : 'var(--accent-amber)';
+  }
+  const ss = document.getElementById('sheetStatus');
+  if(ss && P.sheetLoaded) {
+    const active = P.sheetData ? P.sheetData.filter(e=>e.active).length : 0;
+    const total = P.sheetData ? P.sheetData.length : 0;
+    ss.textContent = `✅ ${active}/${total} Active`;
+    ss.style.color = 'var(--accent-green)';
+  } else if(ss) {
+    ss.textContent = P.sheetLoaded===false ? '⚠ ไม่ได้ตั้งค่า' : '—';
+    ss.style.color = 'var(--accent-amber)';
+  }
+  // Load sheet url into field
+  const su = document.getElementById('sheetUrl');
+  if(su) su.value = localStorage.getItem('qc_sheet_url') || '';
+}
+
+window.addEventListener('DOMContentLoaded', ()=>{ initPinLock(); updatePinStatusUI(); });
+
 loadLogs();
 
 // ===== SETTINGS PERSISTENCE =====
@@ -501,6 +994,7 @@ function loadSettings() {
       if (s.lot !== undefined) document.getElementById('fieldLot').value = s.lot;
       if (s.supplier !== undefined) document.getElementById('fieldSupplier').value = s.supplier;
       if (s.inspector !== undefined) document.getElementById('fieldInspector').value = s.inspector;
+      if (s.sheetUrl !== undefined) { localStorage.setItem('qc_sheet_url', s.sheetUrl); }
     }
   } catch(e) {}
   updateSessionBadge();
@@ -513,7 +1007,8 @@ function saveSettings() {
       product: document.getElementById('fieldProduct').value,
       lot: document.getElementById('fieldLot').value,
       supplier: document.getElementById('fieldSupplier').value,
-      inspector: document.getElementById('fieldInspector').value
+      inspector: document.getElementById('fieldInspector').value,
+      sheetUrl: document.getElementById('sheetUrl') ? document.getElementById('sheetUrl').value : localStorage.getItem('qc_sheet_url') || ''
     };
     localStorage.setItem('qc_settings', JSON.stringify(s));
   } catch(e) {}
@@ -582,13 +1077,56 @@ function avgRGB(c,x){const[rx,ry,rw,rh]=roiB(c.width,c.height);const d=x.getImag
 function hCorr(x1,w1,h1,x2,w2,h2){function bh(x,w,h){const[rx,ry,rw,rh]=roiB(w,h);const d=x.getImageData(rx,ry,rw,rh).data;const bi=32,hR=new Float64Array(bi),hG=new Float64Array(bi),hB=new Float64Array(bi);let n=0;const st=d.length>400000?16:4;for(let i=0;i<d.length;i+=st){hR[~~(d[i]/8)]++;hG[~~(d[i+1]/8)]++;hB[~~(d[i+2]/8)]++;n++}for(let j=0;j<bi;j++){hR[j]/=n;hG[j]/=n;hB[j]/=n}return{r:hR,g:hG,b:hB}}function cr(a,b){let s=0,a2=0,b2=0;const ma=a.reduce((s,v)=>s+v,0)/a.length,mb=b.reduce((s,v)=>s+v,0)/b.length;for(let i=0;i<a.length;i++){const da=a[i]-ma,db=b[i]-mb;s+=da*db;a2+=da*da;b2+=db*db}const dn=Math.sqrt(a2*b2);return dn?s/dn:0}const h1d=bh(x1,w1,h1),h2d=bh(x2,w2,h2);return(cr(h1d.r,h2d.r)+cr(h1d.g,h2d.g)+cr(h1d.b,h2d.b))/3*100}
 
 function getSessionMeta() {
+  const user = JSON.parse(localStorage.getItem('qc_current_user') || 'null');
+  const inspector = document.getElementById('fieldInspector').value.trim() ||
+    (user ? user.name + ' (' + user.id + ')' : '');
   return {
     product: document.getElementById('fieldProduct').value.trim() || '',
     lot: document.getElementById('fieldLot').value.trim() || '',
     supplier: document.getElementById('fieldSupplier').value.trim() || '',
-    inspector: document.getElementById('fieldInspector').value.trim() || ''
+    inspector: inspector
   };
 }
+// ===== DELTA DESCRIPTOR (HunterLab style) =====
+function getDeltaDescriptor(labStd, labSample) {
+  const EQ_THRESH = 0.15; // threshold for "EQ." — same as HunterLab default
+  const dL = labSample[0] - labStd[0];
+  const da = labSample[1] - labStd[1];
+  const db = labSample[2] - labStd[2];
+
+  function descL(v) {
+    if(Math.abs(v) <= EQ_THRESH) return {text:'EQ. Light',cls:'desc-eq'};
+    return v > 0 ? {text:'Lighter',cls:'desc-L-pos'} : {text:'Darker',cls:'desc-L-neg'};
+  }
+  function descA(v) {
+    if(Math.abs(v) <= EQ_THRESH) return {text:'EQ. Red',cls:'desc-eq'};
+    return v > 0 ? {text:'More Red',cls:'desc-a-pos'} : {text:'Less Red',cls:'desc-a-neg'};
+  }
+  function descB(v) {
+    if(Math.abs(v) <= EQ_THRESH) return {text:'EQ. Yellow',cls:'desc-eq'};
+    return v > 0 ? {text:'More Yellow',cls:'desc-b-pos'} : {text:'Less Yellow / More Blue',cls:'desc-b-neg'};
+  }
+
+  const L = descL(dL), a = descA(da), b = descB(db);
+  return {
+    dL: dL.toFixed(2), da: da.toFixed(2), db: db.toFixed(2),
+    parts: [L, a, b],
+    text: [L.text, a.text, b.text].join(', ')
+  };
+}
+
+function descriptorTagsHTML(desc, verdictCls) {
+  const bc = verdictCls==='verdict-pass'?'desc-pass':verdictCls==='verdict-warning'?'desc-warn':'desc-fail';
+  const tags = desc.parts.map(p=>`<span class="desc-tag ${p.cls}">${p.text}</span>`).join('');
+  return `<div class="descriptor-badge ${bc}">
+    <span style="font-size:10px;opacity:0.7">Delta Descriptor</span>
+    ${tags}
+    <span style="font-size:9px;opacity:0.5;width:100%;text-align:center">
+      ΔL*${desc.dL>0?'+':''}${desc.dL} · Δa*${desc.da>0?'+':''}${desc.da} · Δb*${desc.db>0?'+':''}${desc.db}
+    </span>
+  </div>`;
+}
+
 function getTh(){return{pass:parseFloat(document.getElementById('thPass').value)||5,warn:parseFloat(document.getElementById('thWarn').value)||10}}
 function getV(dE){const th=getTh();if(dE<=th.pass)return{text:'✅ PASS',cls:'verdict-pass',color:'var(--accent-green)'};if(dE<=th.warn)return{text:'⚠️ WARNING',cls:'verdict-warning',color:'var(--accent-amber)'};return{text:'❌ FAIL',cls:'verdict-fail',color:'var(--accent-red)'}}
 
@@ -690,16 +1228,19 @@ function checkPt(){
   if(!S.pStdLab||!S.pSmpLab){sec.classList.remove('visible');return}
   sec.classList.add('visible');
   const dE=dE76(S.pStdLab,S.pSmpLab),sim=Math.max(0,Math.min(100,100-dE)),v=getV(dE);
+  const _pdesc=getDeltaDescriptor(S.pStdLab,S.pSmpLab);
   document.getElementById('pcSwStd').style.background=`rgb(${S.pStdRGB.join(',')})`;
   document.getElementById('pcSwSmp').style.background=`rgb(${S.pSmpRGB.join(',')})`;
   document.getElementById('pcScore').innerHTML=`<span style="color:${v.color}">${sim.toFixed(1)}%</span>`;
   document.getElementById('pcVerdict').className='verdict-badge '+v.cls;
   document.getElementById('pcVerdict').textContent=v.text;
   document.getElementById('pcDE').textContent=dE.toFixed(2);
+  const _pdescEl=document.getElementById('pcDescriptor');
+  if(_pdescEl) _pdescEl.innerHTML=descriptorTagsHTML(_pdesc,v.cls);
   const now=new Date();
   const ptKey=S.pStdRGB.join(',')+':'+S.pSmpRGB.join(',');
   if(ptKey!==_lastLoggedPt){_lastLoggedPt=ptKey;
-    const _smp=getSessionMeta();S.logs.unshift({id:Date.now(),type:'point',timestamp:now.toISOString(),displayTime:now.toLocaleString('th-TH'),similarity:sim.toFixed(1),deltaE:dE.toFixed(2),histSim:'-',verdict:v.text.replace(/[✅⚠️❌]\s?/g,''),verdictRaw:v.text,labStd:S.pStdLab.map(v=>v.toFixed(2)),labSample:S.pSmpLab.map(v=>v.toFixed(2)),roi:'point',product:_smp.product,lot:_smp.lot,supplier:_smp.supplier,inspector:_smp.inspector});
+    const _smp=getSessionMeta();S.logs.unshift({id:Date.now(),type:'point',timestamp:now.toISOString(),displayTime:now.toLocaleString('th-TH'),similarity:sim.toFixed(1),deltaE:dE.toFixed(2),histSim:'-',verdict:v.text.replace(/[✅⚠️❌]\s?/g,''),verdictRaw:v.text,labStd:S.pStdLab.map(v=>v.toFixed(2)),labSample:S.pSmpLab.map(v=>v.toFixed(2)),roi:'point',product:_smp.product,lot:_smp.lot,supplier:_smp.supplier,inspector:_smp.inspector,descriptor:_pdesc.text,dL:_pdesc.dL,da:_pdesc.da,db:_pdesc.db});
   saveLogs();
 }
   }
@@ -723,9 +1264,10 @@ function analyzeArea(){
       const v=getV(dE);const now=new Date();
       const ts=now.toLocaleString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
       S.lastR={similarity:sim.toFixed(1),deltaE:dE.toFixed(2),histSim:hS.toFixed(1),verdict:v.text,verdictClass:v.cls,labStd:lS,labSample:lM,rgbStd:rS,rgbSample:rM,timestamp:ts,roi:S.roi};
-      document.getElementById('areaResults').innerHTML=`<div class="results-card"><div class="results-header"><span class="results-title">📊 ผลวิเคราะห์</span><span class="result-timestamp">${ts}</span></div><div class="score-display"><div class="score-value" style="color:${v.color}">${sim.toFixed(1)}<span class="score-unit">%</span></div><div class="score-label">Color Similarity (LAB ΔE*76)</div><span class="verdict-badge ${v.cls}">${v.text}</span></div><div class="color-swatches"><div class="swatch-group"><span class="swatch-label">STD</span><div class="swatch-color" style="background:rgb(${rS.join(',')})"></div></div><span class="swatch-arrow">→</span><div class="swatch-group"><div class="swatch-color" style="background:rgb(${rM.join(',')})"></div><span class="swatch-label">Sample</span></div></div><div class="detail-grid"><div class="detail-item"><div class="detail-label">ΔE</div><div class="detail-value">${dE.toFixed(2)}</div></div><div class="detail-item"><div class="detail-label">Histogram</div><div class="detail-value">${hS.toFixed(1)}%</div></div><div class="detail-item"><div class="detail-label">STD LAB</div><div class="detail-value" style="font-size:11px">${lS.map(v=>v.toFixed(1)).join(' / ')}</div></div><div class="detail-item"><div class="detail-label">Sample LAB</div><div class="detail-value" style="font-size:11px">${lM.map(v=>v.toFixed(1)).join(' / ')}</div></div><div class="detail-item"><div class="detail-label">ROI</div><div class="detail-value">${S.roi}</div></div><div class="detail-item"><div class="detail-label">Method</div><div class="detail-value">CIE76</div></div></div></div>`;
+      const _desc=getDeltaDescriptor(lS,lM);const _descHTML=descriptorTagsHTML(_desc,v.cls);
+      document.getElementById('areaResults').innerHTML=`<div class="results-card"><div class="results-header"><span class="results-title">📊 ผลวิเคราะห์</span><span class="result-timestamp">${ts}</span></div><div class="score-display"><div class="score-value" style="color:${v.color}">${sim.toFixed(1)}<span class="score-unit">%</span></div><div class="score-label">Color Similarity (LAB ΔE*76)</div><span class="verdict-badge ${v.cls}">${v.text}</span>${_descHTML}</div><div class="color-swatches"><div class="swatch-group"><span class="swatch-label">STD</span><div class="swatch-color" style="background:rgb(${rS.join(',')})"></div></div><span class="swatch-arrow">→</span><div class="swatch-group"><div class="swatch-color" style="background:rgb(${rM.join(',')})"></div><span class="swatch-label">Sample</span></div></div><div class="detail-grid"><div class="detail-item"><div class="detail-label">ΔE</div><div class="detail-value">${dE.toFixed(2)}</div></div><div class="detail-item"><div class="detail-label">Histogram</div><div class="detail-value">${hS.toFixed(1)}%</div></div><div class="detail-item"><div class="detail-label">STD LAB</div><div class="detail-value" style="font-size:11px">${lS.map(v=>v.toFixed(1)).join(' / ')}</div></div><div class="detail-item"><div class="detail-label">Sample LAB</div><div class="detail-value" style="font-size:11px">${lM.map(v=>v.toFixed(1)).join(' / ')}</div></div><div class="detail-item"><div class="detail-label">ΔL* / Δa* / Δb*</div><div class="detail-value" style="font-size:11px">${_desc.dL} / ${_desc.da} / ${_desc.db}</div></div><div class="detail-item"><div class="detail-label">ROI</div><div class="detail-value">${S.roi}</div></div><div class="detail-item"><div class="detail-label">Descriptor</div><div class="detail-value" style="font-size:10px;line-height:1.4">${_desc.text}</div></div><div class="detail-item"><div class="detail-label">Method</div><div class="detail-value">CIE76</div></div></div></div>`;
       document.getElementById('areaActions').classList.remove('hidden');
-      const _sm=getSessionMeta();S.logs.unshift({id:Date.now(),type:'area',timestamp:now.toISOString(),displayTime:ts,similarity:sim.toFixed(1),deltaE:dE.toFixed(2),histSim:hS.toFixed(1),verdict:v.text.replace(/[✅⚠️❌]\s?/g,''),verdictRaw:v.text,labStd:lS.map(v=>v.toFixed(2)),labSample:lM.map(v=>v.toFixed(2)),roi:S.roi,product:_sm.product,lot:_sm.lot,supplier:_sm.supplier,inspector:_sm.inspector});saveLogs();
+      const _sm=getSessionMeta();S.logs.unshift({id:Date.now(),type:'area',timestamp:now.toISOString(),displayTime:ts,similarity:sim.toFixed(1),deltaE:dE.toFixed(2),histSim:hS.toFixed(1),verdict:v.text.replace(/[✅⚠️❌]\s?/g,''),verdictRaw:v.text,labStd:lS.map(v=>v.toFixed(2)),labSample:lM.map(v=>v.toFixed(2)),roi:S.roi,product:_sm.product,lot:_sm.lot,supplier:_sm.supplier,inspector:_sm.inspector,descriptor:_desc.text,dL:_desc.dL,da:_desc.da,db:_desc.db});saveLogs();
     }catch(e){toast('❌ เกิดข้อผิดพลาด');console.error(e)}
     btn.classList.remove('disabled');btn.classList.add('ready');btn.innerHTML='🔬 วิเคราะห์สี — Area Compare';btn.disabled=false;
   },100);
@@ -739,7 +1281,7 @@ function saveResultImage(){
   x.fillStyle='#0a0e17';x.fillRect(0,0,w,h);
   x.fillStyle='#111827';x.fillRect(0,0,w,50);
   x.fillStyle='#3b82f6';x.font='bold 16px JetBrains Mono,monospace';
-  x.fillText('QC COLOR COMPARE v2.5',16,32);
+  x.fillText('PackColor QC v2.8',16,32);
   const is=document.getElementById('img-std'),im=document.getElementById('img-smp');
   x.fillStyle='#1a2236';x.fillRect(16,60,280,310);x.drawImage(is,18,90,276,276);
   x.fillStyle='#06b6d4';x.font='bold 12px JetBrains Mono';x.fillText('STANDARD',24,78);
@@ -771,14 +1313,14 @@ function renderLogs(){
     const sc=l.verdict==='PASS'?'var(--accent-green)':l.verdict==='WARNING'?'var(--accent-amber)':'var(--accent-red)';
     const vc=l.verdict==='PASS'?'verdict-pass':l.verdict==='WARNING'?'verdict-warning':'verdict-fail';
     const tb=l.type==='point'?'<span class="log-type-badge type-point">POINT</span>':'<span class="log-type-badge type-area">AREA</span>';
-    const meta=[l.product,l.lot].filter(Boolean).join(' | ');return`<div class="log-item"><div class="log-score" style="color:${sc}">${l.similarity}%</div><div class="log-info"><div class="log-time">${l.displayTime} ${tb}</div><div class="log-method">ΔE:${l.deltaE} | ${l.roi}${meta?' | <span style="color:var(--accent-cyan)">'+meta+'</span>':''}</div></div><span class="log-verdict ${vc}">${l.verdictRaw||l.verdict}</span></div>`;
+    const meta=[l.product,l.lot].filter(Boolean).join(' | ');const desc=l.descriptor?`<span style="font-size:9px;color:var(--text-muted);display:block;margin-top:2px">${l.descriptor}</span>`:'';return`<div class="log-item"><div class="log-score" style="color:${sc}">${l.similarity}%</div><div class="log-info"><div class="log-time">${l.displayTime} ${tb}</div><div class="log-method">ΔE:${l.deltaE} | ${l.roi}${meta?' | <span style="color:var(--accent-cyan)">'+meta+'</span>':''}</div>${desc}</div><span class="log-verdict ${vc}">${l.verdictRaw||l.verdict}</span></div>`;
   }).join('');
 }
 function exportCSV(){
   if(!S.logs.length){toast('ℹ️ ไม่มีข้อมูล');return}
-  const h=['Timestamp','Type','Product','Lot','Supplier','Inspector','Similarity(%)','DeltaE','HistCorr(%)','Verdict','ROI','STD_L','STD_a','STD_b','Sample_L','Sample_a','Sample_b'];
+  const h=['Timestamp','Type','Product','Lot','Supplier','Inspector','Similarity(%)','DeltaE','HistCorr(%)','Verdict','Descriptor','dL*','da*','db*','ROI','STD_L','STD_a','STD_b','Sample_L','Sample_a','Sample_b'];
   let csv='\uFEFF'+h.join(',')+'\n';
-  S.logs.forEach(l=>{const prd=(l.product||'').replace(/,/g,' '),lot=(l.lot||'').replace(/,/g,' '),sup=(l.supplier||'').replace(/,/g,' '),ins=(l.inspector||'').replace(/,/g,' ');csv+=[l.timestamp,l.type||'area',prd,lot,sup,ins,l.similarity,l.deltaE,l.histSim,l.verdict,l.roi,...(l.labStd||['','','']),...(l.labSample||['','',''])].join(',')+'\n'});
+  S.logs.forEach(l=>{const prd=(l.product||'').replace(/,/g,' '),lot=(l.lot||'').replace(/,/g,' '),sup=(l.supplier||'').replace(/,/g,' '),ins=(l.inspector||'').replace(/,/g,' '),desc=(l.descriptor||'').replace(/,/g,' ');csv+=[l.timestamp,l.type||'area',prd,lot,sup,ins,l.similarity,l.deltaE,l.histSim,l.verdict,desc,l.dL||'',l.da||'',l.db||'',l.roi,...(l.labStd||['','','']),...(l.labSample||['','',''])].join(',')+'\n'});
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
   const u=URL.createObjectURL(blob);
   const a=document.createElement('a');a.href=u;a.download=`QC_Log_${new Date().toISOString().slice(0,10)}.csv`;
@@ -817,8 +1359,8 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.cla
 
   // --- Generate manifest as blob URL ---
   const manifest={
-    name:'COLOR QC — Wann Cosmetics',
-    short_name:'COLOR QC',
+    name:'PackColor QC — Wann Cosmetics',
+    short_name:'PackColor QC',
     description:'PKG Color QC — เปรียบเทียบสีบรรจุภัณฑ์ด้วย CIE ΔE',
     start_url:'.',
     display:'standalone',
@@ -836,7 +1378,7 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.cla
 
   // --- Service Worker (inline via blob) for offline support ---
   const swCode=`
-const CACHE='color-qc-v2.5';
+const CACHE='color-qc-v2.8';
 self.addEventListener('install',e=>{
   e.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(['/'])).catch(()=>{}));
   self.skipWaiting();
