@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>COLOR QC — Wann</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="COLOR QC">
+<meta name="theme-color" content="#0a0e17">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="COLOR QC">
+<link rel="manifest" href="#" id="manifestLink">
+<link rel="apple-touch-icon" href="#" id="appleIcon">
+<style>
+  :root {
+    --bg-primary:#0a0e17; --bg-secondary:#111827; --bg-card:#1a2236;
+    --bg-card-hover:#1e2a42; --border:#2a3a5c; --border-active:#3b82f6;
+    --text-primary:#e2e8f0; --text-secondary:#94a3b8; --text-muted:#64748b;
+    --accent-blue:#3b82f6; --accent-cyan:#06b6d4; --accent-green:#10b981;
+    --accent-amber:#f59e0b; --accent-red:#ef4444; --accent-purple:#8b5cf6;
+    --accent-pink:#ec4899;
+    --gradient-blue:linear-gradient(135deg,#3b82f6,#06b6d4);
+    --gradient-pink:linear-gradient(135deg,#ec4899,#8b5cf6);
+    --radius:12px; --radius-sm:8px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Noto Sans Thai','JetBrains Mono',sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh;overflow-x:hidden}
+
+  .header{background:var(--bg-secondary);border-bottom:1px solid var(--border);padding:10px 12px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+  .header-left{display:flex;align-items:center;gap:8px}
+  .logo-icon{width:34px;height:34px;background:var(--gradient-blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 4px 15px rgba(59,130,246,0.3)}
+  .header-title{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;background:var(--gradient-blue);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .header-subtitle{font-size:9px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase}
+  .header-nav{display:flex;gap:3px}
+  .nav-btn{background:transparent;border:1px solid var(--border);color:var(--text-secondary);padding:7px 10px;border-radius:var(--radius-sm);font-size:11px;font-family:inherit;cursor:pointer;transition:all .2s;white-space:nowrap}
+  .nav-btn.active,.nav-btn:hover{background:var(--accent-blue);border-color:var(--accent-blue);color:white}
+
+  .main{padding:10px;max-width:800px;margin:0 auto}
+  .tab-content{display:none}.tab-content.active{display:block}
+
+  .mode-toggle{display:flex;gap:4px;margin-bottom:10px;background:var(--bg-secondary);border-radius:var(--radius);padding:4px;border:1px solid var(--border)}
+  .mode-btn{flex:1;padding:10px 8px;background:transparent;border:none;color:var(--text-muted);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;border-radius:var(--radius-sm);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+  .mode-btn.active{background:var(--bg-card);color:var(--text-primary);box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+  .mode-panel{display:none}.mode-panel.active{display:block}
+
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+  .image-panel{background:var(--bg-card);border:2px solid var(--border);border-radius:var(--radius);overflow:hidden;position:relative;transition:border-color .3s}
+  .panel-header{padding:6px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+  .panel-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+  .label-std{color:var(--accent-cyan)}.label-sample{color:var(--accent-amber)}
+  .panel-badge{font-size:8px;padding:2px 6px;border-radius:20px;font-weight:600}
+  .badge-std{background:rgba(6,182,212,0.15);color:var(--accent-cyan)}
+  .badge-sample{background:rgba(245,158,11,0.15);color:var(--accent-amber)}
+
+  .image-area{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;position:relative;cursor:pointer}
+  .image-area img{width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;padding:4px;pointer-events:none}
+  .upload-placeholder{text-align:center;color:var(--text-muted)}
+  .upload-icon{font-size:28px;margin-bottom:4px;opacity:0.6}
+  .upload-text{font-size:10px;line-height:1.5}
+  .image-actions{padding:4px;display:flex;gap:3px;border-top:1px solid var(--border)}
+  .img-btn{flex:1;padding:8px 4px;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-secondary);border-radius:var(--radius-sm);font-size:10px;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:3px;transition:all .2s}
+  .img-btn:active{background:var(--accent-blue);border-color:var(--accent-blue);color:white}
+
+  .roi-section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:10px;margin-bottom:10px}
+  .roi-title{font-size:11px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+  .roi-options{display:flex;gap:5px;flex-wrap:wrap}
+  .roi-chip{padding:7px 12px;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-secondary);border-radius:20px;font-size:11px;font-family:inherit;cursor:pointer;transition:all .2s}
+  .roi-chip.active{background:var(--accent-blue);border-color:var(--accent-blue);color:white}
+
+  .analyze-btn{width:100%;padding:14px;border:none;border-radius:var(--radius);font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .3s;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px}
+  .analyze-btn.ready{background:var(--gradient-blue);color:white;box-shadow:0 4px 20px rgba(59,130,246,0.3)}
+  .analyze-btn.ready:active{transform:scale(0.98)}
+  .analyze-btn.disabled{background:var(--bg-card);color:var(--text-muted);border:1px solid var(--border);cursor:not-allowed}
+
+  .results-card{background:var(--bg-card);border:2px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;animation:slideUp .4s ease}
+  @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .results-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+  .results-title{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--text-secondary);letter-spacing:1px;text-transform:uppercase}
+  .result-timestamp{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-muted)}
+  .score-display{padding:20px 14px;text-align:center}
+  .score-value{font-family:'JetBrains Mono',monospace;font-size:48px;font-weight:700;line-height:1;margin-bottom:4px}
+  .score-unit{font-size:22px;opacity:0.7}
+  .score-label{font-size:12px;color:var(--text-secondary);margin-bottom:14px}
+  .verdict-badge{display:inline-block;padding:5px 18px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1px}
+  .verdict-pass{background:rgba(16,185,129,0.15);color:var(--accent-green);border:1px solid rgba(16,185,129,0.3)}
+  .verdict-warning{background:rgba(245,158,11,0.15);color:var(--accent-amber);border:1px solid rgba(245,158,11,0.3)}
+  .verdict-fail{background:rgba(239,68,68,0.15);color:var(--accent-red);border:1px solid rgba(239,68,68,0.3)}
+  .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-top:1px solid var(--border)}
+  .detail-item{background:var(--bg-card);padding:10px 14px}
+  .detail-label{font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px}
+  .detail-value{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600}
+  .color-swatches{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--border);align-items:center;justify-content:center}
+  .swatch-group{display:flex;align-items:center;gap:5px}
+  .swatch-label{font-size:9px;color:var(--text-muted);text-transform:uppercase}
+  .swatch-color{width:26px;height:26px;border-radius:6px;border:2px solid var(--border)}
+  .swatch-arrow{color:var(--text-muted);font-size:13px;margin:0 3px}
+
+  .action-row{display:flex;gap:6px;margin-bottom:10px}
+  .action-btn{flex:1;padding:10px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);border-radius:var(--radius-sm);font-size:11px;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .2s}
+  .action-btn:active{transform:scale(0.97)}
+
+  /* Save Preview Modal */
+  .save-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+  .save-modal img{max-width:100%;max-height:70vh;border-radius:var(--radius);border:1px solid var(--border)}
+  .save-modal-text{color:var(--text-secondary);font-size:13px;margin-top:12px;text-align:center;line-height:1.6}
+  .save-modal-close{margin-top:12px;padding:10px 30px;background:var(--accent-blue);color:white;border:none;border-radius:var(--radius-sm);font-size:13px;font-family:inherit;cursor:pointer}
+
+  /* Picker */
+  .picker-container{background:var(--bg-card);border:2px solid var(--border);border-radius:var(--radius);overflow:hidden;position:relative}
+  .picker-header{padding:6px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+  .picker-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+  .picker-hint{font-size:9px;color:var(--text-muted)}
+  .picker-canvas-wrap{position:relative;width:100%;aspect-ratio:1;background:#000;cursor:crosshair;touch-action:none;overflow:hidden}
+  .picker-canvas-wrap img{width:100%;height:100%;object-fit:contain;pointer-events:none}
+  .pick-marker{position:absolute;width:30px;height:30px;border:2px solid white;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:10;box-shadow:0 0 0 1px rgba(0,0,0,0.5);display:none}
+  .pick-marker::before,.pick-marker::after{content:'';position:absolute;background:white}
+  .pick-marker::before{width:1px;height:8px;top:50%;left:50%;transform:translate(-50%,-50%)}
+  .pick-marker::after{width:8px;height:1px;top:50%;left:50%;transform:translate(-50%,-50%)}
+  .loupe{position:absolute;width:80px;height:80px;border:3px solid white;border-radius:50%;overflow:hidden;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,0.6);z-index:20;display:none}
+  .loupe canvas{width:100%;height:100%}
+
+  .color-readout{padding:10px;display:none;border-top:1px solid var(--border)}
+  .color-readout.visible{display:block;animation:slideUp .3s ease}
+  .readout-swatch-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .readout-swatch{width:44px;height:44px;border-radius:10px;border:2px solid var(--border);box-shadow:0 4px 12px rgba(0,0,0,0.3);flex-shrink:0}
+  .readout-hex{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700}
+  .readout-copy{font-size:9px;color:var(--accent-blue);cursor:pointer;margin-top:1px}
+  .readout-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+  .readout-chip{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px 9px}
+  .readout-chip-label{font-size:8px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:1px}
+  .readout-chip-value{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600}
+
+  .point-compare-section{background:var(--bg-card);border:2px solid var(--accent-pink);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;display:none}
+  .point-compare-section.visible{display:block;animation:slideUp .3s ease}
+  .pc-header{padding:10px 14px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,rgba(236,72,153,0.1),rgba(139,92,246,0.1))}
+  .pc-title{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--accent-pink);letter-spacing:1px;text-transform:uppercase}
+  .pc-body{padding:14px}
+  .pc-swatches{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:14px}
+  .pc-swatch-block{text-align:center}
+  .pc-swatch{width:52px;height:52px;border-radius:12px;border:2px solid var(--border);margin-bottom:4px;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+  .pc-swatch-label{font-size:9px;color:var(--text-muted);text-transform:uppercase}
+  .pc-arrow{font-size:18px;color:var(--text-muted)}
+  .pc-score-row{text-align:center;margin-bottom:10px}
+  .pc-score-val{font-family:'JetBrains Mono',monospace;font-size:34px;font-weight:700}
+  .pc-score-label{font-size:11px;color:var(--text-secondary)}
+
+  .log-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .log-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)}
+  .export-csv-btn{padding:7px 14px;border:1px solid var(--accent-purple);background:transparent;color:var(--accent-purple);border-radius:var(--radius-sm);font-size:11px;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .2s}
+  .export-csv-btn:hover{background:var(--accent-purple);color:white}
+  .log-list{display:flex;flex-direction:column;gap:6px}
+  .log-item{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;display:flex;align-items:center;gap:10px}
+  .log-score{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;min-width:58px;text-align:center}
+  .log-info{flex:1;min-width:0}
+  .log-time{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted)}
+  .log-method{font-size:10px;color:var(--text-secondary);margin-top:1px}
+  .log-verdict{font-size:9px;padding:3px 8px;border-radius:12px;font-weight:600;white-space:nowrap}
+  .log-empty{text-align:center;padding:30px 20px;color:var(--text-muted)}
+  .log-type-badge{font-size:7px;padding:2px 5px;border-radius:8px;font-weight:700;margin-left:4px;vertical-align:middle}
+  .type-area{background:rgba(59,130,246,0.2);color:var(--accent-blue)}
+  .type-point{background:rgba(236,72,153,0.2);color:var(--accent-pink)}
+
+  .settings-group{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+  .settings-title{font-size:12px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .setting-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(42,58,92,0.5)}
+  .setting-row:last-child{border-bottom:none}
+  .setting-label{font-size:12px;color:var(--text-secondary)}
+  .setting-value{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-cyan)}
+  .threshold-input{width:65px;padding:5px 8px;background:var(--bg-secondary);border:1px solid var(--border);color:var(--text-primary);border-radius:var(--radius-sm);font-family:'JetBrains Mono',monospace;font-size:12px;text-align:center}
+  .threshold-input:focus{outline:none;border-color:var(--accent-blue)}
+  .text-input{width:100%;padding:8px 10px;background:var(--bg-secondary);border:1px solid var(--border);color:var(--text-primary);border-radius:var(--radius-sm);font-family:inherit;font-size:12px;margin-top:4px;box-sizing:border-box}
+  .text-input:focus{outline:none;border-color:var(--accent-blue)}
+  .session-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:600;background:rgba(6,182,212,0.15);color:var(--accent-cyan);border:1px solid rgba(6,182,212,0.3);margin-top:4px}
+
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--bg-card);border:1px solid var(--accent-green);color:var(--text-primary);padding:10px 20px;border-radius:var(--radius);font-size:12px;z-index:9999;opacity:0;transition:all .3s;white-space:nowrap}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .spinner{width:18px;height:18px;border:2px solid transparent;border-top-color:var(--accent-cyan);border-radius:50%;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .hidden{display:none!important}
+  .offscreen{position:absolute;left:-9999px;top:-9999px}
+  /* PWA Install Banner */
+  .pwa-banner{position:fixed;bottom:0;left:0;width:100%;background:linear-gradient(135deg,#1a2236,#0d1829);border-top:2px solid var(--accent-blue);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;z-index:500;box-shadow:0 -4px 20px rgba(0,0,0,0.4)}
+  .pwa-banner-left{display:flex;align-items:center;gap:10px}
+  .pwa-banner-icon{width:40px;height:40px;background:var(--gradient-blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .pwa-banner-text{font-size:12px;color:var(--text-secondary);line-height:1.5}
+  .pwa-banner-title{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:1px}
+  .pwa-banner-actions{display:flex;gap:6px;flex-shrink:0}
+  .pwa-install-btn{padding:8px 16px;background:var(--gradient-blue);color:white;border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap}
+  .pwa-dismiss-btn{padding:8px 10px;background:transparent;color:var(--text-muted);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:inherit;cursor:pointer}
+  /* iOS install guide modal */
+  .ios-guide{position:fixed;bottom:0;left:0;width:100%;background:var(--bg-secondary);border-top:2px solid var(--accent-blue);border-radius:16px 16px 0 0;padding:20px 16px;z-index:600;box-shadow:0 -8px 30px rgba(0,0,0,0.5)}
+  .ios-guide-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+  .ios-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+  .ios-step-num{width:24px;height:24px;background:var(--accent-blue);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+  .ios-step-text{font-size:12px;color:var(--text-secondary);line-height:1.6}
+  .ios-step-text strong{color:var(--text-primary)}
+  .ios-close-btn{width:100%;padding:12px;background:var(--accent-blue);color:white;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:6px}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <div class="logo-icon">🔬</div>
+    <div>
+      <div class="header-title">COLOR QC</div>
+      <div class="header-subtitle">Packaging Inspector v2.5</div>
+    </div>
+  </div>
+  <div class="header-nav">
+    <button class="nav-btn active" onclick="switchTab('compare')">📸 เทียบ</button>
+    <button class="nav-btn" onclick="switchTab('history')">📋 Log</button>
+    <button class="nav-btn" onclick="switchTab('settings')">⚙️</button>
+  </div>
+</header>
+
+<main class="main">
+  <!-- ===== COMPARE TAB ===== -->
+  <div id="tab-compare" class="tab-content active">
+    <div class="mode-toggle">
+      <button class="mode-btn active" onclick="switchMode('area')">🔬 เทียบพื้นที่</button>
+      <button class="mode-btn" onclick="switchMode('picker')">🎯 Color Picker</button>
+    </div>
+
+    <!-- MODE: AREA -->
+    <div id="mode-area" class="mode-panel active">
+      <div class="compare-grid">
+        <!-- STD Panel -->
+        <div class="image-panel">
+          <div class="panel-header"><span class="panel-label label-std">Standard</span><span class="panel-badge badge-std">STD</span></div>
+          <div class="image-area" onclick="document.getElementById('input-std-file').click()">
+            <div class="upload-placeholder" id="ph-std"><div class="upload-icon">📦</div><div class="upload-text">แตะอัปโหลด STD</div></div>
+            <img id="img-std" class="hidden" alt="STD">
+          </div>
+          <div class="image-actions">
+            <button class="img-btn" onclick="event.stopPropagation();document.getElementById('input-std-file').click()">📁 ไฟล์</button>
+            <button class="img-btn" onclick="event.stopPropagation();document.getElementById('input-std-cam').click()">📷 กล้อง</button>
+            <button class="img-btn" onclick="event.stopPropagation();clearImage('std')">✕</button>
+          </div>
+          <!-- Two inputs: one for gallery, one for camera -->
+          <input type="file" id="input-std-file" accept="image/*" class="hidden" onchange="handleFile(this,'std')">
+          <input type="file" id="input-std-cam" accept="image/*" capture="environment" class="hidden" onchange="handleFile(this,'std')">
+        </div>
+        <!-- Sample Panel -->
+        <div class="image-panel">
+          <div class="panel-header"><span class="panel-label label-sample">Sample</span><span class="panel-badge badge-sample">ตัวอย่าง</span></div>
+          <div class="image-area" onclick="document.getElementById('input-smp-file').click()">
+            <div class="upload-placeholder" id="ph-smp"><div class="upload-icon">🔍</div><div class="upload-text">แตะอัปโหลด Sample</div></div>
+            <img id="img-smp" class="hidden" alt="Sample">
+          </div>
+          <div class="image-actions">
+            <button class="img-btn" onclick="event.stopPropagation();document.getElementById('input-smp-file').click()">📁 ไฟล์</button>
+            <button class="img-btn" onclick="event.stopPropagation();document.getElementById('input-smp-cam').click()">📷 กล้อง</button>
+            <button class="img-btn" onclick="event.stopPropagation();clearImage('smp')">✕</button>
+          </div>
+          <input type="file" id="input-smp-file" accept="image/*" class="hidden" onchange="handleFile(this,'smp')">
+          <input type="file" id="input-smp-cam" accept="image/*" capture="environment" class="hidden" onchange="handleFile(this,'smp')">
+        </div>
+      </div>
+
+      <div class="roi-section">
+        <div class="roi-title">🎯 ROI (Region of Interest)</div>
+        <div class="roi-options">
+          <button class="roi-chip active" onclick="setROI(this,'full')">ทั้งภาพ</button>
+          <button class="roi-chip" onclick="setROI(this,'center50')">Center 50%</button>
+          <button class="roi-chip" onclick="setROI(this,'center25')">Center 25%</button>
+        </div>
+      </div>
+
+      <button id="analyzeBtn" class="analyze-btn disabled" onclick="analyzeArea()" disabled>🔬 วิเคราะห์สี — Area Compare</button>
+      <div id="areaResults"></div>
+      <div id="areaActions" class="action-row hidden">
+        <button class="action-btn" onclick="saveResultImage()" style="border-color:var(--accent-green)">💾 Save ภาพ</button>
+        <button class="action-btn" onclick="switchTab('history')" style="border-color:var(--accent-purple)">📋 ดู Log</button>
+      </div>
+    </div>
+
+    <!-- MODE: PICKER -->
+    <div id="mode-picker" class="mode-panel">
+      <div class="compare-grid">
+        <!-- Picker STD -->
+        <div class="picker-container">
+          <div class="picker-header">
+            <span class="picker-label" style="color:var(--accent-cyan)">🎯 STD</span>
+            <span class="picker-hint">แตะจุดบนภาพ</span>
+          </div>
+          <div class="picker-canvas-wrap" id="pwStd"
+               ontouchstart="pTouch(event,'std')" ontouchmove="pTouchMove(event,'std')" ontouchend="pTouchEnd('std')"
+               onmousedown="pMouse(event,'std')" onmousemove="pMouseMove(event,'std')">
+            <img id="pImgStd" class="hidden">
+            <div class="upload-placeholder" id="pPhStd"><div class="upload-icon">📦</div><div class="upload-text">อัปโหลด STD</div></div>
+            <div class="pick-marker" id="mkStd"></div>
+            <div class="loupe" id="lpStd"><canvas id="lcStd" width="80" height="80"></canvas></div>
+          </div>
+          <div class="image-actions">
+            <button class="img-btn" onclick="document.getElementById('pi-std-f').click()">📁 ไฟล์</button>
+            <button class="img-btn" onclick="document.getElementById('pi-std-c').click()">📷 กล้อง</button>
+            <button class="img-btn" onclick="clearPicker('std')">✕</button>
+          </div>
+          <input type="file" id="pi-std-f" accept="image/*" class="hidden" onchange="handlePFile(this,'std')">
+          <input type="file" id="pi-std-c" accept="image/*" capture="environment" class="hidden" onchange="handlePFile(this,'std')">
+          <div class="color-readout" id="rdStd">
+            <div class="readout-swatch-row">
+              <div class="readout-swatch" id="swStd"></div>
+              <div><div class="readout-hex" id="hxStd">#------</div><div class="readout-copy" onclick="copyHex('std')">📋 Copy</div></div>
+            </div>
+            <div class="readout-grid">
+              <div class="readout-chip"><div class="readout-chip-label">RGB</div><div class="readout-chip-value" id="rvStd">—</div></div>
+              <div class="readout-chip"><div class="readout-chip-label">LAB</div><div class="readout-chip-value" id="lvStd">—</div></div>
+              <div class="readout-chip"><div class="readout-chip-label">HSL</div><div class="readout-chip-value" id="hvStd">—</div></div>
+              <div class="readout-chip"><div class="readout-chip-label">CMYK</div><div class="readout-chip-value" id="cvStd">—</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Picker Sample -->
+        <div class="picker-container">
+          <div class="picker-header">
+            <span class="picker-label" style="color:var(--accent-amber)">🎯 Sample</span>
+            <span class="picker-hint">แตะจุดบนภาพ</span>
+          </div>
+          <div class="picker-canvas-wrap" id="pwSample"
+               ontouchstart="pTouch(event,'sample')" ontouchmove="pTouchMove(event,'sample')" ontouchend="pTouchEnd('sample')"
+               onmousedown="pMouse(event,'sample')" onmousemove="pMouseMove(event,'sample')">
+            <img id="pImgSample" class="hidden">
+            <div class="upload-placeholder" id="pPhSample"><div class="upload-icon">🔍</div><div class="upload-text">อัปโหลด Sample</div></div>
+            <div class="pick-marker" id="mkSample"></div>
+            <div class="loupe" id="lpSample"><canvas id="lcSample" width="80" height="80"></canvas></div>
+          </div>
+          <div class="image-actions">
+            <button class="img-btn" onclick="document.getElementById('pi-smp-f').click()">📁 ไฟล์</button>
+            <button class="img-btn" onclick="document.getElementById('pi-smp-c').click()">📷 กล้อง</button>
+            <button class="img-btn" onclick="clearPicker('sample')">✕</button>
+          </div>
+          <input type="file" id="pi-smp-f" accept="image/*" class="hidden" onchange="handlePFile(this,'sample')">
+          <input type="file" id="pi-smp-c" accept="image/*" capture="environment" class="hidden" onchange="handlePFile(this,'sample')">
+          <div class="color-readout" id="rdSample">
+            <div class="readout-swatch-row">
+              <div class="readout-swatch" id="swSample"></div>
+              <div><div class="readout-hex" id="hxSample">#------</div><div class="readout-copy" onclick="copyHex('sample')">📋 Copy</div></div>
+            </div>
+            <div class="readout-grid">
+              <div class="readout-chip"><div class="readout-chip-label">RGB</div><div class="readout-chip-value" id="rvSample">—</div></div>
+              <div class="readout-chip"><div class="readout-chip-label">LAB</div><div class="readout-chip-value" id="lvSample">—</div></div>
+              <div class="readout-chip"><div class="readout-chip-label">HSL</div><div class="readout-chip-value" id="hvSample">—</div></div>
+              <div class="readout-chip"><div class="readout-chip-label">CMYK</div><div class="readout-chip-value" id="cvSample">—</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="point-compare-section" id="ptResult">
+        <div class="pc-header"><span class="pc-title">🎯 Point-to-Point Compare</span></div>
+        <div class="pc-body">
+          <div class="pc-swatches">
+            <div class="pc-swatch-block"><div class="pc-swatch" id="pcSwStd"></div><div class="pc-swatch-label">STD</div></div>
+            <div class="pc-arrow">⟷</div>
+            <div class="pc-swatch-block"><div class="pc-swatch" id="pcSwSmp"></div><div class="pc-swatch-label">Sample</div></div>
+          </div>
+          <div class="pc-score-row">
+            <div class="pc-score-val" id="pcScore">—</div>
+            <div class="pc-score-label">Color Similarity</div>
+            <div style="margin-top:8px"><span class="verdict-badge" id="pcVerdict"></span></div>
+          </div>
+          <div class="readout-grid">
+            <div class="readout-chip"><div class="readout-chip-label">ΔE</div><div class="readout-chip-value" id="pcDE">—</div></div>
+            <div class="readout-chip"><div class="readout-chip-label">Method</div><div class="readout-chip-value">CIE76 Point</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HISTORY TAB ===== -->
+  <div id="tab-history" class="tab-content">
+    <div class="log-toolbar">
+      <span class="log-count" id="logCount">0 records</span>
+      <button class="export-csv-btn" onclick="exportCSV()">📥 Export CSV</button>
+    </div>
+    <div class="log-list" id="logList"><div class="log-empty">📋 ยังไม่มีประวัติ</div></div>
+  </div>
+
+  <!-- ===== SETTINGS TAB ===== -->
+  <div id="tab-settings" class="tab-content">
+    <div class="settings-group">
+      <div class="settings-title">📦 ข้อมูล Session การตรวจ</div>
+      <div class="setting-row" style="flex-direction:column;align-items:flex-start">
+        <span class="setting-label">ชื่อสินค้า / Product Name</span>
+        <input type="text" class="text-input" id="fieldProduct" placeholder="เช่น Foundation Cushion SKU-001" oninput="saveSettings()">
+      </div>
+      <div class="setting-row" style="flex-direction:column;align-items:flex-start">
+        <span class="setting-label">Lot / Batch No.</span>
+        <input type="text" class="text-input" id="fieldLot" placeholder="เช่น LOT-2026-001" oninput="saveSettings()">
+      </div>
+      <div class="setting-row" style="flex-direction:column;align-items:flex-start">
+        <span class="setting-label">Supplier / แหล่งที่มา</span>
+        <input type="text" class="text-input" id="fieldSupplier" placeholder="เช่น บ.ABC Packaging จำกัด" oninput="saveSettings()">
+      </div>
+      <div class="setting-row" style="flex-direction:column;align-items:flex-start">
+        <span class="setting-label">ผู้ตรวจ / Inspector</span>
+        <input type="text" class="text-input" id="fieldInspector" placeholder="เช่น วัชพล" oninput="saveSettings()">
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">Session ปัจจุบัน</span>
+        <span class="session-badge" id="sessionBadge">ยังไม่กำหนด</span>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-title">🎯 เกณฑ์ตัดสิน (ΔE Threshold)</div>
+      <div class="setting-row"><span class="setting-label">✅ PASS (ΔE ≤)</span><input type="number" class="threshold-input" id="thPass" value="5" min="0" max="50" step="0.5" oninput="saveSettings()"></div>
+      <div class="setting-row"><span class="setting-label">⚠️ WARNING (ΔE ≤)</span><input type="number" class="threshold-input" id="thWarn" value="10" min="0" max="50" step="0.5" oninput="saveSettings()"></div>
+      <div class="setting-row"><span class="setting-label">❌ FAIL (ΔE >)</span><span class="setting-value">Above warning</span></div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-title">📊 Color Space</div>
+      <div class="setting-row"><span class="setting-label">วิธีเปรียบเทียบ</span><span class="setting-value">CIE LAB ΔE*76</span></div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-title">ℹ️ เกี่ยวกับ</div>
+      <div class="setting-row"><span class="setting-label">Version</span><span class="setting-value">2.5 Local Storage</span></div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-title">🗑️ จัดการข้อมูล</div>
+      <div class="setting-row"><span class="setting-label">Log ที่บันทึกไว้</span><span class="setting-value" id="storageInfo">—</span></div>
+      <div class="setting-row"><span class="setting-label">พื้นที่ใช้งาน (localStorage)</span><span class="setting-value" id="storageSize">—</span></div>
+      <div class="setting-row"><span class="setting-label">ลบประวัติทั้งหมด</span><button class="export-csv-btn" style="border-color:var(--accent-red);color:var(--accent-red)" onclick="clearLogs()">🗑️ Clear</button></div>
+    </div>
+  </div>
+</main>
+
+<!-- Save Preview Modal -->
+<div id="saveModal" class="save-modal hidden">
+  <img id="savePreviewImg">
+  <div class="save-modal-text">📱 กดค้างที่ภาพ → เลือก "Save Image"<br>หรือ "บันทึกรูปภาพ" เพื่อเซฟลงเครื่อง</div>
+  <button class="save-modal-close" onclick="document.getElementById('saveModal').classList.add('hidden')">✕ ปิด</button>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<!-- PWA Install Banner (Android/Desktop) -->
+<div class="pwa-banner hidden" id="pwaBanner">
+  <div class="pwa-banner-left">
+    <div class="pwa-banner-icon">🔬</div>
+    <div>
+      <div class="pwa-banner-title">ติดตั้ง COLOR QC App</div>
+      <div class="pwa-banner-text">เพิ่มลงหน้าจอหลัก — ใช้งานได้เหมือนแอปจริง</div>
+    </div>
+  </div>
+  <div class="pwa-banner-actions">
+    <button class="pwa-dismiss-btn" onclick="dismissPWA()">ไม่ใช่ตอนนี้</button>
+    <button class="pwa-install-btn" onclick="installPWA()">📲 ติดตั้ง</button>
+  </div>
+</div>
+
+<!-- iOS Install Guide Modal -->
+<div class="ios-guide hidden" id="iosGuide">
+  <div class="ios-guide-title">📱 วิธีติดตั้งบน iPhone / iPad</div>
+  <div class="ios-step"><div class="ios-step-num">1</div><div class="ios-step-text">แตะปุ่ม <strong>Share</strong> (กล่องมีลูกศรขึ้น) ที่แถบล่างของ Safari</div></div>
+  <div class="ios-step"><div class="ios-step-num">2</div><div class="ios-step-text">เลื่อนลงและแตะ <strong>"Add to Home Screen"</strong> หรือ <strong>"เพิ่มไปที่หน้าจอหลัก"</strong></div></div>
+  <div class="ios-step"><div class="ios-step-num">3</div><div class="ios-step-text">แตะ <strong>"Add"</strong> หรือ <strong>"เพิ่ม"</strong> มุมบนขวา — แอปจะปรากฏบนหน้าจอหลักทันที</div></div>
+  <div class="ios-step"><div class="ios-step-num">4</div><div class="ios-step-text">เปิดแอปจากหน้าจอหลัก — จะทำงานแบบ <strong>Fullscreen</strong> ไม่มีแถบ browser</div></div>
+  <button class="ios-close-btn" onclick="document.getElementById('iosGuide').classList.add('hidden')">✓ เข้าใจแล้ว</button>
+</div>
+<canvas id="cA" class="offscreen"></canvas><canvas id="cB" class="offscreen"></canvas><canvas id="cX" class="offscreen"></canvas>
+<canvas id="pcStd" class="offscreen"></canvas><canvas id="pcSample" class="offscreen"></canvas>
+
+<script>
+// ===== STATE (in-memory, no localStorage) =====
+const S = {
+  stdImg:null, smpImg:null, roi:'full',
+  logs:[], lastR:null,
+  pStdImg:null, pSmpImg:null, pStdLab:null, pSmpLab:null, pStdRGB:null, pSmpRGB:null
+};
+
+// Load logs from persistent storage
+function loadLogs() {
+  try {
+    const raw = localStorage.getItem('qc_logs');
+    if (raw) S.logs = JSON.parse(raw);
+  } catch(e) { S.logs = []; }
+  renderLogs();
+}
+function saveLogs() {
+  try {
+    if (S.logs.length > 500) S.logs = S.logs.slice(0, 500);
+    localStorage.setItem('qc_logs', JSON.stringify(S.logs));
+  } catch(e) { console.warn('Storage full or unavailable'); }
+}
+loadLogs();
+
+// ===== SETTINGS PERSISTENCE =====
+function loadSettings() {
+  try {
+    const raw = localStorage.getItem('qc_settings');
+    if (raw) {
+      const s = JSON.parse(raw);
+      if (s.thPass !== undefined) document.getElementById('thPass').value = s.thPass;
+      if (s.thWarn !== undefined) document.getElementById('thWarn').value = s.thWarn;
+      if (s.product !== undefined) document.getElementById('fieldProduct').value = s.product;
+      if (s.lot !== undefined) document.getElementById('fieldLot').value = s.lot;
+      if (s.supplier !== undefined) document.getElementById('fieldSupplier').value = s.supplier;
+      if (s.inspector !== undefined) document.getElementById('fieldInspector').value = s.inspector;
+    }
+  } catch(e) {}
+  updateSessionBadge();
+}
+function saveSettings() {
+  try {
+    const s = {
+      thPass: document.getElementById('thPass').value,
+      thWarn: document.getElementById('thWarn').value,
+      product: document.getElementById('fieldProduct').value,
+      lot: document.getElementById('fieldLot').value,
+      supplier: document.getElementById('fieldSupplier').value,
+      inspector: document.getElementById('fieldInspector').value
+    };
+    localStorage.setItem('qc_settings', JSON.stringify(s));
+  } catch(e) {}
+  updateSessionBadge();
+}
+function updateSessionBadge() {
+  const p = document.getElementById('fieldProduct').value.trim();
+  const l = document.getElementById('fieldLot').value.trim();
+  const badge = document.getElementById('sessionBadge');
+  if(p || l) {
+    badge.textContent = (p || '—') + ' | ' + (l || '—');
+    badge.style.background = 'rgba(16,185,129,0.15)';
+    badge.style.color = 'var(--accent-green)';
+    badge.style.borderColor = 'rgba(16,185,129,0.3)';
+  } else {
+    badge.textContent = 'ยังไม่กำหนด';
+    badge.style.background = 'rgba(6,182,212,0.15)';
+    badge.style.color = 'var(--accent-cyan)';
+    badge.style.borderColor = 'rgba(6,182,212,0.3)';
+  }
+}
+
+loadSettings();
+
+// ===== TABS / MODES =====
+function updateStorageInfo() {
+  try {
+    const logRaw = localStorage.getItem('qc_logs') || '[]';
+    const logCount = JSON.parse(logRaw).length;
+    const totalBytes = Object.keys(localStorage).reduce((sum,k) => sum + (localStorage.getItem(k)||'').length * 2, 0);
+    const kb = (totalBytes / 1024).toFixed(1);
+    const el1 = document.getElementById('storageInfo');
+    const el2 = document.getElementById('storageSize');
+    if (el1) el1.textContent = logCount + ' records';
+    if (el2) el2.textContent = kb + ' KB / ~5 MB';
+  } catch(e) {}
+}
+function switchTab(t) {
+  document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  document.querySelectorAll('.nav-btn')[{compare:0,history:1,settings:2}[t]].classList.add('active');
+  if(t==='history') renderLogs();
+  if(t==='settings') updateStorageInfo();
+}
+function switchMode(m) {
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.mode-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.mode-btn')[m==='area'?0:1].classList.add('active');
+  document.getElementById('mode-'+m).classList.add('active');
+}
+
+// ===== COLOR SCIENCE =====
+const s2l=c=>{c/=255;return c<=0.04045?c/12.92:Math.pow((c+0.055)/1.055,2.4)};
+function rgb2xyz(r,g,b){const lr=s2l(r),lg=s2l(g),lb=s2l(b);return[lr*.4124564+lg*.3575761+lb*.1804375,lr*.2126729+lg*.7151522+lb*.0721750,lr*.0193339+lg*.1191920+lb*.9503041]}
+function xyz2lab(x,y,z){const f=t=>t>.008856?Math.cbrt(t):7.787*t+16/116;return[116*f(y/1)-16,500*(f(x/.95047)-f(y/1)),200*(f(y/1)-f(z/1.08883))]}
+function rgb2lab(r,g,b){return xyz2lab(...rgb2xyz(r,g,b))}
+function dE76(a,b){return Math.sqrt((a[0]-b[0])**2+(a[1]-b[1])**2+(a[2]-b[2])**2)}
+function rgb2hsl(r,g,b){r/=255;g/=255;b/=255;const mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn;let h=0,s=0,l=(mx+mn)/2;if(d){s=l>.5?d/(2-mx-mn):d/(mx+mn);if(mx===r)h=((g-b)/d+(g<b?6:0))/6;else if(mx===g)h=((b-r)/d+2)/6;else h=((r-g)/d+4)/6}return[Math.round(h*360),Math.round(s*100),Math.round(l*100)]}
+function rgb2cmyk(r,g,b){if(!r&&!g&&!b)return[0,0,0,100];const c=1-r/255,m=1-g/255,y=1-b/255,k=Math.min(c,m,y);return[Math.round((c-k)/(1-k)*100),Math.round((m-k)/(1-k)*100),Math.round((y-k)/(1-k)*100),Math.round(k*100)]}
+function rgb2hex(r,g,b){return'#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('').toUpperCase()}
+
+function roiB(w,h){if(S.roi==='center50'){const rw=w*.5,rh=h*.5;return[~~((w-rw)/2),~~((h-rh)/2),~~rw,~~rh]}if(S.roi==='center25'){const rw=w*.25,rh=h*.25;return[~~((w-rw)/2),~~((h-rh)/2),~~rw,~~rh]}return[0,0,w,h]}
+function avgLab(c,x){const[rx,ry,rw,rh]=roiB(c.width,c.height);const d=x.getImageData(rx,ry,rw,rh).data;let tL=0,tA=0,tB=0,n=0;const st=d.length>400000?16:4;for(let i=0;i<d.length;i+=st){const[l,a,b]=rgb2lab(d[i],d[i+1],d[i+2]);tL+=l;tA+=a;tB+=b;n++}return[tL/n,tA/n,tB/n]}
+function avgRGB(c,x){const[rx,ry,rw,rh]=roiB(c.width,c.height);const d=x.getImageData(rx,ry,rw,rh).data;let r=0,g=0,b=0,n=0;const st=d.length>400000?16:4;for(let i=0;i<d.length;i+=st){r+=d[i];g+=d[i+1];b+=d[i+2];n++}return[Math.round(r/n),Math.round(g/n),Math.round(b/n)]}
+function hCorr(x1,w1,h1,x2,w2,h2){function bh(x,w,h){const[rx,ry,rw,rh]=roiB(w,h);const d=x.getImageData(rx,ry,rw,rh).data;const bi=32,hR=new Float64Array(bi),hG=new Float64Array(bi),hB=new Float64Array(bi);let n=0;const st=d.length>400000?16:4;for(let i=0;i<d.length;i+=st){hR[~~(d[i]/8)]++;hG[~~(d[i+1]/8)]++;hB[~~(d[i+2]/8)]++;n++}for(let j=0;j<bi;j++){hR[j]/=n;hG[j]/=n;hB[j]/=n}return{r:hR,g:hG,b:hB}}function cr(a,b){let s=0,a2=0,b2=0;const ma=a.reduce((s,v)=>s+v,0)/a.length,mb=b.reduce((s,v)=>s+v,0)/b.length;for(let i=0;i<a.length;i++){const da=a[i]-ma,db=b[i]-mb;s+=da*db;a2+=da*da;b2+=db*db}const dn=Math.sqrt(a2*b2);return dn?s/dn:0}const h1d=bh(x1,w1,h1),h2d=bh(x2,w2,h2);return(cr(h1d.r,h2d.r)+cr(h1d.g,h2d.g)+cr(h1d.b,h2d.b))/3*100}
+
+function getSessionMeta() {
+  return {
+    product: document.getElementById('fieldProduct').value.trim() || '',
+    lot: document.getElementById('fieldLot').value.trim() || '',
+    supplier: document.getElementById('fieldSupplier').value.trim() || '',
+    inspector: document.getElementById('fieldInspector').value.trim() || ''
+  };
+}
+function getTh(){return{pass:parseFloat(document.getElementById('thPass').value)||5,warn:parseFloat(document.getElementById('thWarn').value)||10}}
+function getV(dE){const th=getTh();if(dE<=th.pass)return{text:'✅ PASS',cls:'verdict-pass',color:'var(--accent-green)'};if(dE<=th.warn)return{text:'⚠️ WARNING',cls:'verdict-warning',color:'var(--accent-amber)'};return{text:'❌ FAIL',cls:'verdict-fail',color:'var(--accent-red)'}}
+
+// ===== AREA IMAGE =====
+function handleFile(i,t){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=e=>setImg(t,e.target.result);r.readAsDataURL(f);i.value=''}
+function setImg(t,u){
+  const id=t==='std'?'img-std':'img-smp';
+  const phId=t==='std'?'ph-std':'ph-smp';
+  document.getElementById(id).src=u;document.getElementById(id).classList.remove('hidden');
+  document.getElementById(phId).classList.add('hidden');
+  S[t==='std'?'stdImg':'smpImg']=u;updBtn();
+}
+function clearImage(t){
+  const id=t==='std'?'img-std':'img-smp';
+  const phId=t==='std'?'ph-std':'ph-smp';
+  document.getElementById(id).src='';document.getElementById(id).classList.add('hidden');
+  document.getElementById(phId).classList.remove('hidden');
+  S[t==='std'?'stdImg':'smpImg']=null;updBtn();
+}
+function updBtn(){const b=document.getElementById('analyzeBtn');if(S.stdImg&&S.smpImg){b.classList.remove('disabled');b.classList.add('ready');b.disabled=false}else{b.classList.add('disabled');b.classList.remove('ready');b.disabled=true}}
+function setROI(b,m){document.querySelectorAll('.roi-chip').forEach(c=>c.classList.remove('active'));b.classList.add('active');S.roi=m}
+
+// ===== PICKER IMAGE =====
+const Cap=s=>s[0].toUpperCase()+s.slice(1);
+function handlePFile(i,t){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=e=>setPImg(t,e.target.result);r.readAsDataURL(f);i.value=''}
+function setPImg(t,u){
+  document.getElementById('pImg'+Cap(t)).src=u;
+  document.getElementById('pImg'+Cap(t)).classList.remove('hidden');
+  document.getElementById('pPh'+Cap(t)).classList.add('hidden');
+  S['p'+Cap(t)+'Img']=u;
+  const tmp=new Image();tmp.crossOrigin='anonymous';
+  tmp.onload=()=>{const c=document.getElementById('pc'+Cap(t));c.width=tmp.naturalWidth;c.height=tmp.naturalHeight;c.getContext('2d',{willReadFrequently:true}).drawImage(tmp,0,0)};tmp.src=u;
+}
+function clearPicker(t){
+  document.getElementById('pImg'+Cap(t)).src='';
+  document.getElementById('pImg'+Cap(t)).classList.add('hidden');
+  document.getElementById('pPh'+Cap(t)).classList.remove('hidden');
+  S['p'+Cap(t)+'Img']=null;S['p'+Cap(t)+'Lab']=null;S['p'+Cap(t)+'RGB']=null;
+  document.getElementById('rd'+Cap(t)).classList.remove('visible');
+  document.getElementById('mk'+Cap(t)).style.display='none';
+  document.getElementById('lp'+Cap(t)).style.display='none';
+  document.getElementById('ptResult').classList.remove('visible');
+}
+
+// ===== PICKER INTERACTION =====
+function pXY(e,t){const w=document.getElementById('pw'+Cap(t));const r=w.getBoundingClientRect();const tc=e.touches?e.touches[0]:e;return{x:Math.max(0,Math.min(r.width,tc.clientX-r.left)),y:Math.max(0,Math.min(r.height,tc.clientY-r.top)),w:r.width,h:r.height}}
+
+function pickAt(x,y,w,h,t){
+  const c=document.getElementById('pc'+Cap(t));if(!c.width)return null;
+  const ctx=c.getContext('2d',{willReadFrequently:true});
+  const img=document.getElementById('pImg'+Cap(t));
+  const nw=img.naturalWidth,nh=img.naturalHeight;
+  const sc=Math.min(w/nw,h/nh),dw=nw*sc,dh=nh*sc,ox=(w-dw)/2,oy=(h-dh)/2;
+  const cx=Math.round((x-ox)/sc),cy=Math.round((y-oy)/sc);
+  if(cx<0||cy<0||cx>=nw||cy>=nh)return null;
+  let rT=0,gT=0,bT=0,n=0;
+  for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++){
+    const px=Math.max(0,Math.min(nw-1,cx+dx)),py=Math.max(0,Math.min(nh-1,cy+dy));
+    const d=ctx.getImageData(px,py,1,1).data;rT+=d[0];gT+=d[1];bT+=d[2];n++;
+  }
+  const r=Math.round(rT/n),g=Math.round(gT/n),b=Math.round(bT/n);
+  const lab=rgb2lab(r,g,b),hsl=rgb2hsl(r,g,b),cmyk=rgb2cmyk(r,g,b),hex=rgb2hex(r,g,b);
+  document.getElementById('mk'+Cap(t)).style.display='block';
+  document.getElementById('mk'+Cap(t)).style.left=x+'px';
+  document.getElementById('mk'+Cap(t)).style.top=y+'px';
+  document.getElementById('rd'+Cap(t)).classList.add('visible');
+  document.getElementById('sw'+Cap(t)).style.background=`rgb(${r},${g},${b})`;
+  document.getElementById('hx'+Cap(t)).textContent=hex;
+  document.getElementById('rv'+Cap(t)).textContent=`${r}, ${g}, ${b}`;
+  document.getElementById('lv'+Cap(t)).textContent=lab.map(v=>v.toFixed(1)).join(', ');
+  document.getElementById('hv'+Cap(t)).textContent=`${hsl[0]}° ${hsl[1]}% ${hsl[2]}%`;
+  document.getElementById('cv'+Cap(t)).textContent=cmyk.map(v=>v+'%').join(' ');
+  S['p'+Cap(t)+'Lab']=lab;S['p'+Cap(t)+'RGB']=[r,g,b];
+  checkPt();
+  return{cx,cy};
+}
+function showLoupe(x,y,t,cx,cy){
+  const lp=document.getElementById('lp'+Cap(t)),c=document.getElementById('pc'+Cap(t));
+  if(!c.width){lp.style.display='none';return}
+  const lc=document.getElementById('lc'+Cap(t)),lx=lc.getContext('2d');
+  lp.style.display='block';lp.style.left=Math.max(0,x-40)+'px';lp.style.top=Math.max(0,y-100)+'px';
+  lx.imageSmoothingEnabled=false;lx.clearRect(0,0,80,80);
+  const z=6,sw=80/z;
+  lx.drawImage(c,cx-sw/2,cy-sw/2,sw,sw,0,0,80,80);
+  lx.strokeStyle='rgba(255,255,255,0.5)';lx.lineWidth=1;
+  lx.beginPath();lx.moveTo(40,0);lx.lineTo(40,80);lx.stroke();
+  lx.beginPath();lx.moveTo(0,40);lx.lineTo(80,40);lx.stroke();
+}
+function pTouch(e,t){e.preventDefault();if(!S['p'+Cap(t)+'Img']){document.getElementById('pi-'+(t==='std'?'std':'smp')+'-f').click();return}const{x,y,w,h}=pXY(e,t);const r=pickAt(x,y,w,h,t);if(r)showLoupe(x,y,t,r.cx,r.cy)}
+function pTouchMove(e,t){e.preventDefault();if(!S['p'+Cap(t)+'Img'])return;const{x,y,w,h}=pXY(e,t);const r=pickAt(x,y,w,h,t);if(r)showLoupe(x,y,t,r.cx,r.cy)}
+function pTouchEnd(t){document.getElementById('lp'+Cap(t)).style.display='none'}
+function pMouse(e,t){if(!S['p'+Cap(t)+'Img']){document.getElementById('pi-'+(t==='std'?'std':'smp')+'-f').click();return}const{x,y,w,h}=pXY(e,t);pickAt(x,y,w,h,t)}
+function pMouseMove(e,t){if(!S['p'+Cap(t)+'Img']||!e.buttons)return;const{x,y,w,h}=pXY(e,t);pickAt(x,y,w,h,t)}
+function copyHex(t){const hex=document.getElementById('hx'+Cap(t)).textContent;try{navigator.clipboard.writeText(hex);toast('📋 '+hex)}catch(e){toast('📋 '+hex)}}
+
+let _lastLoggedPt=null;
+function checkPt(){
+  const sec=document.getElementById('ptResult');
+  if(!S.pStdLab||!S.pSmpLab){sec.classList.remove('visible');return}
+  sec.classList.add('visible');
+  const dE=dE76(S.pStdLab,S.pSmpLab),sim=Math.max(0,Math.min(100,100-dE)),v=getV(dE);
+  document.getElementById('pcSwStd').style.background=`rgb(${S.pStdRGB.join(',')})`;
+  document.getElementById('pcSwSmp').style.background=`rgb(${S.pSmpRGB.join(',')})`;
+  document.getElementById('pcScore').innerHTML=`<span style="color:${v.color}">${sim.toFixed(1)}%</span>`;
+  document.getElementById('pcVerdict').className='verdict-badge '+v.cls;
+  document.getElementById('pcVerdict').textContent=v.text;
+  document.getElementById('pcDE').textContent=dE.toFixed(2);
+  const now=new Date();
+  const ptKey=S.pStdRGB.join(',')+':'+S.pSmpRGB.join(',');
+  if(ptKey!==_lastLoggedPt){_lastLoggedPt=ptKey;
+    const _smp=getSessionMeta();S.logs.unshift({id:Date.now(),type:'point',timestamp:now.toISOString(),displayTime:now.toLocaleString('th-TH'),similarity:sim.toFixed(1),deltaE:dE.toFixed(2),histSim:'-',verdict:v.text.replace(/[✅⚠️❌]\s?/g,''),verdictRaw:v.text,labStd:S.pStdLab.map(v=>v.toFixed(2)),labSample:S.pSmpLab.map(v=>v.toFixed(2)),roi:'point',product:_smp.product,lot:_smp.lot,supplier:_smp.supplier,inspector:_smp.inspector});
+  saveLogs();
+}
+  }
+
+
+// ===== AREA ANALYSIS =====
+function analyzeArea(){
+  if(!S.stdImg||!S.smpImg)return;
+  const btn=document.getElementById('analyzeBtn');
+  btn.classList.remove('ready');btn.classList.add('disabled');
+  btn.innerHTML='<div class="spinner"></div> กำลังวิเคราะห์...';btn.disabled=true;
+  setTimeout(()=>{
+    try{
+      const is=document.getElementById('img-std'),im=document.getElementById('img-smp');
+      const c1=document.getElementById('cA'),x1=c1.getContext('2d',{willReadFrequently:true});
+      c1.width=is.naturalWidth;c1.height=is.naturalHeight;x1.drawImage(is,0,0);
+      const c2=document.getElementById('cB'),x2=c2.getContext('2d',{willReadFrequently:true});
+      c2.width=im.naturalWidth;c2.height=im.naturalHeight;x2.drawImage(im,0,0);
+      const lS=avgLab(c1,x1),lM=avgLab(c2,x2),dE=dE76(lS,lM),sim=Math.max(0,Math.min(100,100-dE));
+      const hS=hCorr(x1,c1.width,c1.height,x2,c2.width,c2.height),rS=avgRGB(c1,x1),rM=avgRGB(c2,x2);
+      const v=getV(dE);const now=new Date();
+      const ts=now.toLocaleString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+      S.lastR={similarity:sim.toFixed(1),deltaE:dE.toFixed(2),histSim:hS.toFixed(1),verdict:v.text,verdictClass:v.cls,labStd:lS,labSample:lM,rgbStd:rS,rgbSample:rM,timestamp:ts,roi:S.roi};
+      document.getElementById('areaResults').innerHTML=`<div class="results-card"><div class="results-header"><span class="results-title">📊 ผลวิเคราะห์</span><span class="result-timestamp">${ts}</span></div><div class="score-display"><div class="score-value" style="color:${v.color}">${sim.toFixed(1)}<span class="score-unit">%</span></div><div class="score-label">Color Similarity (LAB ΔE*76)</div><span class="verdict-badge ${v.cls}">${v.text}</span></div><div class="color-swatches"><div class="swatch-group"><span class="swatch-label">STD</span><div class="swatch-color" style="background:rgb(${rS.join(',')})"></div></div><span class="swatch-arrow">→</span><div class="swatch-group"><div class="swatch-color" style="background:rgb(${rM.join(',')})"></div><span class="swatch-label">Sample</span></div></div><div class="detail-grid"><div class="detail-item"><div class="detail-label">ΔE</div><div class="detail-value">${dE.toFixed(2)}</div></div><div class="detail-item"><div class="detail-label">Histogram</div><div class="detail-value">${hS.toFixed(1)}%</div></div><div class="detail-item"><div class="detail-label">STD LAB</div><div class="detail-value" style="font-size:11px">${lS.map(v=>v.toFixed(1)).join(' / ')}</div></div><div class="detail-item"><div class="detail-label">Sample LAB</div><div class="detail-value" style="font-size:11px">${lM.map(v=>v.toFixed(1)).join(' / ')}</div></div><div class="detail-item"><div class="detail-label">ROI</div><div class="detail-value">${S.roi}</div></div><div class="detail-item"><div class="detail-label">Method</div><div class="detail-value">CIE76</div></div></div></div>`;
+      document.getElementById('areaActions').classList.remove('hidden');
+      const _sm=getSessionMeta();S.logs.unshift({id:Date.now(),type:'area',timestamp:now.toISOString(),displayTime:ts,similarity:sim.toFixed(1),deltaE:dE.toFixed(2),histSim:hS.toFixed(1),verdict:v.text.replace(/[✅⚠️❌]\s?/g,''),verdictRaw:v.text,labStd:lS.map(v=>v.toFixed(2)),labSample:lM.map(v=>v.toFixed(2)),roi:S.roi,product:_sm.product,lot:_sm.lot,supplier:_sm.supplier,inspector:_sm.inspector});saveLogs();
+    }catch(e){toast('❌ เกิดข้อผิดพลาด');console.error(e)}
+    btn.classList.remove('disabled');btn.classList.add('ready');btn.innerHTML='🔬 วิเคราะห์สี — Area Compare';btn.disabled=false;
+  },100);
+}
+
+// ===== SAVE IMAGE (Long-press method for mobile) =====
+function saveResultImage(){
+  if(!S.lastR)return;
+  const c=document.getElementById('cX'),x=c.getContext('2d');
+  const w=800,h=500;c.width=w;c.height=h;
+  x.fillStyle='#0a0e17';x.fillRect(0,0,w,h);
+  x.fillStyle='#111827';x.fillRect(0,0,w,50);
+  x.fillStyle='#3b82f6';x.font='bold 16px JetBrains Mono,monospace';
+  x.fillText('QC COLOR COMPARE v2.5',16,32);
+  const is=document.getElementById('img-std'),im=document.getElementById('img-smp');
+  x.fillStyle='#1a2236';x.fillRect(16,60,280,310);x.drawImage(is,18,90,276,276);
+  x.fillStyle='#06b6d4';x.font='bold 12px JetBrains Mono';x.fillText('STANDARD',24,78);
+  x.fillStyle='#1a2236';x.fillRect(306,60,280,310);x.drawImage(im,308,90,276,276);
+  x.fillStyle='#f59e0b';x.fillText('SAMPLE',314,78);
+  const r=S.lastR,rx=600,ry=60;
+  x.fillStyle='#1a2236';x.fillRect(rx,ry,185,310);
+  const sc=r.verdictClass==='verdict-pass'?'#10b981':r.verdictClass==='verdict-warning'?'#f59e0b':'#ef4444';
+  x.fillStyle=sc;x.font='bold 36px JetBrains Mono';x.fillText(r.similarity+'%',rx+16,ry+50);
+  x.fillStyle='#94a3b8';x.font='11px sans-serif';x.fillText('Color Similarity',rx+16,ry+68);
+  x.fillStyle=sc;x.font='bold 14px JetBrains Mono';x.fillText(r.verdict,rx+16,ry+95);
+  x.fillStyle='#e2e8f0';x.font='11px JetBrains Mono';let yo=ry+125;
+  [`ΔE: ${r.deltaE}`,`Hist: ${r.histSim}%`,`ROI: ${r.roi}`,'',`STD: ${r.labStd.map(v=>parseFloat(v).toFixed(1)).join('/')}`,`SMP: ${r.labSample.map(v=>parseFloat(v).toFixed(1)).join('/')}`].forEach(l=>{x.fillText(l,rx+16,yo);yo+=16});
+  x.fillStyle='#111827';x.fillRect(0,h-32,w,32);
+  x.fillStyle='#64748b';x.font='10px JetBrains Mono';const _smr=getSessionMeta();const footerLeft=r.timestamp+' | Wann Cosmetics QC';const footerRight=(_smr.product||'')+(_smr.lot?' LOT:'+_smr.lot:'');x.fillText(footerLeft,16,h-12);if(footerRight){x.fillStyle='#94a3b8';x.fillText(footerRight,w-x.measureText(footerRight).width-16,h-12);}
+
+  // Show in modal for long-press save
+  const dataUrl = c.toDataURL('image/png');
+  document.getElementById('savePreviewImg').src = dataUrl;
+  document.getElementById('saveModal').classList.remove('hidden');
+  toast('📱 กดค้างที่ภาพเพื่อบันทึก');
+}
+
+// ===== LOGS =====
+function renderLogs(){
+  const c=document.getElementById('logList'),cnt=document.getElementById('logCount');cnt.textContent=S.logs.length+' records';
+  if(!S.logs.length){c.innerHTML='<div class="log-empty">📋 ยังไม่มีประวัติ</div>';return}
+  c.innerHTML=S.logs.map(l=>{
+    const sc=l.verdict==='PASS'?'var(--accent-green)':l.verdict==='WARNING'?'var(--accent-amber)':'var(--accent-red)';
+    const vc=l.verdict==='PASS'?'verdict-pass':l.verdict==='WARNING'?'verdict-warning':'verdict-fail';
+    const tb=l.type==='point'?'<span class="log-type-badge type-point">POINT</span>':'<span class="log-type-badge type-area">AREA</span>';
+    const meta=[l.product,l.lot].filter(Boolean).join(' | ');return`<div class="log-item"><div class="log-score" style="color:${sc}">${l.similarity}%</div><div class="log-info"><div class="log-time">${l.displayTime} ${tb}</div><div class="log-method">ΔE:${l.deltaE} | ${l.roi}${meta?' | <span style="color:var(--accent-cyan)">'+meta+'</span>':''}</div></div><span class="log-verdict ${vc}">${l.verdictRaw||l.verdict}</span></div>`;
+  }).join('');
+}
+function exportCSV(){
+  if(!S.logs.length){toast('ℹ️ ไม่มีข้อมูล');return}
+  const h=['Timestamp','Type','Product','Lot','Supplier','Inspector','Similarity(%)','DeltaE','HistCorr(%)','Verdict','ROI','STD_L','STD_a','STD_b','Sample_L','Sample_a','Sample_b'];
+  let csv='\uFEFF'+h.join(',')+'\n';
+  S.logs.forEach(l=>{const prd=(l.product||'').replace(/,/g,' '),lot=(l.lot||'').replace(/,/g,' '),sup=(l.supplier||'').replace(/,/g,' '),ins=(l.inspector||'').replace(/,/g,' ');csv+=[l.timestamp,l.type||'area',prd,lot,sup,ins,l.similarity,l.deltaE,l.histSim,l.verdict,l.roi,...(l.labStd||['','','']),...(l.labSample||['','',''])].join(',')+'\n'});
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const u=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=u;a.download=`QC_Log_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(u);toast('✅ Export CSV สำเร็จ');
+}
+function clearLogs(){if(confirm('ลบประวัติทั้งหมด?')){S.logs=[];try{localStorage.removeItem('qc_logs');}catch(e){}toast('🗑️ ลบแล้ว');renderLogs()}}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+
+// ===== PWA SETUP =====
+(function initPWA(){
+  // --- Generate app icon as data URL (canvas-based, no external file needed) ---
+  function makeIcon(size){
+    const c=document.createElement('canvas');c.width=size;c.height=size;
+    const x=c.getContext('2d');
+    // Background gradient
+    const g=x.createLinearGradient(0,0,size,size);
+    g.addColorStop(0,'#3b82f6');g.addColorStop(1,'#06b6d4');
+    x.fillStyle=g;
+    const r=size*0.18;
+    x.beginPath();x.moveTo(r,0);x.lineTo(size-r,0);x.quadraticCurveTo(size,0,size,r);
+    x.lineTo(size,size-r);x.quadraticCurveTo(size,size,size-r,size);
+    x.lineTo(r,size);x.quadraticCurveTo(0,size,0,size-r);
+    x.lineTo(0,r);x.quadraticCurveTo(0,0,r,0);x.closePath();x.fill();
+    // Icon text
+    x.fillStyle='white';x.font=`bold ${size*0.38}px Arial`;x.textAlign='center';x.textBaseline='middle';
+    x.fillText('🔬',size/2,size/2);
+    return c.toDataURL('image/png');
+  }
+
+  const icon192=makeIcon(192);
+  const icon512=makeIcon(512);
+
+  // Set apple-touch-icon
+  document.getElementById('appleIcon').href=icon192;
+
+  // --- Generate manifest as blob URL ---
+  const manifest={
+    name:'COLOR QC — Wann Cosmetics',
+    short_name:'COLOR QC',
+    description:'PKG Color QC — เปรียบเทียบสีบรรจุภัณฑ์ด้วย CIE ΔE',
+    start_url:'.',
+    display:'standalone',
+    background_color:'#0a0e17',
+    theme_color:'#0a0e17',
+    orientation:'portrait',
+    icons:[
+      {src:icon192,sizes:'192x192',type:'image/png',purpose:'any maskable'},
+      {src:icon512,sizes:'512x512',type:'image/png',purpose:'any maskable'}
+    ]
+  };
+  const mBlob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+  const mUrl=URL.createObjectURL(mBlob);
+  document.getElementById('manifestLink').href=mUrl;
+
+  // --- Service Worker (inline via blob) for offline support ---
+  const swCode=`
+const CACHE='color-qc-v2.5';
+self.addEventListener('install',e=>{
+  e.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(['/'])).catch(()=>{}));
+  self.skipWaiting();
+});
+self.addEventListener('activate',e=>{
+  e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
+  self.clients.claim();
+});
+self.addEventListener('fetch',e=>{
+  e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>new Response('Offline'))));
+});
+`;
+  if('serviceWorker' in navigator){
+    const swBlob=new Blob([swCode],{type:'application/javascript'});
+    const swUrl=URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl).catch(()=>{});
+  }
+
+  // --- Detect iOS ---
+  const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
+  const isInStandalone=window.navigator.standalone===true||window.matchMedia('(display-mode: standalone)').matches;
+
+  if(isInStandalone){
+    // Already installed — no banner needed
+    return;
+  }
+
+  // Check if user dismissed before
+  let dismissed=false;
+  try{dismissed=!!localStorage.getItem('pwa_dismissed');}catch(e){}
+  if(dismissed)return;
+
+  if(isIOS){
+    // Show iOS guide after 3 seconds
+    setTimeout(()=>{
+      document.getElementById('iosGuide').classList.remove('hidden');
+    },3000);
+  } else {
+    // Android/Desktop: wait for beforeinstallprompt
+    window._deferredPrompt=null;
+    window.addEventListener('beforeinstallprompt',e=>{
+      e.preventDefault();
+      window._deferredPrompt=e;
+      setTimeout(()=>{
+        document.getElementById('pwaBanner').classList.remove('hidden');
+      },2000);
+    });
+  }
+})();
+
+function installPWA(){
+  if(window._deferredPrompt){
+    window._deferredPrompt.prompt();
+    window._deferredPrompt.userChoice.then(r=>{
+      if(r.outcome==='accepted'){toast('✅ ติดตั้งสำเร็จ! เช็คหน้าจอหลัก');} 
+      else {toast('ℹ️ ยกเลิกการติดตั้ง');}
+      window._deferredPrompt=null;
+      document.getElementById('pwaBanner').classList.add('hidden');
+    });
+  }
+}
+function dismissPWA(){
+  document.getElementById('pwaBanner').classList.add('hidden');
+  try{localStorage.setItem('pwa_dismissed','1');}catch(e){}
+}
+</script>
+</body>
+</html>
