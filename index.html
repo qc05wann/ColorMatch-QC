@@ -1373,8 +1373,7 @@ function setPImg(t,u){
   document.getElementById('pImg'+Cap(t)).classList.remove('hidden');
   document.getElementById('pPh'+Cap(t)).classList.add('hidden');
   S['p'+Cap(t)+'Img']=u;
-  const tmp=new Image();tmp.crossOrigin='anonymous';
-  tmp.onload=()=>{const c=document.getElementById('pc'+Cap(t));c.width=tmp.naturalWidth;c.height=tmp.naturalHeight;c.getContext('2d',{willReadFrequently:true}).drawImage(tmp,0,0)};tmp.src=u;
+  fetch(u).then(r=>r.blob()).then(blob=>createImageBitmap(blob,{colorSpaceConversion:'none'})).then(bmp=>{const c=document.getElementById('pc'+Cap(t));c.width=bmp.width;c.height=bmp.height;c.getContext('2d',{willReadFrequently:true,colorSpace:'srgb'}).drawImage(bmp,0,0);bmp.close();}).catch(()=>{const tmp=new Image();tmp.crossOrigin='anonymous';tmp.onload=()=>{const c=document.getElementById('pc'+Cap(t));c.width=tmp.naturalWidth;c.height=tmp.naturalHeight;c.getContext('2d',{willReadFrequently:true}).drawImage(tmp,0,0)};tmp.src=u;});
 }
 function clearPicker(t){
   document.getElementById('pImg'+Cap(t)).src='';
@@ -1510,13 +1509,18 @@ function analyzeArea(){
   const btn=document.getElementById('analyzeBtn');
   btn.classList.remove('ready');btn.classList.add('disabled');
   btn.innerHTML='<div class="spinner"></div> กำลังวิเคราะห์...';btn.disabled=true;
-  setTimeout(()=>{
+  const decodeImg=(dataUrl)=>{
+    return fetch(dataUrl).then(r=>r.blob()).then(blob=>createImageBitmap(blob,{colorSpaceConversion:'none'})).catch(()=>{
+      return new Promise(res=>{const tmp=new Image();tmp.onload=()=>res(tmp);tmp.src=dataUrl;});
+    });
+  };
+  Promise.all([decodeImg(S.stdImg),decodeImg(S.smpImg)]).then(([bmpStd,bmpSmp])=>{
     try{
-      const is=document.getElementById('img-std'),im=document.getElementById('img-smp');
-      const c1=document.getElementById('cA'),x1=c1.getContext('2d',{willReadFrequently:true});
-      c1.width=is.naturalWidth;c1.height=is.naturalHeight;x1.drawImage(is,0,0);
-      const c2=document.getElementById('cB'),x2=c2.getContext('2d',{willReadFrequently:true});
-      c2.width=im.naturalWidth;c2.height=im.naturalHeight;x2.drawImage(im,0,0);
+      const c1=document.getElementById('cA'),x1=c1.getContext('2d',{willReadFrequently:true,colorSpace:'srgb'});
+      c1.width=bmpStd.width||bmpStd.naturalWidth;c1.height=bmpStd.height||bmpStd.naturalHeight;x1.drawImage(bmpStd,0,0);
+      const c2=document.getElementById('cB'),x2=c2.getContext('2d',{willReadFrequently:true,colorSpace:'srgb'});
+      c2.width=bmpSmp.width||bmpSmp.naturalWidth;c2.height=bmpSmp.height||bmpSmp.naturalHeight;x2.drawImage(bmpSmp,0,0);
+      if(bmpStd.close)bmpStd.close();if(bmpSmp.close)bmpSmp.close();
       const lSraw=avgLab(c1,x1),lMraw=avgLab(c2,x2),lS=applyCalibration(lSraw),lM=applyCalibration(lMraw),dE=dE76(lS,lM),sim=Math.max(0,Math.min(100,100-dE));
       const hS=hCorr(x1,c1.width,c1.height,x2,c2.width,c2.height),rS=avgRGB(c1,x1),rM=avgRGB(c2,x2);
       const v=getV(dE);const now=new Date();
@@ -1528,7 +1532,7 @@ function analyzeArea(){
       const _sm=getSessionMeta();S.logs.unshift({id:Date.now(),type:'area',timestamp:now.toISOString(),displayTime:ts,similarity:sim.toFixed(1),deltaE:dE.toFixed(2),histSim:hS.toFixed(1),verdict:v.text.replace(/[✅⚠️❌]\s?/g,''),verdictRaw:v.text,labStd:lS.map(v=>v.toFixed(2)),labSample:lM.map(v=>v.toFixed(2)),roi:S.roi,product:_sm.product,lot:_sm.lot,supplier:_sm.supplier,inspector:_sm.inspector,descriptor:_desc.text,dL:_desc.dL,da:_desc.da,db:_desc.db});saveLogs();
     }catch(e){toast('❌ เกิดข้อผิดพลาด');console.error(e)}
     btn.classList.remove('disabled');btn.classList.add('ready');btn.innerHTML='🔬 วิเคราะห์สี — Area Compare';btn.disabled=false;
-  },100);
+  }).catch(()=>{toast('❌ เกิดข้อผิดพลาด');btn.classList.remove('disabled');btn.classList.add('ready');btn.innerHTML='🔬 วิเคราะห์สี — Area Compare';btn.disabled=false;});
 }
 
 // ===== SAVE IMAGE (Long-press method for mobile) =====
