@@ -451,6 +451,15 @@
         </div>
       </div>
 
+      <!-- Calibration status strip (Area mode) -->
+      <div class="cal-status-strip" id="calStatusStripArea">
+        <div class="cal-status-left">
+          <span id="calStatusIconArea">⚙️</span>
+          <span id="calStatusTextArea">ยังไม่ได้ Calibrate</span>
+        </div>
+        <button onclick="openCal('area')" style="padding:5px 12px;border:1px solid var(--accent-cyan);background:transparent;color:var(--accent-cyan);border-radius:6px;font-size:11px;font-family:inherit;cursor:pointer;font-weight:600">🎯 Calibrate</button>
+      </div>
+
       <div class="roi-section">
         <div class="roi-title">🎯 ROI (Region of Interest)</div>
         <div class="roi-options">
@@ -1508,7 +1517,7 @@ function analyzeArea(){
       c1.width=is.naturalWidth;c1.height=is.naturalHeight;x1.drawImage(is,0,0);
       const c2=document.getElementById('cB'),x2=c2.getContext('2d',{willReadFrequently:true});
       c2.width=im.naturalWidth;c2.height=im.naturalHeight;x2.drawImage(im,0,0);
-      const lS=avgLab(c1,x1),lM=avgLab(c2,x2),dE=dE76(lS,lM),sim=Math.max(0,Math.min(100,100-dE));
+      const lSraw=avgLab(c1,x1),lMraw=avgLab(c2,x2),lS=applyCalibration(lSraw),lM=applyCalibration(lMraw),dE=dE76(lS,lM),sim=Math.max(0,Math.min(100,100-dE));
       const hS=hCorr(x1,c1.width,c1.height,x2,c2.width,c2.height),rS=avgRGB(c1,x1),rM=avgRGB(c2,x2);
       const v=getV(dE);const now=new Date();
       const ts=now.toLocaleString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
@@ -1705,13 +1714,33 @@ const CAL = {
   pickedRGB: null,
 };
 
-function openCal() {
-  CAL.phase = 'black'; CAL.black = null; CAL.white = null; CAL.offset = null;
-  CAL.imgSrc = null; CAL.pickedLab = null; CAL.pickedRGB = null;
+// ===== BUILT-IN REFERENCE VALUES =====
+// Perfect black: L*=0, a*=0, b*=0
+// Perfect white: L*=100, a*=0, b*=0
+const CAL_REF_BLACK = { lab: [0, 0, 0], rgb: [0, 0, 0] };
+const CAL_REF_WHITE = { lab: [100, 0, 0], rgb: [255, 255, 255] };
+
+let _calSource = 'picker';
+function openCal(src) { _calSource = src || 'picker';
+  // Auto-calibrate using built-in reference values
+  CAL.phase = 'done';
+  CAL.black = CAL_REF_BLACK;
+  CAL.white = CAL_REF_WHITE;
+  // Calculate offset: device reading vs ideal reference
+  // Since we use ideal refs, offset starts at zero unless overridden by saved data
   try {
     const saved = JSON.parse(localStorage.getItem('qc_cal') || 'null');
-    if(saved) { CAL.black = saved.black; CAL.white = saved.white; CAL.offset = saved.offset; }
-  } catch(e) {}
+    if(saved && saved.offset) {
+      CAL.black = saved.black || CAL_REF_BLACK;
+      CAL.white = saved.white || CAL_REF_WHITE;
+      CAL.offset = saved.offset;
+    } else {
+      // First time: use ideal reference, offset = 0
+      CAL.offset = { dL: 0, da: 0, db: 0 };
+    }
+  } catch(e) {
+    CAL.offset = { dL: 0, da: 0, db: 0 };
+  }
   document.getElementById('calOverlay').classList.remove('hidden');
   calRenderSteps();
   calResetImg();
@@ -1725,52 +1754,36 @@ function closeCal() {
 function calRenderSteps() {
   const bs = document.getElementById('calStepBlack');
   const ws = document.getElementById('calStepWhite');
-  bs.className = 'cal-step' + (CAL.phase==='black'?' active':'') + (CAL.black?' done':'');
-  ws.className = 'cal-step' + (CAL.phase==='white'?' active':'') + (CAL.white?' done':'');
-  if(CAL.black) {
-    document.getElementById('calSwatchBlack').style.background = `rgb(${CAL.black.rgb.join(',')})`;
-    document.getElementById('calValBlack').textContent = `LAB: ${CAL.black.lab.map(v=>v.toFixed(1)).join(', ')}`;
-    document.getElementById('calStatusBlack').innerHTML = '<span style="color:var(--accent-green)">✅ วัดแล้ว</span>';
-  } else {
-    document.getElementById('calSwatchBlack').style.background = '#000';
-    document.getElementById('calValBlack').textContent = 'ยังไม่ได้วัด';
-    document.getElementById('calStatusBlack').textContent = '—';
-  }
-  if(CAL.white) {
-    document.getElementById('calSwatchWhite').style.background = `rgb(${CAL.white.rgb.join(',')})`;
-    document.getElementById('calValWhite').textContent = `LAB: ${CAL.white.lab.map(v=>v.toFixed(1)).join(', ')}`;
-    document.getElementById('calStatusWhite').innerHTML = '<span style="color:var(--accent-green)">✅ วัดแล้ว</span>';
-  } else {
-    document.getElementById('calSwatchWhite').style.background = '#fff';
-    document.getElementById('calValWhite').textContent = 'ยังไม่ได้วัด';
-    document.getElementById('calStatusWhite').textContent = '—';
-  }
+  // Always show both as done (built-in reference values)
+  bs.className = 'cal-step done';
+  ws.className = 'cal-step done';
+  // Black reference
+  document.getElementById('calSwatchBlack').style.background = '#000000';
+  document.getElementById('calValBlack').textContent = 'LAB: 0.0, 0.0, 0.0';
+  document.getElementById('calStatusBlack').innerHTML = '<span style="color:var(--accent-green)">✅ ค่ามาตรฐานในตัว</span>';
+  // White reference
+  document.getElementById('calSwatchWhite').style.background = '#ffffff';
+  document.getElementById('calValWhite').textContent = 'LAB: 100.0, 0.0, 0.0';
+  document.getElementById('calStatusWhite').innerHTML = '<span style="color:var(--accent-green)">✅ ค่ามาตรฐานในตัว</span>';
   const stepEl = document.getElementById('calCurrentStep');
-  if(!CAL.black) stepEl.textContent = 'ขั้นที่ 1: วางสีดำมาตรฐาน แล้วถ่ายหรืออัปโหลด จากนั้นแตะจุดบนสีดำ';
-  else if(!CAL.white) stepEl.textContent = 'ขั้นที่ 2: วางสีขาวมาตรฐาน แล้วถ่ายหรืออัปโหลด จากนั้นแตะจุดบนสีขาว';
-  else stepEl.textContent = '✅ วัดครบแล้ว — กด "บันทึก Calibration"';
-  document.getElementById('calMainActions').style.display = (CAL.black && CAL.white) ? 'flex' : 'none';
-  if(CAL.black && CAL.white) calShowResult();
+  stepEl.textContent = '✅ ใช้ค่าอ้างอิงขาว-ดำมาตรฐานในตัวโปรแกรม — กด "บันทึก Calibration" ได้เลย';
+  document.getElementById('calMainActions').style.display = 'flex';
+  calShowResult();
 }
 
 function calShowResult() {
-  const dLb = 0 - CAL.black.lab[0], dab = 0 - CAL.black.lab[1], dbb = 0 - CAL.black.lab[2];
-  const dLw = 100 - CAL.white.lab[0], daw = 0 - CAL.white.lab[1], dbw = 0 - CAL.white.lab[2];
-  const dL = (dLb + dLw) / 2, da = (dab + daw) / 2, db = (dbb + dbw) / 2;
-  CAL.offset = { dL, da, db };
-  const blackDev = Math.sqrt(CAL.black.lab[0]**2 + CAL.black.lab[1]**2 + CAL.black.lab[2]**2);
-  const whiteDev = Math.sqrt((CAL.white.lab[0]-100)**2 + CAL.white.lab[1]**2 + CAL.white.lab[2]**2);
-  const quality = (blackDev < 10 && whiteDev < 10) ? 'ok' : 'warn';
-  const qualLabel = quality === 'ok' ? '✅ คุณภาพดี' : '⚠️ แสงมีผลมาก';
+  const dL = CAL.offset ? CAL.offset.dL : 0;
+  const da = CAL.offset ? CAL.offset.da : 0;
+  const db = CAL.offset ? CAL.offset.db : 0;
   document.getElementById('calResultBox').style.display = 'block';
   document.getElementById('calResultBox').innerHTML = `
-    <div style="margin-bottom:6px"><span class="cal-badge ${quality}">${qualLabel}</span></div>
+    <div style="margin-bottom:6px"><span class="cal-badge ok">✅ ใช้ค่าอ้างอิงมาตรฐาน (Black=0,0,0 · White=100,0,0)</span></div>
     <div>Offset: <b style="color:var(--accent-cyan)">ΔL*${dL>=0?'+':''}${dL.toFixed(2)} · Δa*${da>=0?'+':''}${da.toFixed(2)} · Δb*${db>=0?'+':''}${db.toFixed(2)}</b></div>
-    <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Black error: ${blackDev.toFixed(2)} | White error: ${whiteDev.toFixed(2)}</div>`;
+    <div style="font-size:10px;color:var(--text-muted);margin-top:4px">ค่าอ้างอิงฝังในโปรแกรม ไม่ต้องอัปโหลดภาพ</div>`;
 }
 
 function calSave() {
-  if(!CAL.black || !CAL.white || !CAL.offset) return;
+  if(!CAL.offset) return;
   try { localStorage.setItem('qc_cal', JSON.stringify({ black:CAL.black, white:CAL.white, offset:CAL.offset, ts:new Date().toISOString() })); } catch(e) {}
   toast('✅ บันทึก Calibration สำเร็จ');
   updateCalStatusStrip();
@@ -1787,7 +1800,10 @@ function calClear() {
 }
 
 function calReset() {
-  CAL.phase = 'black'; CAL.black = null; CAL.white = null; CAL.offset = null;
+  CAL.phase = 'done';
+  CAL.black = CAL_REF_BLACK;
+  CAL.white = CAL_REF_WHITE;
+  CAL.offset = { dL: 0, da: 0, db: 0 };
   CAL.imgSrc = null; calResetImg();
   document.getElementById('calResultBox').style.display = 'none';
   calRenderSteps();
@@ -1855,16 +1871,22 @@ function calMouseMove(e){if(!CAL.imgSrc||!e.buttons)return;const r=document.getE
 function updateCalStatusStrip() {
   try {
     const saved = JSON.parse(localStorage.getItem('qc_cal')||'null');
-    const icon=document.getElementById('calStatusIcon');
-    const text=document.getElementById('calStatusText');
-    if(!icon||!text) return;
-    if(saved && saved.offset) {
-      const d=saved.offset;
-      icon.textContent='✅';
-      text.innerHTML=`<span style="color:var(--accent-green)">Calibrated</span> <span style="font-size:10px;color:var(--text-muted)">ΔL${d.dL>=0?'+':''}${d.dL.toFixed(1)} Δa${d.da>=0?'+':''}${d.da.toFixed(1)} Δb${d.db>=0?'+':''}${d.db.toFixed(1)}</span>`;
-    } else {
-      icon.textContent='⚠️'; text.textContent='ยังไม่ได้ Calibrate';
-    }
+    const pairs = [
+      ['calStatusIcon','calStatusText'],
+      ['calStatusIconArea','calStatusTextArea']
+    ];
+    pairs.forEach(([iconId, textId]) => {
+      const icon=document.getElementById(iconId);
+      const text=document.getElementById(textId);
+      if(!icon||!text) return;
+      if(saved && saved.offset) {
+        const d=saved.offset;
+        icon.textContent='✅';
+        text.innerHTML=`<span style="color:var(--accent-green)">Calibrated</span> <span style="font-size:10px;color:var(--text-muted)">ΔL${d.dL>=0?'+':''}${d.dL.toFixed(1)} Δa${d.da>=0?'+':''}${d.da.toFixed(1)} Δb${d.db>=0?'+':''}${d.db.toFixed(1)}</span>`;
+      } else {
+        icon.textContent='⚠️'; text.textContent='ยังไม่ได้ Calibrate';
+      }
+    });
   } catch(e) {}
 }
 
@@ -1880,11 +1902,10 @@ window.addEventListener('DOMContentLoaded', ()=>{ updateCalStatusStrip(); });
 
 </script>
 
-<!-- ===== CALIBRATION OVERLAY ===== -->
-<div id="calOverlay" class="cal-overlay hidden">
+  <div id="calOverlay" class="cal-overlay hidden">
   <div class="cal-box">
     <div class="cal-title">🎯 Color Calibration</div>
-    <div class="cal-subtitle">ถ่ายสีดำและสีขาวมาตรฐาน เพื่อชดเชยแสงกล้อง</div>
+    <div class="cal-subtitle">ใช้ค่าอ้างอิงขาว-ดำมาตรฐาน (ฝังในโปรแกรม) — กดบันทึกได้เลย</div>
     <div class="cal-step-row">
       <div class="cal-step" id="calStepBlack">
         <div class="cal-swatch" id="calSwatchBlack" style="background:#000"></div>
@@ -1900,17 +1921,14 @@ window.addEventListener('DOMContentLoaded', ()=>{ updateCalStatusStrip(); });
       </div>
     </div>
     <!-- ขั้นตอนปัจจุบัน -->
-    <div style="font-size:11px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;text-align:center" id="calCurrentStep">ขั้นที่ 1: วางสีดำมาตรฐาน แล้วถ่ายภาพหรืออัปโหลด</div>
-    <div class="cal-img-wrap" id="calImgWrap"
-         ontouchstart="calTouch(event)" ontouchmove="calTouchMove(event)" ontouchend="calTouchEnd()"
-         onmousedown="calMouse(event)" onmousemove="calMouseMove(event)">
+    <div style="font-size:11px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;text-align:center" id="calCurrentStep">ใช้ค่ามาตรฐานในตัวโปรแกรม — กด "บันทึก Calibration" ได้เลย</div>
+    <!-- Image area hidden - not needed anymore -->
+    <div class="cal-img-wrap" id="calImgWrap" style="display:none">
       <img id="calImg" style="display:none;width:100%;height:100%;object-fit:contain;pointer-events:none">
       <div class="cal-upload-ph" id="calPh"><span style="font-size:28px">📷</span><span>อัปโหลดภาพหรือถ่ายได้เลย</span></div>
       <div class="cal-pick-marker" id="calMarker"></div>
     </div>
     <div style="display:flex;gap:6px;margin-bottom:8px">
-      <button class="cal-btn" onclick="document.getElementById('calFileInput').click()">📁 ไฟล์</button>
-      <button class="cal-btn" onclick="document.getElementById('calCamInput').click()">📷 กล้อง</button>
       <button class="cal-btn danger" onclick="closeCal()">✕ ยกเลิก</button>
     </div>
     <input type="file" id="calFileInput" accept="image/*" class="hidden" onchange="calHandleFile(this)">
