@@ -751,11 +751,20 @@ function parseSheetCSV(text) {
       break;
     }
   }
-  return rows.slice(dataStart).filter(r => r.length >= 4 && r[0] && r[0] !== '').map(r => ({
+  // Sheet: A=EmployeeID, B=Name, C=PINHash, D=Role, E=Active(TRUE/FALSE)
+  // Detect Active column from header row
+  const headerRow = rows[dataStart - 1] || [];
+  let activeIdx = 4; // default column E
+  for(let ci = 0; ci < headerRow.length; ci++) {
+    const h = headerRow[ci].toLowerCase().replace(/[\s()\/]/g,'');
+    if(h.startsWith('active')) { activeIdx = ci; break; }
+  }
+  return rows.slice(dataStart).filter(r => r.length >= 3 && r[0] && r[0] !== '').map(r => ({
     id: r[0].toUpperCase().trim(),
     name: r[1] || '',
     pinHash: r[2] || '',
-    active: r[3].toUpperCase().trim() === 'TRUE'
+    role: r[3] || '',
+    active: (r[activeIdx] || '').toUpperCase().trim() === 'TRUE'
   }));
 }
 
