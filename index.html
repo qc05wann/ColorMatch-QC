@@ -711,12 +711,19 @@ async function fetchAllowlist(url) {
 function parseSheetCSV(text) {
   const rows = text.trim().split('\n').map(r => r.split(',').map(s => s.trim().replace(/^"|"$/g,'')));
   if(rows.length < 2) return [];
-  // Header: EmployeeID, Name, PINHash, Active
-  return rows.slice(1).filter(r => r.length >= 4 && r[0]).map(r => ({
-    id: r[0].toUpperCase(),
+  // Find the header row dynamically (look for 'employeeid' in first column, case-insensitive)
+  let dataStart = 1; // default: skip first row
+  for(let i = 0; i < Math.min(rows.length, 6); i++) {
+    if(rows[i][0] && rows[i][0].toLowerCase().replace(/\s/g,'') === 'employeeid') {
+      dataStart = i + 1; // data starts after header row
+      break;
+    }
+  }
+  return rows.slice(dataStart).filter(r => r.length >= 4 && r[0] && r[0] !== '').map(r => ({
+    id: r[0].toUpperCase().trim(),
     name: r[1] || '',
     pinHash: r[2] || '',
-    active: r[3].toUpperCase() === 'TRUE'
+    active: r[3].toUpperCase().trim() === 'TRUE'
   }));
 }
 
@@ -742,8 +749,9 @@ async function initPinLock() {
   const hasMasterHash = !!localStorage.getItem('qc_master_hash');
 
   if(hasSheet) {
+    const activeCount = P.sheetData.filter(e=>e.active).length;
     document.getElementById('sheetStatusMsg').textContent =
-      `✅ โหลด Allowlist แล้ว (${P.sheetData.length} คน)`;
+      `✅ โหลด Allowlist แล้ว — Active ${activeCount} คน (หรือกรอก ADMIN สำหรับ Supervisor)`;
     // Show EmpID step
     document.getElementById('empIdStep').classList.remove('hidden');
     document.getElementById('pinStep').classList.add('hidden');
@@ -773,6 +781,21 @@ async function initPinLock() {
 async function confirmEmpId() {
   const id = document.getElementById('empIdInput').value.trim().toUpperCase();
   if(!id) { document.getElementById('empIdErr').textContent = 'กรุณากรอก Employee ID'; return; }
+
+  // ---- ADMIN shortcut: bypass Allowlist, go straight to Master PIN ----
+  if(id === 'ADMIN') {
+    P.empId = 'ADMIN'; P.empName = 'QC Supervisor';
+    document.getElementById('empIdStep').classList.add('hidden');
+    document.getElementById('pinStep').classList.remove('hidden');
+    document.getElementById('empIdDisplay').textContent = '👤 QC Supervisor (ADMIN)';
+    document.getElementById('pinLabel').textContent = 'กรอก Master PIN';
+    document.getElementById('pinMasterLink').classList.add('hidden');
+    // Force master mode
+    P.masterMode = true; P.masterBuf = ''; P.buf = '';
+    document.getElementById('masterInputWrap').classList.remove('hidden');
+    updateDots('pd',''); updateDots('md','');
+    return;
+  }
 
   if(!P.sheetLoaded) {
     document.getElementById('empIdErr').textContent = 'ไม่สามารถเชื่อมต่อ Allowlist ได้';
