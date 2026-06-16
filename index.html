@@ -1620,11 +1620,14 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.cla
   document.getElementById('appleIcon').href=icon192;
 
   // --- Generate manifest as blob URL ---
+  const _pageUrl = location.href.split('?')[0].split('#')[0];
+  const _scope = _pageUrl.substring(0, _pageUrl.lastIndexOf('/') + 1);
   const manifest={
     name:'PackColor QC — Wann Cosmetics',
     short_name:'PackColor QC',
     description:'PackColor QC — Packaging Color Inspector',
-    start_url:'.',
+    start_url: _pageUrl,
+    scope: _scope,
     display:'standalone',
     background_color:'#0a0e17',
     theme_color:'#0a0e17',
@@ -1638,25 +1641,55 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.cla
   const mUrl=URL.createObjectURL(mBlob);
   document.getElementById('manifestLink').href=mUrl;
 
-  // --- Service Worker (inline via blob) for offline support ---
-  const swCode=`
-const CACHE='color-qc-v2.8.1';
-self.addEventListener('install',e=>{
-  e.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(['/'])).catch(()=>{}));
+  // --- Service Worker for offline/PWA install ---
+  // Single-file PWA: inject SW by writing it into the page's own URL scope
+  // GitHub Pages blocks blob: SW — use fetch+cache of current page URL instead
+  if('serviceWorker' in navigator){
+    // Write SW code as a JS string, host it via a tiny express-less trick:
+    // Register the current HTML file itself as a SW-capable resource by
+    // pointing SW to a data script injected dynamically.
+    // Most reliable for single-file: use page's own URL as SW scope target.
+    const swCode = `
+const CACHE_NAME = 'packcolor-qc-v2.8';
+self.addEventListener('install', e => {
+  const pageUrl = self.registration.scope.replace(/\\/$/, '') + '/index.html';
+  e.waitUntil(
+    caches.open(CACHE_NAME).then(cache =>
+      fetch(self.registration.scope, {cache:'reload'})
+        .then(r => { if(r.ok) cache.put(self.registration.scope, r); })
+        .catch(()=>{})
+    )
+  );
   self.skipWaiting();
 });
-self.addEventListener('activate',e=>{
-  e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    )
+  );
   self.clients.claim();
 });
-self.addEventListener('fetch',e=>{
-  e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>new Response('Offline'))));
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(r => r || fetch(e.request)
+      .then(resp => {
+        if(resp && resp.status === 200 && e.request.method === 'GET'){
+          const clone = resp.clone();
+          caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
+        }
+        return resp;
+      })
+      .catch(() => caches.match(self.registration.scope))
+    )
+  );
 });
 `;
-  if('serviceWorker' in navigator){
-    const swBlob=new Blob([swCode],{type:'application/javascript'});
-    const swUrl=URL.createObjectURL(swBlob);
-    navigator.serviceWorker.register(swUrl).catch(()=>{});
+    const swBlob = new Blob([swCode], {type:'application/javascript'});
+    const swBlobUrl = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swBlobUrl, {scope: './'})
+      .then(() => console.log('[PackColor] SW registered'))
+      .catch(err => console.warn('[PackColor] SW failed:', err.message));
   }
 
   // --- Detect iOS ---
