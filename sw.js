@@ -32,11 +32,14 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
+  // Skip non-http requests (chrome-extension, data, blob, etc.)
+  if (!e.request.url.startsWith('http')) return;
   e.respondWith(
     caches.match(e.request).then(r => {
       if (r) return r;
       return fetch(e.request).then(resp => {
-        if (resp && resp.status === 200 && e.request.method === 'GET') {
+        if (resp && resp.status === 200 && e.request.method === 'GET'
+            && e.request.url.startsWith('http')) {
           const clone = resp.clone();
           caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
         }
