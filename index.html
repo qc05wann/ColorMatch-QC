@@ -104,6 +104,16 @@
   .save-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
   .save-modal img{max-width:100%;max-height:70vh;border-radius:var(--radius);border:1px solid var(--border)}
   .save-modal-text{color:var(--text-secondary);font-size:13px;margin-top:12px;text-align:center;line-height:1.6}
+  .coa-cand{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .coa-cand-hint{width:100%;font-size:10px;color:var(--text-muted);line-height:1.5}
+  .coa-chip{padding:8px 11px;min-height:36px;background:#1a2236;border:1px solid #2a3a5c;border-radius:8px;font-size:11px;color:#e2e8f0;font-family:inherit;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent}
+  .coa-chip small{display:block;color:var(--text-muted);font-size:9px;margin-top:2px}
+  .coa-chip:active{opacity:.7}
+  .coa-chip.confirm{border-color:var(--accent-green);color:var(--accent-green)}
+  .coa-chip.picked{border-color:var(--accent-green);background:rgba(16,185,129,.12)}
+  .coa-src{width:100%;font-size:10px;color:var(--text-muted);line-height:1.5;word-break:break-word;margin-bottom:2px}
+  .coa-lang-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px;font-size:12px;color:var(--text-secondary)}
+  .coa-lang-select{flex:0 1 220px;padding:9px 10px;background:#1a2236;border:1px solid #2a3a5c;color:#e2e8f0;border-radius:8px;font-size:12px;font-family:inherit}
   #userListBox{display:flex;flex-direction:column;gap:6px;width:100%}
   .user-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 11px;background:#1a2236;border:1px solid #2a3a5c;border-radius:8px;font-size:12px;color:#e2e8f0}
   .user-date{color:var(--text-muted);font-size:10px}
@@ -686,6 +696,13 @@
       </div>
     </div>
 
+    <div class="coa-lang-row">
+      <span>ภาษาบนเอกสาร</span>
+      <select id="coaLang" class="coa-lang-select">
+        <option value="eng" selected>อังกฤษอย่างเดียว (แม่นกว่า)</option>
+        <option value="eng+tha">ไทย + อังกฤษ</option>
+      </select>
+    </div>
     <button id="coaOcrBtn" class="coa-ocr-btn disabled" onclick="runCoaOCR()" disabled>🔍 อ่านข้อมูลด้วย OCR</button>
 
     <div id="coaProgressWrap" class="coa-progress-wrap hidden">
@@ -697,36 +714,36 @@
       <div class="coa-field-card">
         <div class="coa-field-title"><span>📦 ชื่อวัตถุดิบ</span><span class="coa-match-icon" id="coaMatchIcon-name">—</span></div>
         <div class="coa-field-row">
-          <div><span class="coa-field-col-label">จาก COA</span><input class="coa-field-input" id="coaVal-name-coa" oninput="coaCompareField('name')" placeholder="ชื่อวัตถุดิบบน COA"></div>
-          <div><span class="coa-field-col-label">จากฉลาก</span><input class="coa-field-input" id="coaVal-name-mlabel" oninput="coaCompareField('name')" placeholder="ชื่อวัตถุดิบบนฉลาก"></div>
+          <div><span class="coa-field-col-label">จาก COA</span><input class="coa-field-input" id="coaVal-name-coa" oninput="coaOnInput('name','coa')" placeholder="ชื่อวัตถุดิบบน COA"><div class="coa-cand" id="coaCand-name-coa"></div></div>
+          <div><span class="coa-field-col-label">จากฉลาก</span><input class="coa-field-input" id="coaVal-name-mlabel" oninput="coaOnInput('name','mlabel')" placeholder="ชื่อวัตถุดิบบนฉลาก"><div class="coa-cand" id="coaCand-name-mlabel"></div></div>
         </div>
       </div>
       <div class="coa-field-card">
         <div class="coa-field-title"><span>🔢 Lot No.</span><span class="coa-match-icon" id="coaMatchIcon-lot">—</span></div>
         <div class="coa-field-row">
-          <div><span class="coa-field-col-label">จาก COA</span><input class="coa-field-input" id="coaVal-lot-coa" oninput="coaCompareField('lot')" placeholder="เช่น LOT-2026-001"></div>
-          <div><span class="coa-field-col-label">จากฉลาก</span><input class="coa-field-input" id="coaVal-lot-mlabel" oninput="coaCompareField('lot')" placeholder="เช่น LOT-2026-001"></div>
+          <div><span class="coa-field-col-label">จาก COA</span><input class="coa-field-input" id="coaVal-lot-coa" oninput="coaOnInput('lot','coa')" placeholder="เช่น LOT-2026-001"><div class="coa-cand" id="coaCand-lot-coa"></div></div>
+          <div><span class="coa-field-col-label">จากฉลาก</span><input class="coa-field-input" id="coaVal-lot-mlabel" oninput="coaOnInput('lot','mlabel')" placeholder="เช่น LOT-2026-001"><div class="coa-cand" id="coaCand-lot-mlabel"></div></div>
         </div>
       </div>
       <div class="coa-field-card">
         <div class="coa-field-title"><span>📅 วันผลิต (Mfg. Date)</span><span class="coa-match-icon" id="coaMatchIcon-mfg">—</span></div>
         <div class="coa-field-row">
-          <div><span class="coa-field-col-label">จาก COA</span><input class="coa-field-input" id="coaVal-mfg-coa" oninput="coaCompareField('mfg')" placeholder="เช่น 01/06/2026"></div>
-          <div><span class="coa-field-col-label">จากฉลาก</span><input class="coa-field-input" id="coaVal-mfg-mlabel" oninput="coaCompareField('mfg')" placeholder="เช่น 01/06/2026"></div>
+          <div><span class="coa-field-col-label">จาก COA</span><input class="coa-field-input" id="coaVal-mfg-coa" oninput="coaOnInput('mfg','coa')" placeholder="เช่น 01/06/2026"><div class="coa-cand" id="coaCand-mfg-coa"></div></div>
+          <div><span class="coa-field-col-label">จากฉลาก</span><input class="coa-field-input" id="coaVal-mfg-mlabel" oninput="coaOnInput('mfg','mlabel')" placeholder="เช่น 01/06/2026"><div class="coa-cand" id="coaCand-mfg-mlabel"></div></div>
         </div>
       </div>
       <div class="coa-field-card">
         <div class="coa-field-title"><span>⏳ วันหมดอายุ (Exp. Date)</span><span class="coa-match-icon" id="coaMatchIcon-exp">—</span></div>
         <div class="coa-field-row">
-          <div><span class="coa-field-col-label">จาก COA</span><input class="coa-field-input" id="coaVal-exp-coa" oninput="coaCompareField('exp')" placeholder="เช่น 01/06/2028"></div>
-          <div><span class="coa-field-col-label">จากฉลาก</span><input class="coa-field-input" id="coaVal-exp-mlabel" oninput="coaCompareField('exp')" placeholder="เช่น 01/06/2028"></div>
+          <div><span class="coa-field-col-label">จาก COA</span><input class="coa-field-input" id="coaVal-exp-coa" oninput="coaOnInput('exp','coa')" placeholder="เช่น 01/06/2028"><div class="coa-cand" id="coaCand-exp-coa"></div></div>
+          <div><span class="coa-field-col-label">จากฉลาก</span><input class="coa-field-input" id="coaVal-exp-mlabel" oninput="coaOnInput('exp','mlabel')" placeholder="เช่น 01/06/2028"><div class="coa-cand" id="coaCand-exp-mlabel"></div></div>
         </div>
       </div>
       <div class="coa-field-card">
         <div class="coa-field-title"><span>🏭 Supplier / ผู้ผลิต</span><span class="coa-match-icon" id="coaMatchIcon-supplier">—</span></div>
         <div class="coa-field-row">
-          <div><span class="coa-field-col-label">จาก COA</span><input class="coa-field-input" id="coaVal-supplier-coa" oninput="coaCompareField('supplier')" placeholder="ชื่อผู้ผลิต/ซัพพลายเออร์"></div>
-          <div><span class="coa-field-col-label">จากฉลาก</span><input class="coa-field-input" id="coaVal-supplier-mlabel" oninput="coaCompareField('supplier')" placeholder="ชื่อผู้ผลิต/ซัพพลายเออร์"></div>
+          <div><span class="coa-field-col-label">จาก COA</span><input class="coa-field-input" id="coaVal-supplier-coa" oninput="coaOnInput('supplier','coa')" placeholder="ชื่อผู้ผลิต/ซัพพลายเออร์"><div class="coa-cand" id="coaCand-supplier-coa"></div></div>
+          <div><span class="coa-field-col-label">จากฉลาก</span><input class="coa-field-input" id="coaVal-supplier-mlabel" oninput="coaOnInput('supplier','mlabel')" placeholder="ชื่อผู้ผลิต/ซัพพลายเออร์"><div class="coa-cand" id="coaCand-supplier-mlabel"></div></div>
         </div>
       </div>
     </div>
@@ -881,6 +898,8 @@ const S = {
 const COA = {
   coaImg:null, mlabelImg:null,
   coaText:'', mlabelText:'',
+  ok:{},        // 'field-side' -> true เมื่อคนยืนยัน/เลือก/พิมพ์เอง
+  ext:{},       // ผลการดึงข้อมูลพร้อมระดับความเชื่อมั่น
   fields:['name','lot','mfg','exp','supplier'],
   fieldLabels:{name:'ชื่อวัตถุดิบ',lot:'Lot No.',mfg:'วันผลิต',exp:'วันหมดอายุ',supplier:'Supplier/ผู้ผลิต'}
 };
@@ -1739,16 +1758,23 @@ async function runCoaOCR(){
   document.getElementById('coaSummaryWrap').classList.add('hidden');
   const btn=document.getElementById('coaOcrBtn'); btn.disabled=true; btn.classList.add('disabled');
 
+  COA.ok={};
+  const lang=(document.getElementById('coaLang')||{}).value||'eng';
+
   try{
+    txt.textContent='กำลังปรับภาพให้ชัดขึ้น...';
+    const imgA=await coaPrep(COA.coaImg);
+    const imgB=await coaPrep(COA.mlabelImg);
+
     txt.textContent='กำลังอ่าน COA...';
-    const r1=await Tesseract.recognize(COA.coaImg,'eng+tha',{
+    const r1=await Tesseract.recognize(imgA,lang,{
       logger:m=>{ if(m.status==='recognizing text'){const p=Math.round(m.progress*50);fill.style.width=p+'%';pct.textContent=p+'%';} }
     });
     COA.coaText=r1.data.text||'';
     document.getElementById('coaRawText-coa').value=COA.coaText;
 
     txt.textContent='กำลังอ่านฉลากวัตถุดิบ...';
-    const r2=await Tesseract.recognize(COA.mlabelImg,'eng+tha',{
+    const r2=await Tesseract.recognize(imgB,lang,{
       logger:m=>{ if(m.status==='recognizing text'){const p=50+Math.round(m.progress*50);fill.style.width=p+'%';pct.textContent=p+'%';} }
     });
     COA.mlabelText=r2.data.text||'';
@@ -1758,10 +1784,17 @@ async function runCoaOCR(){
 
     const extCoa=coaExtractFields(COA.coaText);
     const extLabel=coaExtractFields(COA.mlabelText);
+    COA.ext={coa:extCoa, mlabel:extLabel};
     COA.fields.forEach(f=>{
-      document.getElementById('coaVal-'+f+'-coa').value=extCoa[f]||'';
-      document.getElementById('coaVal-'+f+'-mlabel').value=extLabel[f]||'';
+      document.getElementById('coaVal-'+f+'-coa').value=extCoa[f].v||'';
+      document.getElementById('coaVal-'+f+'-mlabel').value=extLabel[f].v||'';
+      coaRenderCand(f,'coa',extCoa[f]);
+      coaRenderCand(f,'mlabel',extLabel[f]);
     });
+
+    // เตือนถ้าข้อความที่อ่านได้ดูไม่เป็นภาษาคน
+    const junk=t=>{ const a=(t.match(/[A-Za-z0-9]/g)||[]).length; return t.length>20 && a/t.length<0.35; };
+    if(junk(COA.coaText)||junk(COA.mlabelText)) toast('⚠️ ภาพไม่ชัดพอ — ผลอ่านอาจเชื่อถือไม่ได้ ลองถ่ายใหม่');
 
     setTimeout(()=>{wrap.classList.add('hidden')},600);
     document.getElementById('coaFieldsWrap').classList.remove('hidden');
@@ -1779,39 +1812,174 @@ async function runCoaOCR(){
   }
 }
 
-// Extract candidate fields from raw OCR text using label keyword + pattern heuristics
+// ===== COA: ปรับภาพก่อนส่ง OCR =====
+function coaPrep(dataUrl){
+  return new Promise(res=>{
+    const img=new Image();
+    img.onload=()=>{
+      try{
+        let scale = Math.min(3, Math.max(1, 2000/img.width));
+        if(img.width*scale*img.height*scale > 12e6) scale = Math.sqrt(12e6/(img.width*img.height));
+        const w=Math.round(img.width*scale), h=Math.round(img.height*scale);
+        const c=document.createElement('canvas'); c.width=w; c.height=h;
+        const x=c.getContext('2d');
+        x.imageSmoothingQuality='high';
+        x.drawImage(img,0,0,w,h);
+        const d=x.getImageData(0,0,w,h), p=d.data, n=w*h;
+        const g=new Uint8ClampedArray(n);
+        const hist=new Uint32Array(256);
+        for(let i=0,j=0;j<n;i+=4,j++){
+          const v=(p[i]*0.299+p[i+1]*0.587+p[i+2]*0.114)|0;
+          g[j]=v; hist[v]++;
+        }
+        // ตัดหัวท้าย 1% แล้วยืด contrast (ทนเงา/แสงไม่สม่ำเสมอกว่าใช้ค่า min-max ตรงๆ)
+        const cut=n*0.01; let acc=0,lo=0,hi=255;
+        for(let v=0;v<256;v++){ acc+=hist[v]; if(acc>cut){lo=v;break} }
+        acc=0;
+        for(let v=255;v>=0;v--){ acc+=hist[v]; if(acc>cut){hi=v;break} }
+        const rng=Math.max(1,hi-lo);
+        for(let i=0,j=0;j<n;i+=4,j++){
+          const v=Math.max(0,Math.min(255,((g[j]-lo)/rng)*255));
+          p[i]=p[i+1]=p[i+2]=v;
+        }
+        x.putImageData(d,0,0);
+        res(c.toDataURL('image/png'));
+      }catch(e){ console.warn('coaPrep failed',e); res(dataUrl); }
+    };
+    img.onerror=()=>res(dataUrl);
+    img.src=dataUrl;
+  });
+}
+
+// ===== COA: ดึงข้อมูลจากข้อความ OCR พร้อมระดับความเชื่อมั่น =====
+// คืนค่าต่อ field เป็น {v, conf:'high'|'low'|'none', src, cands:[{v,label}]}
 function coaExtractFields(text){
-  const out={name:'',lot:'',mfg:'',exp:'',supplier:''};
+  const out={};
+  COA.fields.forEach(f=>out[f]={v:'',conf:'none',src:'',cands:[]});
   if(!text) return out;
-  const lines=text.split('\n').map(l=>l.trim()).filter(Boolean);
-  const full=text.replace(/\r/g,'');
 
-  // Lot No. — look for "lot" keyword followed by alnum code
-  let m=full.match(/lot\s*(?:no\.?|number)?\s*[:\-]?\s*([A-Za-z0-9\-\/]{3,20})/i);
-  if(m) out.lot=m[1].trim();
+  const lines=text.split('\n').map(l=>l.replace(/[ \t]+/g,' ').trim()).filter(Boolean);
+  const DATE=/(\d{1,2}[\/\-. ]\d{1,2}[\/\-. ]\d{2,4}|\d{4}[\/\-.]\d{1,2}[\/\-.]\d{1,2})/;
+  const MFG=/(date of manufactur\w*|manufactur\w*\s*date|mfg\.?\s*date|mfg|production date|date of production|prod\.?\s*date|วันที่ผลิต|วันผลิต)/i;
+  const EXP=/(minimum shelf life|shelf life|expiry date|expiration date|expiry|expire\w*|exp\.?\s*date|best before|use by|use before|วันหมดอายุ|วันสิ้นอายุ)/i;
+  const OTHER=/(reanalysis|re-analysis|retest|date of analysis|analysis date|printed|issued|revision)/i;
 
-  // Dates — dd/mm/yyyy, dd-mm-yyyy, or yyyy-mm-dd patterns near mfg/production keyword
-  const datePattern='(\\d{1,2}[\\/\\-.]\\d{1,2}[\\/\\-.]\\d{2,4}|\\d{4}[\\/\\-.]\\d{1,2}[\\/\\-.]\\d{1,2})';
-  let mfgM=full.match(new RegExp('(?:mfg|manufactur(?:e|ing)|production|วันที?่?ผลิต)\\D{0,15}'+datePattern,'i'));
-  if(mfgM) out.mfg=mfgM[1];
-  let expM=full.match(new RegExp('(?:exp|expiry|expiration|วันหมดอายุ|วันสิ้นอายุ)\\D{0,15}'+datePattern,'i'));
-  if(expM) out.exp=expM[1];
-  if(!out.mfg || !out.exp){
-    const allDates=[...full.matchAll(new RegExp(datePattern,'g'))].map(x=>x[0]);
-    if(!out.mfg && allDates[0]) out.mfg=allDates[0];
-    if(!out.exp && allDates[1]) out.exp=allDates[1];
+  // ---- รวบรวมวันที่ทุกตัวพร้อมป้ายกำกับจากบรรทัดที่มันอยู่ ----
+  const dates=[];
+  lines.forEach(ln=>{
+    const m=ln.match(DATE);
+    if(!m) return;
+    let kind='unknown', label='ไม่ระบุว่าเป็นวันอะไร';
+    if(OTHER.test(ln)){ kind='other'; label='วันอื่น (ไม่ใช่ผลิต/หมดอายุ)'; }
+    else if(EXP.test(ln)){ kind='exp'; label='วันหมดอายุ'; }
+    else if(MFG.test(ln)){ kind='mfg'; label='วันผลิต'; }
+    dates.push({v:m[1].replace(/ /g,'.'), kind, label, line:ln});
+  });
+
+  const pickDate=(key)=>{
+    const hit=dates.filter(d=>d.kind===key);
+    if(hit.length===1) return {v:hit[0].v, conf:'high', src:hit[0].line, cands:[]};
+    if(dates.length) return {v:'', conf:'low', src:'', cands:dates.map(d=>({v:d.v,label:d.label}))};
+    return {v:'',conf:'none',src:'',cands:[]};
+  };
+  out.mfg=pickDate('mfg');
+  out.exp=pickDate('exp');
+
+  // ---- Lot / Batch ----
+  const LOT=/\b(?:batch|lot|charge|b\.?\s*no)\.?\s*(?:no\.?|number|nr\.?)?\s*[:\-.]?\s*([A-Za-z0-9][A-Za-z0-9\-\/]{2,19})\b/i;
+  const lots=[];
+  lines.forEach(ln=>{
+    const m=ln.match(LOT);
+    if(m && !/^\d{1,2}[\/\-.]\d{1,2}/.test(m[1])) lots.push({v:m[1].trim(), line:ln});
+  });
+  if(lots.length===1) out.lot={v:lots[0].v,conf:'high',src:lots[0].line,cands:[]};
+  else if(lots.length>1) out.lot={v:'',conf:'low',src:'',cands:lots.map(l=>({v:l.v,label:l.line.slice(0,40)}))};
+
+  // ---- Supplier / ผู้ผลิต ----
+  for(const ln of lines){
+    const m=ln.match(/(?:manufactured by|manufacturer|supplier|produced by|distributed by|ผู้ผลิต|จำหน่ายโดย)\s*[:\-]?\s*(.{3,60})/i);
+    if(m){ out.supplier={v:m[1].trim(),conf:'high',src:ln,cands:[]}; break; }
   }
 
-  // Supplier / Manufacturer name
-  let supM=full.match(/(?:manufacturer|supplier|produced by|ผู้ผลิต|จำหน่ายโดย)\s*[:\-]?\s*([^\n]{3,60})/i);
-  if(supM) out.supplier=supM[1].trim();
-
-  // Product / material name — look for "product name" / "material" / "ชื่อ" keyword
-  let nameM=full.match(/(?:product name|material name|item name|ชื่อสินค้า|ชื่อวัตถุดิบ)\s*[:\-]?\s*([^\n]{2,60})/i);
-  if(nameM) out.name=nameM[1].trim();
-  else if(lines[0]) out.name=lines[0].slice(0,60); // fallback: first line, often the title
+  // ---- ชื่อวัตถุดิบ ----
+  let named=null;
+  for(const ln of lines){
+    const m=ln.match(/(?:product name|material name|item name|product|description|ชื่อสินค้า|ชื่อวัตถุดิบ)\s*[:\-]\s*(.{2,60})/i);
+    if(m){ named={v:m[1].trim(),line:ln}; break; }
+  }
+  if(named) out.name={v:named.v,conf:'high',src:named.line,cands:[]};
+  else {
+    const cands=lines.slice(0,8)
+      .filter(l=>l.length>=4 && l.length<=60 && /[A-Za-zก-๙]{3}/.test(l)
+              && !DATE.test(l)
+              && !/certificate of analysis|^batch|^lot\b|date|charact|manufactured by|^page|specification|shelf life|expiry/i.test(l))
+      .slice(0,4);
+    if(cands.length) out.name={v:'',conf:'low',src:'',cands:cands.map(l=>({v:l,label:'บรรทัดบนเอกสาร'}))};
+  }
 
   return out;
+}
+
+// ===== COA: แสดงตัวเลือก / แหล่งที่มา ใต้แต่ละช่อง =====
+function coaRenderCand(f, side, data){
+  const box=document.getElementById('coaCand-'+f+'-'+side);
+  if(!box) return;
+  box.innerHTML='';
+  if(!data) return;
+
+  if(data.conf==='high' && data.v){
+    const src=document.createElement('div');
+    src.className='coa-src';
+    src.textContent='📄 อ่านจาก: "'+data.src.slice(0,80)+'"';
+    const btn=document.createElement('button');
+    btn.className='coa-chip confirm';
+    btn.textContent='✓ ตรวจแล้ว ถูกต้อง';
+    btn.onclick=()=>coaConfirm(f,side);
+    box.appendChild(src); box.appendChild(btn);
+    return;
+  }
+
+  if(data.conf==='low' && data.cands.length){
+    const hint=document.createElement('div');
+    hint.className='coa-cand-hint';
+    hint.textContent='⚠️ ระบบไม่แน่ใจว่าอันไหนถูก — พบ '+data.cands.length+' ตัวเลือก แตะเลือกอันที่ถูกต้อง';
+    box.appendChild(hint);
+    data.cands.forEach(c=>{
+      const b=document.createElement('button');
+      b.className='coa-chip';
+      b.innerHTML=esc(c.v)+'<small>'+esc(c.label)+'</small>';
+      b.onclick=()=>coaPick(f,side,c.v,b);
+      box.appendChild(b);
+    });
+    return;
+  }
+
+  const hint=document.createElement('div');
+  hint.className='coa-cand-hint';
+  hint.textContent='🔴 อ่านค่านี้ไม่ได้ — กรุณากรอกเอง แล้วเทียบกับเอกสารจริง';
+  box.appendChild(hint);
+}
+
+function coaPick(f, side, val, btnEl){
+  document.getElementById('coaVal-'+f+'-'+side).value=val;
+  const box=btnEl.parentNode;
+  box.querySelectorAll('.coa-chip').forEach(b=>b.classList.remove('picked'));
+  btnEl.classList.add('picked');
+  COA.ok[f+'-'+side]=true;
+  coaCompareField(f);
+}
+
+function coaConfirm(f, side){
+  COA.ok[f+'-'+side]=true;
+  const box=document.getElementById('coaCand-'+f+'-'+side);
+  const btn=box.querySelector('.coa-chip.confirm');
+  if(btn){ btn.classList.add('picked'); btn.textContent='✓ ยืนยันแล้ว'; btn.disabled=true; }
+  coaCompareField(f);
+}
+
+function coaOnInput(f, side){
+  COA.ok[f+'-'+side]=true;   // พิมพ์เอง = ตรวจเอกสารเองแล้ว
+  coaCompareField(f);
 }
 
 function coaNormalize(s){
@@ -1825,8 +1993,19 @@ function coaCompareField(f){
   const av=a.value.trim(), bv=b.value.trim();
   if(!av || !bv){ icon.textContent='⚠️'; coaUpdateSummary(); return; }
   const match=coaNormalize(av)===coaNormalize(bv);
-  a.classList.add(match?'match':'mismatch'); b.classList.add(match?'match':'mismatch');
-  icon.textContent=match?'✅':'❌';
+  if(!match){
+    a.classList.add('mismatch'); b.classList.add('mismatch');
+    icon.textContent='❌'; coaUpdateSummary(); return;
+  }
+  // ตรงกัน — แต่จะเป็นไฟเขียวได้ต้องมีคนตรวจกับเอกสารจริงอย่างน้อยหนึ่งฝั่ง
+  const confirmed = COA.ok[f+'-coa'] || COA.ok[f+'-mlabel'];
+  if(confirmed){
+    a.classList.add('match'); b.classList.add('match');
+    icon.textContent='✅';
+  } else {
+    icon.textContent='⚠️';
+    icon.title='ค่าตรงกัน แต่ยังไม่มีใครยืนยันกับเอกสารจริง';
+  }
   coaUpdateSummary();
 }
 function coaUpdateSummary(){
@@ -1845,7 +2024,15 @@ function coaUpdateSummary(){
   }else if(pending>0){
     verdictEl.textContent='⚠️ รอตรวจสอบ';
     verdictEl.className='verdict-badge coa-summary-verdict verdict-warning';
-    subEl.textContent=`กรอกข้อมูลให้ครบ ${pending} รายการที่เหลือ เพื่อสรุปผล`;
+    let unconf=0, empty=0;
+    COA.fields.forEach(f=>{
+      const t=document.getElementById('coaMatchIcon-'+f).textContent;
+      if(t==='⚠️') { (document.getElementById('coaVal-'+f+'-coa').value.trim() && document.getElementById('coaVal-'+f+'-mlabel').value.trim()) ? unconf++ : empty++; }
+      else if(t!=='✅' && t!=='❌') empty++;
+    });
+    subEl.textContent = unconf
+      ? `ยังไม่ยืนยัน ${unconf} รายการ — แตะ "✓ ตรวจแล้ว ถูกต้อง" หลังเทียบกับเอกสารจริง` + (empty?` · ยังว่าง ${empty} รายการ`:'')
+      : `กรอกข้อมูลให้ครบอีก ${empty} รายการ เพื่อสรุปผล`;
   }else{
     verdictEl.textContent='✅ PASS — ข้อมูลตรงกันทั้งหมด';
     verdictEl.className='verdict-badge coa-summary-verdict verdict-pass';
