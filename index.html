@@ -104,7 +104,49 @@
   .save-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
   .save-modal img{max-width:100%;max-height:70vh;border-radius:var(--radius);border:1px solid var(--border)}
   .save-modal-text{color:var(--text-secondary);font-size:13px;margin-top:12px;text-align:center;line-height:1.6}
+  #userListBox{display:flex;flex-direction:column;gap:6px;width:100%}
+  .user-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 11px;background:#1a2236;border:1px solid #2a3a5c;border-radius:8px;font-size:12px;color:#e2e8f0}
+  .user-date{color:var(--text-muted);font-size:10px}
+  .user-empty{padding:10px;font-size:11px;color:var(--text-muted);text-align:center}
+  .user-mini-btn{min-width:38px;min-height:34px;margin-left:5px;background:#0f1626;border:1px solid #2a3a5c;border-radius:7px;font-size:14px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .user-mini-btn.danger{border-color:#7f1d1d}
+  .user-mini-btn:active{opacity:.7}
+  .glare-warn{margin:10px 0;padding:10px 12px;background:rgba(245,158,11,.12);border:1px solid var(--accent-amber);border-left-width:4px;border-radius:var(--radius-sm);color:var(--accent-amber);font-size:12px;line-height:1.5}
+  .save-modal-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+  .save-modal-btn{padding:13px 22px;min-height:46px;background:#1a2236;color:#e2e8f0;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .save-modal-btn.primary{background:var(--accent-blue);border-color:var(--accent-blue);color:#fff;font-weight:600}
+  .save-modal-btn:active{opacity:.75}
   .save-modal-close{margin-top:12px;padding:10px 30px;background:var(--accent-blue);color:white;border:none;border-radius:var(--radius-sm);font-size:13px;font-family:inherit;cursor:pointer}
+
+  /* ===== COA CHECK TAB ===== */
+  .coa-doc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+  .coa-doc-panel{background:var(--bg-card);border:2px solid var(--border);border-radius:var(--radius);overflow:hidden}
+  .coa-doc-header{padding:6px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+  .coa-doc-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+  .label-coa{color:var(--accent-purple)}.label-mlabel{color:var(--accent-pink)}
+  .coa-doc-area{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;position:relative;cursor:pointer;overflow:hidden}
+  .coa-doc-area img{width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;padding:4px;pointer-events:none}
+  .coa-doc-actions{padding:4px;display:flex;gap:3px;border-top:1px solid var(--border)}
+  .coa-ocr-btn{width:100%;padding:12px;border:none;border-radius:var(--radius);font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;margin-bottom:10px;background:var(--gradient-pink);color:white;box-shadow:0 4px 20px rgba(236,72,153,0.25);display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s}
+  .coa-ocr-btn:active{transform:scale(0.98)}
+  .coa-ocr-btn.disabled{background:var(--bg-card);color:var(--text-muted);border:1px solid var(--border);box-shadow:none;cursor:not-allowed}
+  .coa-progress-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:10px;margin-bottom:10px}
+  .coa-progress-label{font-size:11px;color:var(--text-secondary);margin-bottom:6px;display:flex;justify-content:space-between}
+  .coa-progress-track{height:8px;background:var(--bg-secondary);border-radius:20px;overflow:hidden}
+  .coa-progress-fill{height:100%;background:var(--gradient-pink);border-radius:20px;transition:width .25s;width:0%}
+  .coa-field-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:10px;margin-bottom:8px}
+  .coa-field-title{font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:8px;display:flex;align-items:center;gap:6px;justify-content:space-between}
+  .coa-match-icon{font-size:13px}
+  .coa-field-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
+  .coa-field-col-label{font-size:8px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;display:block}
+  .coa-field-input{width:100%;padding:8px 9px;background:var(--bg-secondary);border:1px solid var(--border);color:var(--text-primary);border-radius:var(--radius-sm);font-size:12px;font-family:inherit}
+  .coa-field-input:focus{outline:none;border-color:var(--border-active)}
+  .coa-field-input.mismatch{border-color:var(--accent-red)}
+  .coa-field-input.match{border-color:var(--accent-green)}
+  .coa-summary-card{background:var(--bg-card);border:2px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;text-align:center;padding:16px 14px}
+  .coa-summary-verdict{display:inline-block;padding:6px 22px;border-radius:20px;font-size:14px;font-weight:700;letter-spacing:1px;margin-bottom:6px}
+  .coa-summary-sub{font-size:11px;color:var(--text-secondary)}
+  .coa-doc-empty-icon{font-size:28px;margin-bottom:4px;opacity:.6}
 
   /* Picker */
   .picker-container{background:var(--bg-card);border:2px solid var(--border);border-radius:var(--radius);overflow:hidden;position:relative}
@@ -198,8 +240,7 @@
   .pin-error-msg{font-size:12px;color:#ef4444;height:18px;margin-bottom:8px;text-align:center}
   .pin-master-link{font-size:11px;color:#3b82f6;cursor:pointer;margin-top:8px;text-decoration:underline}
   .pin-setup-box{width:100%;max-width:300px;background:#111827;border:1px solid #2a3a5c;border-radius:16px;padding:20px;margin-top:8px}
-  #pinUnlockMode,#pinSetupMode{display:flex;flex-direction:column;align-items:center;text-align:center;width:100%}
-  #empIdStep,#pinStep{display:flex;flex-direction:column;align-items:center;text-align:center;width:100%}
+  #pinUnlockMode,#pinRegMode{display:flex;flex-direction:column;align-items:center;text-align:center;width:100%}
   .pin-setup-title{font-size:13px;font-weight:600;color:#94a3b8;margin-bottom:12px;text-align:center;text-transform:uppercase;letter-spacing:1px}
   .descriptor-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.5px;margin-top:8px;flex-wrap:wrap;justify-content:center}
   .desc-pass{background:rgba(16,185,129,0.12);color:var(--accent-green);border:1px solid rgba(16,185,129,0.3)}
@@ -302,29 +343,19 @@
   <div class="pin-app-name">PackColor QC</div>
   <div class="pin-subtitle">Packaging Inspector · Wann Cosmetics</div>
 
-  <!-- UNLOCK MODE -->
+  <!-- ===== UNLOCK ===== -->
   <div id="pinUnlockMode">
-    <!-- Employee ID input -->
-    <div id="empIdStep">
-      <div class="pin-label">กรอก Employee ID ของคุณ</div>
-      <input id="empIdInput" type="text" placeholder="เช่น QC001" maxlength="10"
-        style="width:200px;padding:10px 14px;background:#1a2236;border:1px solid #2a3a5c;color:#e2e8f0;border-radius:10px;font-size:16px;text-align:center;font-family:inherit;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto;text-transform:uppercase;letter-spacing:2px"
-        oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')confirmEmpId()">
-      <div class="pin-error-msg" id="empIdErr"></div>
-      <button onclick="confirmEmpId()" style="padding:10px 28px;background:linear-gradient(135deg,#3b82f6,#06b6d4);color:white;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;margin-top:4px">ถัดไป →</button>
-      <div style="font-size:11px;color:#374151;margin-top:24px;text-align:center" id="sheetStatusMsg">กำลังตรวจสอบสิทธิ์...</div>
-    </div>
-    <!-- PIN input (shown after EmpID confirmed) -->
-    <div id="pinStep" class="hidden">
-      <div class="pin-label" id="pinLabel">กรอก PIN 6 หลัก</div>
-      <div style="font-size:12px;color:#06b6d4;margin-bottom:12px" id="empIdDisplay"></div>
-      <div class="pin-dots" id="pinDots">
-        <div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div>
-        <div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div>
-        <div class="pin-dot" id="pd4"></div><div class="pin-dot" id="pd5"></div>
+    <div class="pin-label" id="pinLabel">กรอก PIN 6 หลักของคุณ</div>
+    <div class="pin-dots" id="pinDots">
+        <div class="pin-dot" id="pd0"></div>
+        <div class="pin-dot" id="pd1"></div>
+        <div class="pin-dot" id="pd2"></div>
+        <div class="pin-dot" id="pd3"></div>
+        <div class="pin-dot" id="pd4"></div>
+        <div class="pin-dot" id="pd5"></div>
       </div>
-      <div class="pin-error-msg" id="pinErr"></div>
-      <div class="pin-numpad" id="pinNumpad">
+    <div class="pin-error-msg" id="pinErr"></div>
+    <div class="pin-numpad" id="pinNumpad">
         <button class="pin-key" onclick="pinKey('1')">1</button>
         <button class="pin-key" onclick="pinKey('2')">2</button>
         <button class="pin-key" onclick="pinKey('3')">3</button>
@@ -338,57 +369,49 @@
         <button class="pin-key" onclick="pinKey('0')">0</button>
         <button class="pin-key del" onclick="pinDel()">⌫</button>
       </div>
-      <div style="display:flex;gap:16px;justify-content:center;margin-top:4px">
-        <div class="pin-master-link" onclick="goBackEmpId()">← เปลี่ยน ID</div>
-        <div class="pin-master-link" id="pinMasterLink" onclick="showMasterInput()">ลืม PIN? ใช้ Master PIN</div>
-      </div>
-      <!-- Master PIN input (hidden) -->
-      <div id="masterInputWrap" class="hidden" style="margin-top:12px;text-align:center">
-        <div class="pin-label">กรอก Master PIN (QC Supervisor)</div>
-        <div class="pin-dots" id="masterDots">
-          <div class="pin-dot" id="md0"></div><div class="pin-dot" id="md1"></div>
-          <div class="pin-dot" id="md2"></div><div class="pin-dot" id="md3"></div>
-          <div class="pin-dot" id="md4"></div><div class="pin-dot" id="md5"></div>
-        </div>
-        <div class="pin-error-msg" id="masterErr"></div>
-      </div>
-    </div>
+    <div class="pin-master-link" style="margin-top:6px" onclick="openRegister()">+ ลงทะเบียนผู้ใช้ใหม่</div>
   </div>
 
-  <!-- FIRST SETUP MODE -->
-  <div id="pinSetupMode" class="hidden">
-    <div class="pin-setup-box">
-      <div class="pin-setup-title" id="setupTitle">ตั้ง PIN ครั้งแรก</div>
-      <div class="pin-label" id="setupLabel" style="text-align:center;margin-bottom:12px">กรอก PIN 6 หลักที่ต้องการ</div>
-      <div class="pin-dots" style="justify-content:center" id="setupDots">
-        <div class="pin-dot" id="sd0"></div><div class="pin-dot" id="sd1"></div>
-        <div class="pin-dot" id="sd2"></div><div class="pin-dot" id="sd3"></div>
-        <div class="pin-dot" id="sd4"></div><div class="pin-dot" id="sd5"></div>
-      </div>
-      <div class="pin-error-msg" id="setupErr"></div>
-      <div class="pin-label" style="margin-top:8px;margin-bottom:8px;text-align:center">Master PIN (QC Supervisor)</div>
-      <div class="pin-dots" style="justify-content:center" id="masterSetupDots">
-        <div class="pin-dot" id="msd0"></div><div class="pin-dot" id="msd1"></div>
-        <div class="pin-dot" id="msd2"></div><div class="pin-dot" id="msd3"></div>
-        <div class="pin-dot" id="msd4"></div><div class="pin-dot" id="msd5"></div>
-      </div>
-      <div class="pin-error-msg" id="masterSetupErr"></div>
-      <div style="font-size:11px;color:#64748b;text-align:center;margin-top:4px">ตั้ง Master PIN แยกกับ PIN ทีม</div>
+  <!-- ===== REGISTER / SETUP / CHANGE PIN ===== -->
+  <div id="pinRegMode" class="hidden">
+    <div class="pin-label" id="regTitle">ลงทะเบียนผู้ใช้ใหม่</div>
+    <div style="font-size:12px;color:#06b6d4;margin-bottom:12px" id="regStepLabel"></div>
+
+    <div id="regNameWrap" class="hidden">
+      <input id="regName" type="text" placeholder="ชื่อผู้ใช้ เช่น วัชพล" maxlength="24"
+        style="width:220px;padding:10px 14px;background:#1a2236;border:1px solid #2a3a5c;color:#e2e8f0;border-radius:10px;font-size:16px;text-align:center;font-family:inherit;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto"
+        onkeydown="if(event.key==='Enter')regNameNext()">
+      <div class="pin-error-msg" id="regErrName"></div>
+      <button onclick="regNameNext()" style="padding:10px 28px;background:linear-gradient(135deg,#3b82f6,#06b6d4);color:white;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;margin-top:4px">ถัดไป →</button>
     </div>
-    <div class="pin-numpad" style="margin-top:14px">
-      <button class="pin-key" onclick="setupKey('1')">1</button>
-      <button class="pin-key" onclick="setupKey('2')">2</button>
-      <button class="pin-key" onclick="setupKey('3')">3</button>
-      <button class="pin-key" onclick="setupKey('4')">4</button>
-      <button class="pin-key" onclick="setupKey('5')">5</button>
-      <button class="pin-key" onclick="setupKey('6')">6</button>
-      <button class="pin-key" onclick="setupKey('7')">7</button>
-      <button class="pin-key" onclick="setupKey('8')">8</button>
-      <button class="pin-key" onclick="setupKey('9')">9</button>
-      <div class="pin-key empty"></div>
-      <button class="pin-key" onclick="setupKey('0')">0</button>
-      <button class="pin-key del" onclick="setupDel()">⌫</button>
+
+    <div id="regPadWrap">
+      <div class="pin-dots" id="regDots">
+        <div class="pin-dot" id="rd0"></div>
+        <div class="pin-dot" id="rd1"></div>
+        <div class="pin-dot" id="rd2"></div>
+        <div class="pin-dot" id="rd3"></div>
+        <div class="pin-dot" id="rd4"></div>
+        <div class="pin-dot" id="rd5"></div>
+      </div>
+      <div class="pin-error-msg" id="regErr"></div>
+      <div class="pin-numpad" id="regNumpad">
+        <button class="pin-key" onclick="regKey('1')">1</button>
+        <button class="pin-key" onclick="regKey('2')">2</button>
+        <button class="pin-key" onclick="regKey('3')">3</button>
+        <button class="pin-key" onclick="regKey('4')">4</button>
+        <button class="pin-key" onclick="regKey('5')">5</button>
+        <button class="pin-key" onclick="regKey('6')">6</button>
+        <button class="pin-key" onclick="regKey('7')">7</button>
+        <button class="pin-key" onclick="regKey('8')">8</button>
+        <button class="pin-key" onclick="regKey('9')">9</button>
+        <div class="pin-key empty"></div>
+        <button class="pin-key" onclick="regKey('0')">0</button>
+        <button class="pin-key del" onclick="regDel()">⌫</button>
+      </div>
     </div>
+
+    <div class="pin-master-link" id="regCancel" style="margin-top:8px" onclick="closeRegister()">← ยกเลิก</div>
   </div>
 </div>
 
@@ -397,11 +420,12 @@
     <div class="logo-icon">🔬</div>
     <div>
       <div class="header-title">PackColor QC</div>
-      <div class="header-subtitle">PackColor QC v2.8</div>
+      <div class="header-subtitle">PackColor QC v2.9</div>
     </div>
   </div>
   <div class="header-nav">
     <button class="nav-btn active" onclick="switchTab('compare')">📸 เทียบ</button>
+    <button class="nav-btn" onclick="switchTab('coa')">📄 COA</button>
     <button class="nav-btn" onclick="switchTab('history')">📋 Log</button>
     <button class="nav-btn" onclick="switchTab('settings')">⚙️</button>
   </div>
@@ -502,7 +526,7 @@
           </div>
         </div>
         <div class="psc-details">
-          <div class="psc-chip"><div class="psc-chip-label">ΔE*76</div><div class="psc-chip-val" id="pscDE">—</div></div>
+          <div class="psc-chip"><div class="psc-chip-label">ΔE00</div><div class="psc-chip-val" id="pscDE">—</div></div>
           <div class="psc-chip"><div class="psc-chip-label">ΔL*</div><div class="psc-chip-val" id="pscDL">—</div></div>
           <div class="psc-chip"><div class="psc-chip-label">Δa*</div><div class="psc-chip-val" id="pscDA">—</div></div>
           <div class="psc-chip"><div class="psc-chip-label">Δb*</div><div class="psc-chip-val" id="pscDB">—</div></div>
@@ -596,11 +620,11 @@
           </div>
         </div>
         <div class="psb-details">
-          <div class="psb-chip"><div class="psb-chip-label">ΔE*76</div><div class="psb-chip-val" id="psbDE">—</div></div>
+          <div class="psb-chip"><div class="psb-chip-label">ΔE00</div><div class="psb-chip-val" id="psbDE">—</div></div>
           <div class="psb-chip"><div class="psb-chip-label">ΔL*</div><div class="psb-chip-val" id="psbDL">—</div></div>
           <div class="psb-chip"><div class="psb-chip-label">Δa*</div><div class="psb-chip-val" id="psbDA">—</div></div>
           <div class="psb-chip" style="grid-column:1/3"><div class="psb-chip-label">Δb* / Delta Descriptor</div><div class="psb-chip-val" id="psbDB" style="font-size:10px;line-height:1.4">—</div></div>
-          <div class="psb-chip"><div class="psb-chip-label">Method</div><div class="psb-chip-val" style="font-size:9px">CIE76</div></div>
+          <div class="psb-chip"><div class="psb-chip-label">Method</div><div class="psb-chip-val" style="font-size:9px">CIE2000</div></div>
         </div>
       </div>
 
@@ -620,11 +644,117 @@
           <div id="pcDescriptor" style="text-align:center;margin-bottom:8px"></div>
           <div class="readout-grid">
             <div class="readout-chip"><div class="readout-chip-label">ΔE</div><div class="readout-chip-value" id="pcDE">—</div></div>
-            <div class="readout-chip"><div class="readout-chip-label">Method</div><div class="readout-chip-value">CIE76 Point</div></div>
+            <div class="readout-chip"><div class="readout-chip-label">Method</div><div class="readout-chip-value">CIE2000 Point</div></div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- ===== COA CHECK TAB ===== -->
+  <div id="tab-coa" class="tab-content">
+    <div class="coa-doc-grid">
+      <!-- COA Panel -->
+      <div class="coa-doc-panel">
+        <div class="coa-doc-header"><span class="coa-doc-label label-coa">COA</span><span class="panel-badge" style="background:rgba(139,92,246,0.15);color:var(--accent-purple)">ใบวิเคราะห์</span></div>
+        <div class="coa-doc-area" onclick="document.getElementById('input-coa-file').click()">
+          <div class="upload-placeholder" id="ph-coadoc"><div class="coa-doc-empty-icon">📄</div><div class="upload-text">แตะอัปโหลด COA</div></div>
+          <img id="img-coadoc" class="hidden" alt="COA">
+        </div>
+        <div class="coa-doc-actions">
+          <button class="img-btn" onclick="event.stopPropagation();document.getElementById('input-coa-file').click()">📁 ไฟล์</button>
+          <button class="img-btn" onclick="event.stopPropagation();document.getElementById('input-coa-cam').click()">📷 กล้อง</button>
+          <button class="img-btn" onclick="event.stopPropagation();clearCoaImage('coa')">✕</button>
+        </div>
+        <input type="file" id="input-coa-file" accept="image/*" class="hidden" onchange="handleCoaFile(this,'coa')">
+        <input type="file" id="input-coa-cam" accept="image/*" capture="environment" class="hidden" onchange="handleCoaFile(this,'coa')">
+      </div>
+      <!-- Material Label Panel -->
+      <div class="coa-doc-panel">
+        <div class="coa-doc-header"><span class="coa-doc-label label-mlabel">ฉลาก</span><span class="panel-badge" style="background:rgba(236,72,153,0.15);color:var(--accent-pink)">วัตถุดิบ</span></div>
+        <div class="coa-doc-area" onclick="document.getElementById('input-mlabel-file').click()">
+          <div class="upload-placeholder" id="ph-mlabeldoc"><div class="coa-doc-empty-icon">🏷️</div><div class="upload-text">แตะอัปโหลดฉลาก</div></div>
+          <img id="img-mlabeldoc" class="hidden" alt="Material Label">
+        </div>
+        <div class="coa-doc-actions">
+          <button class="img-btn" onclick="event.stopPropagation();document.getElementById('input-mlabel-file').click()">📁 ไฟล์</button>
+          <button class="img-btn" onclick="event.stopPropagation();document.getElementById('input-mlabel-cam').click()">📷 กล้อง</button>
+          <button class="img-btn" onclick="event.stopPropagation();clearCoaImage('mlabel')">✕</button>
+        </div>
+        <input type="file" id="input-mlabel-file" accept="image/*" class="hidden" onchange="handleCoaFile(this,'mlabel')">
+        <input type="file" id="input-mlabel-cam" accept="image/*" capture="environment" class="hidden" onchange="handleCoaFile(this,'mlabel')">
+      </div>
+    </div>
+
+    <button id="coaOcrBtn" class="coa-ocr-btn disabled" onclick="runCoaOCR()" disabled>🔍 อ่านข้อมูลด้วย OCR</button>
+
+    <div id="coaProgressWrap" class="coa-progress-wrap hidden">
+      <div class="coa-progress-label"><span id="coaProgressText">กำลังประมวลผล...</span><span id="coaProgressPct">0%</span></div>
+      <div class="coa-progress-track"><div class="coa-progress-fill" id="coaProgressFill"></div></div>
+    </div>
+
+    <div id="coaFieldsWrap" class="hidden">
+      <div class="coa-field-card">
+        <div class="coa-field-title"><span>📦 ชื่อวัตถุดิบ</span><span class="coa-match-icon" id="coaMatchIcon-name">—</span></div>
+        <div class="coa-field-row">
+          <div><span class="coa-field-col-label">จาก COA</span><input class="coa-field-input" id="coaVal-name-coa" oninput="coaCompareField('name')" placeholder="ชื่อวัตถุดิบบน COA"></div>
+          <div><span class="coa-field-col-label">จากฉลาก</span><input class="coa-field-input" id="coaVal-name-mlabel" oninput="coaCompareField('name')" placeholder="ชื่อวัตถุดิบบนฉลาก"></div>
+        </div>
+      </div>
+      <div class="coa-field-card">
+        <div class="coa-field-title"><span>🔢 Lot No.</span><span class="coa-match-icon" id="coaMatchIcon-lot">—</span></div>
+        <div class="coa-field-row">
+          <div><span class="coa-field-col-label">จาก COA</span><input class="coa-field-input" id="coaVal-lot-coa" oninput="coaCompareField('lot')" placeholder="เช่น LOT-2026-001"></div>
+          <div><span class="coa-field-col-label">จากฉลาก</span><input class="coa-field-input" id="coaVal-lot-mlabel" oninput="coaCompareField('lot')" placeholder="เช่น LOT-2026-001"></div>
+        </div>
+      </div>
+      <div class="coa-field-card">
+        <div class="coa-field-title"><span>📅 วันผลิต (Mfg. Date)</span><span class="coa-match-icon" id="coaMatchIcon-mfg">—</span></div>
+        <div class="coa-field-row">
+          <div><span class="coa-field-col-label">จาก COA</span><input class="coa-field-input" id="coaVal-mfg-coa" oninput="coaCompareField('mfg')" placeholder="เช่น 01/06/2026"></div>
+          <div><span class="coa-field-col-label">จากฉลาก</span><input class="coa-field-input" id="coaVal-mfg-mlabel" oninput="coaCompareField('mfg')" placeholder="เช่น 01/06/2026"></div>
+        </div>
+      </div>
+      <div class="coa-field-card">
+        <div class="coa-field-title"><span>⏳ วันหมดอายุ (Exp. Date)</span><span class="coa-match-icon" id="coaMatchIcon-exp">—</span></div>
+        <div class="coa-field-row">
+          <div><span class="coa-field-col-label">จาก COA</span><input class="coa-field-input" id="coaVal-exp-coa" oninput="coaCompareField('exp')" placeholder="เช่น 01/06/2028"></div>
+          <div><span class="coa-field-col-label">จากฉลาก</span><input class="coa-field-input" id="coaVal-exp-mlabel" oninput="coaCompareField('exp')" placeholder="เช่น 01/06/2028"></div>
+        </div>
+      </div>
+      <div class="coa-field-card">
+        <div class="coa-field-title"><span>🏭 Supplier / ผู้ผลิต</span><span class="coa-match-icon" id="coaMatchIcon-supplier">—</span></div>
+        <div class="coa-field-row">
+          <div><span class="coa-field-col-label">จาก COA</span><input class="coa-field-input" id="coaVal-supplier-coa" oninput="coaCompareField('supplier')" placeholder="ชื่อผู้ผลิต/ซัพพลายเออร์"></div>
+          <div><span class="coa-field-col-label">จากฉลาก</span><input class="coa-field-input" id="coaVal-supplier-mlabel" oninput="coaCompareField('supplier')" placeholder="ชื่อผู้ผลิต/ซัพพลายเออร์"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="coaSummaryWrap" class="hidden">
+      <div class="coa-summary-card">
+        <div class="verdict-badge coa-summary-verdict" id="coaSummaryVerdict">—</div>
+        <div class="coa-summary-sub" id="coaSummarySub">—</div>
+      </div>
+      <div class="action-row">
+        <button class="action-btn" onclick="saveCoaLog()" style="border-color:var(--accent-green)">💾 บันทึกผลตรวจ</button>
+        <button class="action-btn" onclick="switchTab('history')" style="border-color:var(--accent-purple)">📋 ดู Log</button>
+      </div>
+    </div>
+
+    <details style="margin-top:6px">
+      <summary style="font-size:11px;color:var(--text-muted);cursor:pointer;padding:6px 0">📝 ข้อความ OCR ดิบ (ใช้ตรวจสอบ/แก้ไขเอง)</summary>
+      <div class="coa-doc-grid" style="margin-top:8px">
+        <div>
+          <span class="coa-field-col-label">COA Raw Text</span>
+          <textarea class="coa-field-input" id="coaRawText-coa" rows="6" style="resize:vertical;font-family:'JetBrains Mono',monospace;font-size:10px" placeholder="ข้อความจาก OCR จะแสดงที่นี่..."></textarea>
+        </div>
+        <div>
+          <span class="coa-field-col-label">Label Raw Text</span>
+          <textarea class="coa-field-input" id="coaRawText-mlabel" rows="6" style="resize:vertical;font-family:'JetBrains Mono',monospace;font-size:10px" placeholder="ข้อความจาก OCR จะแสดงที่นี่..."></textarea>
+        </div>
+      </div>
+    </details>
   </div>
 
   <!-- ===== HISTORY TAB ===== -->
@@ -639,15 +769,16 @@
   <!-- ===== SETTINGS TAB ===== -->
   <div id="tab-settings" class="tab-content">
     <div class="settings-group">
-      <div class="settings-title">🔐 PIN Lock & Allowlist</div>
+      <div class="settings-title">🔐 PIN Lock</div>
       <div class="setting-row"><span class="setting-label">ผู้ใช้ปัจจุบัน</span><span class="setting-value" id="pinStatus">—</span></div>
-      <div class="setting-row"><span class="setting-label">สถานะ Allowlist</span><span class="setting-value" id="sheetStatus">—</span></div>
-      <div class="setting-row" style="flex-direction:column;align-items:flex-start">
-        <span class="setting-label">Google Sheet URL (Admin เท่านั้น)</span>
-        <input type="text" class="text-input" id="sheetUrl" placeholder="วาง URL จาก Google Sheet Publish" oninput="saveSettings()">
+      <div class="setting-row"><span class="setting-label">ผู้ใช้ที่ลงทะเบียนในเครื่องนี้</span><span class="setting-value" id="userCount">—</span></div>
+      <div class="setting-row" style="flex-direction:column;align-items:stretch">
+        <span class="setting-label" style="margin-bottom:8px">รายชื่อผู้ใช้</span>
+        <div id="userListBox"></div>
       </div>
-      <div class="setting-row"><span class="setting-label">ทดสอบการเชื่อมต่อ</span><button class="export-csv-btn" style="border-color:var(--accent-cyan);color:var(--accent-cyan)" onclick="testSheetConnection()">🔗 ทดสอบ</button></div>
+      <div class="setting-row"><span class="setting-label">เพิ่มผู้ใช้ใหม่</span><button class="export-csv-btn" style="border-color:var(--accent-cyan);color:var(--accent-cyan)" onclick="addUserFromSettings()">➕ ลงทะเบียน</button></div>
       <div class="setting-row"><span class="setting-label">เปลี่ยน PIN ของฉัน</span><button class="export-csv-btn" style="border-color:var(--accent-blue);color:var(--accent-blue)" onclick="changePIN()">🔑 เปลี่ยน PIN</button></div>
+      <div class="setting-row"><span class="setting-label">เปลี่ยน Master PIN</span><button class="export-csv-btn" style="border-color:var(--accent-blue);color:var(--accent-blue)" onclick="changeMasterPIN()">🔐 Master PIN</button></div>
       <div class="setting-row"><span class="setting-label">ล็อคแอปทันที</span><button class="export-csv-btn" style="border-color:var(--accent-amber);color:var(--accent-amber)" onclick="lockNow()">🔒 Lock</button></div>
     </div>
 
@@ -676,17 +807,17 @@
     </div>
     <div class="settings-group">
       <div class="settings-title">🎯 เกณฑ์ตัดสิน (ΔE Threshold)</div>
-      <div class="setting-row"><span class="setting-label">✅ PASS (ΔE ≤)</span><input type="number" class="threshold-input" id="thPass" value="5" min="0" max="50" step="0.5" oninput="saveSettings()"></div>
-      <div class="setting-row"><span class="setting-label">⚠️ WARNING (ΔE ≤)</span><input type="number" class="threshold-input" id="thWarn" value="10" min="0" max="50" step="0.5" oninput="saveSettings()"></div>
+      <div class="setting-row"><span class="setting-label">✅ PASS (ΔE ≤)</span><input type="number" class="threshold-input" id="thPass" value="2" min="0" max="50" step="0.5" oninput="saveSettings()"></div>
+      <div class="setting-row"><span class="setting-label">⚠️ WARNING (ΔE ≤)</span><input type="number" class="threshold-input" id="thWarn" value="3" min="0" max="50" step="0.5" oninput="saveSettings()"></div>
       <div class="setting-row"><span class="setting-label">❌ FAIL (ΔE >)</span><span class="setting-value">Above warning</span></div>
     </div>
     <div class="settings-group">
       <div class="settings-title">📊 Color Space</div>
-      <div class="setting-row"><span class="setting-label">วิธีเปรียบเทียบ</span><span class="setting-value">CIE LAB ΔE*76</span></div>
+      <div class="setting-row"><span class="setting-label">วิธีเปรียบเทียบ</span><span class="setting-value">CIE LAB ΔE2000</span></div>
     </div>
     <div class="settings-group">
       <div class="settings-title">ℹ️ เกี่ยวกับ</div>
-      <div class="setting-row"><span class="setting-label">Version</span><span class="setting-value">2.8.1</span></div>
+      <div class="setting-row"><span class="setting-label">Version</span><span class="setting-value">2.9.0</span></div>
     </div>
     <div class="settings-group">
       <div class="settings-title">🗑️ จัดการข้อมูล</div>
@@ -700,8 +831,12 @@
 <!-- Save Preview Modal -->
 <div id="saveModal" class="save-modal hidden">
   <img id="savePreviewImg">
-  <div class="save-modal-text">📱 กดค้างที่ภาพ → เลือก "Save Image"<br>หรือ "บันทึกรูปภาพ" เพื่อเซฟลงเครื่อง</div>
-  <button class="save-modal-close" onclick="document.getElementById('saveModal').classList.add('hidden')">✕ ปิด</button>
+  <div class="save-modal-btns">
+    <button class="save-modal-btn primary" onclick="doSaveImage('download')">💾 บันทึกลงเครื่อง</button>
+    <button class="save-modal-btn" id="btnShareImg" onclick="doSaveImage('share')">📤 แชร์ / เซฟผ่านแอป</button>
+  </div>
+  <div class="save-modal-text">ถ้ากด "บันทึกลงเครื่อง" แล้วไม่ขึ้น ให้ลองปุ่มแชร์<br>แล้วเลือก My Files / แกลเลอรี</div>
+  <button class="save-modal-close" onclick="closeSaveModal()">✕ ปิด</button>
 </div>
 
 <div id="toast" class="toast"></div>
@@ -733,12 +868,21 @@
 <canvas id="cA" class="offscreen"></canvas><canvas id="cB" class="offscreen"></canvas><canvas id="cX" class="offscreen"></canvas>
 <canvas id="pcStd" class="offscreen"></canvas><canvas id="pcSample" class="offscreen"></canvas>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js"></script>
 <script>
 // ===== STATE (in-memory, no localStorage) =====
 const S = {
   stdImg:null, smpImg:null, roi:'full',
   logs:[], lastR:null,
   pStdImg:null, pSmpImg:null, pStdLab:null, pSmpLab:null, pStdRGB:null, pSmpRGB:null
+};
+
+// ===== COA CHECK STATE =====
+const COA = {
+  coaImg:null, mlabelImg:null,
+  coaText:'', mlabelText:'',
+  fields:['name','lot','mfg','exp','supplier'],
+  fieldLabels:{name:'ชื่อวัตถุดิบ',lot:'Lot No.',mfg:'วันผลิต',exp:'วันหมดอายุ',supplier:'Supplier/ผู้ผลิต'}
 };
 
 // Load logs from persistent storage
@@ -756,442 +900,337 @@ function saveLogs() {
   } catch(e) { console.warn('Storage full or unavailable'); }
 }
 
-// ===== PIN LOCK SYSTEM v2.7 — Google Sheet Allowlist =====
+// ===== PIN LOCK SYSTEM v3.0 — PIN ระบุตัวตน (ไม่ต้องกรอกชื่อผู้ใช้) =====
 
 async function hashPIN(pin) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('wann_qc_v27_' + pin));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 
-// State
+const USERS_KEY = 'qc_users';
+function getUsers(){ try { return JSON.parse(localStorage.getItem(USERS_KEY) || '[]'); } catch(e) { return []; } }
+function saveUsers(u){ try { localStorage.setItem(USERS_KEY, JSON.stringify(u)); } catch(e) { toast('❌ บันทึกไม่สำเร็จ พื้นที่เต็ม'); } }
+function esc(t){ return String(t).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
 const P = {
-  empId: '',         // current employee ID (uppercase)
-  empName: '',       // name from sheet
-  buf: '',           // PIN buffer
-  masterBuf: '',
-  setupPhase: 'team',
-  attempts: 0, maxAttempts: 5,
-  masterMode: false,
-  sheetData: null,   // parsed allowlist [{id,name,pinHash,active}]
-  sheetLoaded: false,
-  _setupConfirmBuf: ''
+  empId:'', empName:'', isAdmin:false,
+  buf:'', attempts:0, maxAttempts:5,
+  reg:{ phase:'', name:'', pin:'', buf:'', editId:'' }
 };
 
-// ---- SHEET FETCH ----
-async function fetchAllowlist(url) {
-  if(!url) return null;
-
-  // Ensure CSV output format
-  let csvUrl = url;
-  if(!csvUrl.includes('output=csv')) {
-    csvUrl = csvUrl.replace('/pub?', '/pub?output=csv&').replace('/edit', '/pub?output=csv');
-  }
-  const ts = '_t=' + Date.now();
-  const finalUrl = csvUrl + (csvUrl.includes('?') ? '&' : '?') + ts;
-
-  // Try direct fetch first (works when CORS is allowed by Google)
-  try {
-    const resp = await fetch(finalUrl, {mode:'cors'});
-    if(resp.ok) {
-      const text = await resp.text();
-      const parsed = parseSheetCSV(text);
-      if(parsed !== null) return parsed;
-    }
-  } catch(e) {}
-
-  // Fallback 1: allorigins.win proxy
-  try {
-    const proxy1 = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(finalUrl);
-    const r1 = await fetch(proxy1);
-    if(r1.ok) {
-      const text = await r1.text();
-      const parsed = parseSheetCSV(text);
-      if(parsed !== null) return parsed;
-    }
-  } catch(e) {}
-
-  // Fallback 2: corsproxy.io
-  try {
-    const proxy2 = 'https://corsproxy.io/?' + encodeURIComponent(finalUrl);
-    const r2 = await fetch(proxy2);
-    if(r2.ok) {
-      const text = await r2.text();
-      const parsed = parseSheetCSV(text);
-      if(parsed !== null) return parsed;
-    }
-  } catch(e) {}
-
-  return null;
-}
-
-function parseSheetCSV(text) {
-  const rows = text.trim().split('\n').map(r => r.split(',').map(s => s.trim().replace(/^"|"$/g,'')));
-  if(rows.length < 2) return [];
-  // Find the header row dynamically (look for 'employeeid' in first column, case-insensitive)
-  let dataStart = 1; // default: skip first row
-  for(let i = 0; i < Math.min(rows.length, 6); i++) {
-    if(rows[i][0] && rows[i][0].toLowerCase().replace(/\s/g,'') === 'employeeid') {
-      dataStart = i + 1; // data starts after header row
-      break;
-    }
-  }
-  // Sheet: A=EmployeeID, B=Name, C=PINHash, D=Role, E=Active(TRUE/FALSE)
-  // Detect Active column from header row
-  const headerRow = rows[dataStart - 1] || [];
-  let activeIdx = 4; // default column E
-  for(let ci = 0; ci < headerRow.length; ci++) {
-    const h = headerRow[ci].toLowerCase().replace(/[\s()\/]/g,'');
-    if(h.startsWith('active')) { activeIdx = ci; break; }
-  }
-  return rows.slice(dataStart).filter(r => r.length >= 3 && r[0] && r[0] !== '').map(r => ({
-    id: r[0].toUpperCase().trim(),
-    name: r[1] || '',
-    pinHash: r[2] || '',
-    role: r[3] || '',
-    active: (r[activeIdx] || '').toUpperCase().trim() === 'TRUE'
-  }));
-}
-
-function findEmployee(id) {
-  if(!P.sheetData) return null;
-  return P.sheetData.find(e => e.id === id.toUpperCase()) || null;
-}
-
-async function loadSheetData() {
-  const url = localStorage.getItem('qc_sheet_url') || '';
-  if(!url) { P.sheetLoaded = false; return; }
-  const data = await fetchAllowlist(url);
-  if(data) { P.sheetData = data; P.sheetLoaded = true; }
-  else { P.sheetLoaded = false; }
-}
-
 // ---- INIT ----
-async function initPinLock() {
-  document.getElementById('sheetStatusMsg').textContent = 'กำลังโหลด Allowlist...';
-  await loadSheetData();
+function initPinLock(){
+  // ล้าง PIN เก่าจากระบบ Allowlist (v2.x) ที่ใช้ไม่ได้แล้ว
+  try {
+    const stale = Object.keys(localStorage).filter(k => k.indexOf('qc_pin_')===0);
+    stale.forEach(k => localStorage.removeItem(k));
+    localStorage.removeItem('qc_sheet_url');
+  } catch(e) {}
 
-  const hasSheet = P.sheetLoaded && P.sheetData && P.sheetData.length > 0;
-  const hasMasterHash = !!localStorage.getItem('qc_master_hash');
-
-  if(hasSheet) {
-    const activeCount = P.sheetData.filter(e=>e.active).length;
-    document.getElementById('sheetStatusMsg').textContent =
-      `✅ โหลด Allowlist แล้ว — Active ${activeCount} คน (หรือกรอก ADMIN สำหรับ Supervisor)`;
-    // Show EmpID step
-    document.getElementById('empIdStep').classList.remove('hidden');
-    document.getElementById('pinStep').classList.add('hidden');
-    document.getElementById('pinUnlockMode').classList.remove('hidden');
-    document.getElementById('pinSetupMode').classList.add('hidden');
-  } else if(!hasMasterHash) {
-    // No sheet, no master PIN → first setup
-    document.getElementById('sheetStatusMsg').textContent = '⚙️ ตั้งค่าครั้งแรก';
-    document.getElementById('pinUnlockMode').classList.add('hidden');
-    document.getElementById('pinSetupMode').classList.remove('hidden');
-    P.setupPhase = 'master';
-    document.getElementById('setupTitle').textContent = 'ตั้ง Master PIN (QC Supervisor)';
-    document.getElementById('setupLabel').textContent = 'กรอก Master PIN 6 หลัก';
-  } else {
-    // No sheet but has master → offline fallback (master PIN only)
-    document.getElementById('sheetStatusMsg').textContent = '⚠ เชื่อมต่อ Allowlist ไม่ได้ — กรอก ADMIN + Master PIN';
-    document.getElementById('empIdStep').classList.add('hidden');
-    document.getElementById('pinStep').classList.remove('hidden');
-    document.getElementById('pinLabel').textContent = 'กรอก Master PIN (ไม่มีเน็ต)';
-    document.getElementById('pinMasterLink').classList.add('hidden');
-    P.masterMode = true;
-  }
-  document.getElementById('pinMasterLink').classList.toggle('hidden', !hasMasterHash);
-}
-
-// ---- STEP 1: Employee ID ----
-async function confirmEmpId() {
-  const id = document.getElementById('empIdInput').value.trim().toUpperCase();
-  if(!id) { document.getElementById('empIdErr').textContent = 'กรุณากรอก Employee ID'; return; }
-
-  // ---- ADMIN shortcut: bypass Allowlist, go straight to Master PIN ----
-  if(id === 'ADMIN') {
-    P.empId = 'ADMIN'; P.empName = 'QC Supervisor';
-    document.getElementById('empIdStep').classList.add('hidden');
-    document.getElementById('pinStep').classList.remove('hidden');
-    document.getElementById('empIdDisplay').textContent = '👤 QC Supervisor (ADMIN)';
-    document.getElementById('pinLabel').textContent = 'กรอก Master PIN';
-    document.getElementById('pinMasterLink').classList.add('hidden');
-    // Force master mode
-    P.masterMode = true; P.masterBuf = ''; P.buf = '';
-    document.getElementById('masterInputWrap').classList.remove('hidden');
-    updateDots('pd',''); updateDots('md','');
-    return;
-  }
-
-  if(!P.sheetLoaded) {
-    document.getElementById('empIdErr').textContent = 'ไม่สามารถเชื่อมต่อ Allowlist ได้';
-    return;
-  }
-
-  const emp = findEmployee(id);
-  if(!emp) {
-    document.getElementById('empIdErr').textContent = `ไม่พบ ID "${id}" ใน Allowlist`;
-    return;
-  }
-  if(!emp.active) {
-    document.getElementById('empIdErr').textContent = `ID "${id}" ถูกระงับสิทธิ์การใช้งาน`;
-    // Flash red
-    const inp = document.getElementById('empIdInput');
-    inp.style.borderColor = '#ef4444';
-    setTimeout(() => { inp.style.borderColor = '#2a3a5c'; }, 1500);
-    return;
-  }
-
-  // Valid & active → go to PIN step
-  P.empId = id;
-  P.empName = emp.name;
-  P.sheetEntry = emp; // store for PIN check
-
-  document.getElementById('empIdStep').classList.add('hidden');
-  document.getElementById('pinStep').classList.remove('hidden');
-  document.getElementById('empIdDisplay').textContent = `👤 ${emp.name} (${id})`;
-  document.getElementById('empIdErr').textContent = '';
-  P.buf = '';
-  updateDots('pd', P.buf);
-
-  // แจ้งว่าถ้ายังไม่มี PIN ให้ตั้งใหม่ได้เลย
-  const sheetHash = emp.pinHash ? emp.pinHash.trim() : '';
-  const localHash = localStorage.getItem('qc_pin_' + id);
-  if(!sheetHash && !localHash) {
-    document.getElementById('pinLabel').textContent = '🔑 ตั้ง PIN 6 หลักของคุณ (ครั้งแรก)';
-    document.getElementById('pinErr').textContent = '';
-    // hint text
-    const hint = document.createElement('div');
-    hint.id = 'pinFirstHint';
-    hint.style.cssText = 'font-size:11px;color:#06b6d4;margin-bottom:8px;text-align:center';
-    hint.textContent = 'กรอก PIN ที่ต้องการใช้ได้เลย — ระบบจะบันทึกให้อัตโนมัติ';
-    const dotsEl = document.getElementById('pinDots');
-    if(!document.getElementById('pinFirstHint')) dotsEl.parentNode.insertBefore(hint, dotsEl);
-  } else {
-    document.getElementById('pinLabel').textContent = 'กรอก PIN 6 หลัก';
-    const old = document.getElementById('pinFirstHint');
-    if(old) old.remove();
-  }
-}
-
-function goBackEmpId() {
-  P.empId = ''; P.empName = ''; P.buf = '';
-  document.getElementById('pinStep').classList.add('hidden');
-  document.getElementById('empIdStep').classList.remove('hidden');
-  document.getElementById('empIdInput').value = '';
-  document.getElementById('masterInputWrap').classList.add('hidden');
-  P.masterMode = false;
+  P.buf=''; P.attempts=0;
   updateDots('pd','');
-}
+  const err = document.getElementById('pinErr'); if(err) err.textContent='';
+  document.getElementById('pinRegMode').classList.add('hidden');
+  document.getElementById('pinUnlockMode').classList.remove('hidden');
 
-// ---- STEP 2: PIN ----
-function pinKey(n) {
-  if(P.masterMode) { masterKey(n); return; }
-  if(P.buf.length >= 6) return;
-  P.buf += n;
-  updateDots('pd', P.buf);
-  if(P.buf.length === 6) setTimeout(checkPIN, 80);
-}
-function pinDel() {
-  if(P.masterMode) { masterDel(); return; }
-  P.buf = P.buf.slice(0,-1);
-  updateDots('pd', P.buf);
-}
-
-async function checkPIN() {
-  const h = await hashPIN(P.buf);
-  const emp = P.sheetEntry;
-  const localHash = localStorage.getItem('qc_pin_' + P.empId);
-  const sheetHash = emp && emp.pinHash ? emp.pinHash.trim() : '';
-
-  // ---- Case 1: ไม่มี PIN ทั้งใน Sheet และ local → ให้ตั้ง PIN ครั้งแรก ----
-  if(!sheetHash && !localHash) {
-    // บันทึก PIN นี้เป็น PIN แรกของ employee
-    localStorage.setItem('qc_pin_' + P.empId, h);
-    toast('✅ ตั้ง PIN สำเร็จ! ยินดีต้อนรับ ' + (P.empName || P.empId));
-    unlockSuccess('pd');
+  if(!localStorage.getItem('qc_master_hash')){
+    openRegister('newmaster');   // เครื่องใหม่ → บังคับตั้ง Master PIN ก่อน
     return;
   }
+  document.getElementById('pinLabel').textContent =
+    getUsers().length ? 'กรอก PIN 6 หลักของคุณ' : 'กรอก Master PIN เพื่อเริ่มใช้งาน';
+}
 
-  // ---- Case 2: มี PIN ใน Sheet → เช็คกับ Sheet ----
-  if(sheetHash && h === sheetHash) {
-    unlockSuccess('pd');
+// ---- UNLOCK ----
+function pinKey(n){
+  if(P.buf.length>=6) return;
+  P.buf+=n; updateDots('pd',P.buf);
+  if(P.buf.length===6) setTimeout(checkPIN,80);
+}
+function pinDel(){ P.buf=P.buf.slice(0,-1); updateDots('pd',P.buf); }
+
+async function checkPIN(){
+  let h;
+  try { h = await hashPIN(P.buf); }
+  catch(err){
+    console.error('hashPIN failed:', err);
+    document.getElementById('pinErr').textContent = '⚠ ต้องเปิดผ่าน https เท่านั้น';
+    P.buf=''; updateDots('pd','');
     return;
   }
+  const u = getUsers().find(x => x.hash === h);
+  if(u){ loginAs(u.id, u.name, false); return; }
+  if(h === localStorage.getItem('qc_master_hash')){ loginAs('ADMIN','QC Supervisor',true); return; }
+  wrongPIN();
+}
 
-  // ---- Case 3: มี PIN ใน local (employee ตั้งเอง) → เช็ค local ----
-  if(localHash && h === localHash) {
-    unlockSuccess('pd');
-    return;
-  }
-
-  // ---- Wrong PIN ----
+function wrongPIN(){
   P.attempts++;
-  flashError('pd', 6);
+  flashError('pd',6);
   const left = P.maxAttempts - P.attempts;
-  document.getElementById('pinErr').textContent = left > 0
-    ? `PIN ไม่ถูกต้อง (เหลือ ${left} ครั้ง)` : 'ล็อค 30 วินาที';
-  if(P.attempts >= P.maxAttempts) lockNumpad(30, 'pinNumpad', 'pinErr');
-  setTimeout(()=>{ P.buf=''; updateDots('pd',P.buf); document.getElementById('pinErr').textContent=''; }, 800);
+  document.getElementById('pinErr').textContent = left>0 ? `PIN ไม่ถูกต้อง (เหลือ ${left} ครั้ง)` : 'ล็อค 30 วินาที';
+  if(P.attempts>=P.maxAttempts) lockNumpad(30,'pinNumpad','pinErr');
+  setTimeout(()=>{
+    P.buf=''; updateDots('pd',P.buf);
+    if(P.attempts<P.maxAttempts) document.getElementById('pinErr').textContent='';
+  },800);
 }
 
-function unlockSuccess(prefix) {
-  const count = prefix==='pd'?6:6;
-  for(let i=0;i<count;i++){const d=document.getElementById(prefix+i);if(d){d.classList.remove('filled');d.classList.add('success');}}
-  P.attempts = 0;
-  // Save current user to session
-  localStorage.setItem('qc_current_user', JSON.stringify({id:P.empId, name:P.empName}));
-  setTimeout(()=>{ document.getElementById('pinOverlay').classList.add('hidden'); updatePinStatusUI(); }, 350);
+function loginAs(id,name,isAdmin){
+  P.empId=id; P.empName=name; P.isAdmin=isAdmin; P.attempts=0;
+  localStorage.setItem('qc_current_user', JSON.stringify({id:id, name:name, admin:isAdmin}));
+  for(let i=0;i<6;i++){ const d=document.getElementById('pd'+i); if(d){ d.classList.remove('filled'); d.classList.add('success'); } }
+  // เติมชื่อผู้ตรวจอัตโนมัติถ้ายังว่าง
+  const fi=document.getElementById('fieldInspector');
+  if(fi && !fi.value.trim() && !isAdmin){ fi.value=name; try{ saveSettings(); }catch(e){} }
+  toast('👋 สวัสดี '+name);
+  setTimeout(()=>{
+    document.getElementById('pinOverlay').classList.add('hidden');
+    P.buf=''; updateDots('pd','');
+    updatePinStatusUI();
+  },350);
 }
 
-function flashError(prefix, count) {
-  for(let i=0;i<count;i++){const d=document.getElementById(prefix+i);if(d){d.classList.remove('filled');d.classList.add('error');}}
-  setTimeout(()=>{for(let i=0;i<count;i++){const d=document.getElementById(prefix+i);if(d){d.classList.remove('error');}}},700);
+// ---- REGISTER / SETUP / CHANGE PIN ----
+function openRegister(mode){
+  P.reg={ phase: mode==='newmaster' ? 'newmaster' : 'master', name:'', pin:'', buf:'', editId:'' };
+  document.getElementById('pinUnlockMode').classList.add('hidden');
+  document.getElementById('pinRegMode').classList.remove('hidden');
+  document.getElementById('regTitle').textContent = mode==='newmaster' ? '⚙️ ตั้งค่าครั้งแรก' : 'ลงทะเบียนผู้ใช้ใหม่';
+  document.getElementById('regCancel').style.display = mode==='newmaster' ? 'none' : '';
+  const rn=document.getElementById('regName'); if(rn) rn.value='';
+  renderRegStep();
 }
 
-function lockNumpad(sec, padId, errId) {
-  const btns = document.querySelectorAll('#'+padId+' .pin-key');
+function closeRegister(){
+  document.getElementById('pinRegMode').classList.add('hidden');
+  document.getElementById('pinUnlockMode').classList.remove('hidden');
+  P.reg={ phase:'', name:'', pin:'', buf:'', editId:'' };
+  P.buf=''; updateDots('pd','');
+  // ถ้าเปิดมาจากหน้าตั้งค่า (ล็อกอินอยู่แล้ว) ให้ปิด overlay กลับไป
+  if(localStorage.getItem('qc_current_user')) document.getElementById('pinOverlay').classList.add('hidden');
+}
+
+function renderRegStep(){
+  const ph=P.reg.phase;
+  P.reg.buf=''; updateDots('rd','');
+  document.getElementById('regErr').textContent='';
+  const en=document.getElementById('regErrName'); if(en) en.textContent='';
+  document.getElementById('regNameWrap').classList.toggle('hidden', ph!=='name');
+  document.getElementById('regPadWrap').classList.toggle('hidden', ph==='name');
+  const label={
+    newmaster : 'ตั้ง Master PIN ของ Supervisor (6 หลัก)',
+    newmaster2: 'กรอก Master PIN อีกครั้งเพื่อยืนยัน',
+    master    : '🔐 ยืนยันตัวตน — กรอก Master PIN',
+    name      : 'ตั้งชื่อผู้ใช้ (จะใช้เป็นชื่อผู้ตรวจในรายงาน)',
+    pin       : `ตั้ง PIN 6 หลักของ "${P.reg.name}"`,
+    confirm   : 'กรอก PIN อีกครั้งเพื่อยืนยัน'
+  };
+  document.getElementById('regStepLabel').textContent = label[ph] || '';
+  if(ph==='name') setTimeout(()=>{ const rn=document.getElementById('regName'); if(rn) rn.focus(); },100);
+}
+
+function regKey(n){
+  if(P.reg.buf.length>=6) return;
+  P.reg.buf+=n; updateDots('rd',P.reg.buf);
+  if(P.reg.buf.length===6) setTimeout(regSubmit,80);
+}
+function regDel(){ P.reg.buf=P.reg.buf.slice(0,-1); updateDots('rd',P.reg.buf); }
+
+function regFail(msg, backPhase){
+  flashError('rd',6);
+  document.getElementById('regErr').textContent=msg;
+  setTimeout(()=>{ P.reg.phase=backPhase; renderRegStep(); },900);
+}
+
+function regNameNext(){
+  const v=document.getElementById('regName').value.trim();
+  const errEl=document.getElementById('regErrName');
+  if(v.length<2){ errEl.textContent='กรุณากรอกชื่ออย่างน้อย 2 ตัวอักษร'; return; }
+  if(/^\d+$/.test(v)){ errEl.textContent='⚠ ช่องนี้คือ "ชื่อ" ไม่ใช่ PIN — ห้ามเป็นตัวเลขล้วน'; return; }
+  if(getUsers().some(u=>u.name.toLowerCase()===v.toLowerCase())){ errEl.textContent='ชื่อนี้มีอยู่แล้ว'; return; }
+  errEl.textContent='';
+  P.reg.name=v; P.reg.phase='pin'; renderRegStep();
+}
+
+async function regSubmit(){
+  const ph=P.reg.phase;
+  let h;
+  try { h = await hashPIN(P.reg.buf); }
+  catch(err){
+    console.error('hashPIN failed:', err);
+    document.getElementById('regErr').textContent='⚠ ต้องเปิดผ่าน https เท่านั้น';
+    P.reg.buf=''; updateDots('rd','');
+    return;
+  }
+
+  if(ph==='newmaster'){ P.reg.pin=P.reg.buf; P.reg.phase='newmaster2'; renderRegStep(); return; }
+
+  if(ph==='newmaster2'){
+    if(P.reg.buf!==P.reg.pin){ regFail('PIN ไม่ตรงกัน ลองใหม่','newmaster'); return; }
+    localStorage.setItem('qc_master_hash', h);
+    toast('✅ ตั้ง Master PIN สำเร็จ');
+    P.reg={phase:'',name:'',pin:'',buf:'',editId:''};
+    initPinLock();
+    return;
+  }
+
+  if(ph==='master'){
+    if(h !== localStorage.getItem('qc_master_hash')){ regFail('Master PIN ไม่ถูกต้อง','master'); return; }
+    P.reg.phase='name'; renderRegStep(); return;
+  }
+
+  if(ph==='pin'){
+    const taken = getUsers().some(u => u.hash===h && u.id!==P.reg.editId);
+    if(taken || h===localStorage.getItem('qc_master_hash')){
+      regFail('PIN นี้มีคนใช้แล้ว กรุณาตั้งเลขอื่น','pin'); return;
+    }
+    P.reg.pin=P.reg.buf; P.reg.phase='confirm'; renderRegStep(); return;
+  }
+
+  if(ph==='confirm'){
+    if(P.reg.buf!==P.reg.pin){ regFail('PIN ไม่ตรงกัน ลองใหม่','pin'); return; }
+    const us=getUsers();
+    if(P.reg.editId){
+      const t=us.find(u=>u.id===P.reg.editId);
+      if(t){ t.hash=h; saveUsers(us); toast('✅ เปลี่ยน PIN ของ '+t.name+' สำเร็จ'); }
+    } else {
+      us.push({ id:'u'+Date.now().toString(36), name:P.reg.name, hash:h, created:new Date().toISOString().slice(0,10) });
+      saveUsers(us);
+      toast('✅ ลงทะเบียน '+P.reg.name+' สำเร็จ');
+    }
+    closeRegister();
+    updatePinStatusUI();
+    return;
+  }
+}
+
+// ---- SHARED UI HELPERS ----
+function flashError(prefix, count){
+  for(let i=0;i<count;i++){ const d=document.getElementById(prefix+i); if(d){ d.classList.remove('filled'); d.classList.add('error'); } }
+  setTimeout(()=>{ for(let i=0;i<count;i++){ const d=document.getElementById(prefix+i); if(d) d.classList.remove('error'); } },700);
+}
+
+function lockNumpad(sec, padId, errId){
+  const btns=document.querySelectorAll('#'+padId+' .pin-key');
   btns.forEach(b=>b.disabled=true);
   let s=sec;
-  const iv=setInterval(()=>{ s--; document.getElementById(errId).textContent=`รอ ${s} วินาที...`;
-    if(s<=0){clearInterval(iv);btns.forEach(b=>b.disabled=false);P.attempts=0;document.getElementById(errId).textContent='';}
+  const iv=setInterval(()=>{
+    s--; document.getElementById(errId).textContent=`รอ ${s} วินาที...`;
+    if(s<=0){ clearInterval(iv); btns.forEach(b=>b.disabled=false); document.getElementById(errId).textContent=''; P.attempts=0; }
   },1000);
 }
 
-function updateDots(prefix, buf, count=6) {
+function updateDots(prefix, buf, count=6){
   for(let i=0;i<count;i++){
-    const d=document.getElementById(prefix+i); if(!d) return;
+    const d=document.getElementById(prefix+i);
+    if(!d) continue;
+    d.classList.remove('success','error');
     d.classList.toggle('filled', i < buf.length);
-    d.classList.remove('error','success');
   }
 }
 
-// ---- MASTER PIN ----
-function showMasterInput() {
-  P.masterMode = true; P.masterBuf = '';
-  document.getElementById('masterInputWrap').classList.remove('hidden');
-  document.getElementById('pinMasterLink').classList.add('hidden');
-}
-function masterKey(n) {
-  if(P.masterBuf.length >= 6) return;
-  P.masterBuf += n; updateDots('md', P.masterBuf);
-  if(P.masterBuf.length === 6) setTimeout(checkMaster, 80);
-}
-function masterDel() { P.masterBuf=P.masterBuf.slice(0,-1); updateDots('md',P.masterBuf); }
-async function checkMaster() {
-  const h = await hashPIN(P.masterBuf);
-  if(h === localStorage.getItem('qc_master_hash')) {
-    P.empId = 'ADMIN'; P.empName = 'QC Supervisor';
-    localStorage.setItem('qc_current_user', JSON.stringify({id:'ADMIN',name:'QC Supervisor'}));
-    unlockSuccess('md');
-  } else {
-    flashError('md',6); document.getElementById('masterErr').textContent='Master PIN ไม่ถูกต้อง';
-    setTimeout(()=>{ P.masterBuf=''; updateDots('md',P.masterBuf); document.getElementById('masterErr').textContent=''; },800);
-  }
-}
-
-// ---- FIRST SETUP (Master PIN only) ----
-let _masterConfirm = '';
-function setupKey(n) {
-  if(P.setupPhase==='master') {
-    if(!_masterConfirm) {
-      if(P.masterBuf.length>=6) return;
-      P.masterBuf += n; updateDots('msd',P.masterBuf);
-      if(P.masterBuf.length===6) {
-        _masterConfirm = P.masterBuf; P.masterBuf='';
-        document.getElementById('setupLabel').textContent='กรอก Master PIN อีกครั้งเพื่อยืนยัน';
-        updateDots('msd',P.masterBuf);
-      }
-    } else {
-      if(P.masterBuf.length>=6) return;
-      P.masterBuf+=n; updateDots('msd',P.masterBuf);
-      if(P.masterBuf.length===6) setTimeout(confirmMasterSetup,80);
-    }
-  }
-}
-function setupDel() { P.masterBuf=P.masterBuf.slice(0,-1); updateDots('msd',P.masterBuf); }
-async function confirmMasterSetup() {
-  if(P.masterBuf !== _masterConfirm) {
-    flashError('msd',6); document.getElementById('masterSetupErr').textContent='PIN ไม่ตรงกัน ลองใหม่';
-    setTimeout(()=>{ P.masterBuf=''; _masterConfirm=''; document.getElementById('setupLabel').textContent='กรอก Master PIN 6 หลัก'; updateDots('msd',P.masterBuf); document.getElementById('masterSetupErr').textContent=''; },800);
-    return;
-  }
-  const mh = await hashPIN(P.masterBuf);
-  localStorage.setItem('qc_master_hash', mh);
-  for(let i=0;i<6;i++){const d=document.getElementById('msd'+i);if(d){d.classList.add('success');d.classList.remove('filled');}}
-  toast('✅ ตั้ง Master PIN สำเร็จ! ตั้งค่า Google Sheet ใน Settings');
-  P.empId='ADMIN'; P.empName='QC Supervisor';
-  localStorage.setItem('qc_current_user', JSON.stringify({id:'ADMIN',name:'QC Supervisor'}));
-  setTimeout(()=>{ document.getElementById('pinOverlay').classList.add('hidden'); updatePinStatusUI(); },500);
-}
-
-// ---- SETTINGS ACTIONS ----
-function lockNow() {
-  P.empId=''; P.empName=''; P.buf=''; P.masterBuf=''; P.masterMode=false; P.attempts=0;
+// ---- SESSION ----
+function lockNow(){
+  P.empId=''; P.empName=''; P.isAdmin=false; P.buf=''; P.attempts=0;
   localStorage.removeItem('qc_current_user');
   document.getElementById('pinOverlay').classList.remove('hidden');
-  document.getElementById('empIdInput').value='';
-  document.getElementById('empIdErr').textContent='';
-  document.getElementById('pinErr').textContent='';
-  document.getElementById('masterErr').textContent='';
-  document.getElementById('masterInputWrap').classList.add('hidden');
-  document.getElementById('empIdStep').classList.remove('hidden');
-  document.getElementById('pinStep').classList.add('hidden');
-  updateDots('pd',''); updateDots('md','');
   initPinLock();
+  updatePinStatusUI();
 }
 
-function changePIN() {
-  // Employee changes their own local PIN
-  const id = P.empId;
-  if(!id || id==='ADMIN') { toast('⚠ เข้าสู่ระบบก่อนเปลี่ยน PIN'); return; }
-  const np = prompt(`ตั้ง PIN ใหม่ 6 หลักสำหรับ ${id}:`);
-  if(!np || np.length!==6 || !/^\d+$/.test(np)) { toast('❌ PIN ต้องเป็นตัวเลข 6 หลัก'); return; }
-  const np2 = prompt('กรอกอีกครั้งเพื่อยืนยัน:');
-  if(np !== np2) { toast('❌ PIN ไม่ตรงกัน'); return; }
-  hashPIN(np).then(h => {
-    localStorage.setItem('qc_pin_' + id, h);
-    toast('✅ เปลี่ยน PIN สำเร็จ');
-  });
+function changePIN(){
+  const cur=JSON.parse(localStorage.getItem('qc_current_user')||'null');
+  if(!cur){ toast('⚠ เข้าสู่ระบบก่อน'); return; }
+  if(cur.admin){ toast('⚠ Master PIN เปลี่ยนได้จากปุ่มด้านล่าง'); return; }
+  document.getElementById('pinOverlay').classList.remove('hidden');
+  document.getElementById('pinUnlockMode').classList.add('hidden');
+  document.getElementById('pinRegMode').classList.remove('hidden');
+  document.getElementById('regTitle').textContent='🔑 เปลี่ยน PIN ของฉัน';
+  document.getElementById('regCancel').style.display='';
+  P.reg={ phase:'pin', name:cur.name, pin:'', buf:'', editId:cur.id };
+  renderRegStep();
 }
 
-async function testSheetConnection() {
-  const url = document.getElementById('sheetUrl').value.trim();
-  if(!url) { toast('⚠ กรุณากรอก URL ก่อน'); return; }
-  toast('🔗 กำลังทดสอบ...');
-  const data = await fetchAllowlist(url);
-  if(data && data.length > 0) {
-    P.sheetData = data; P.sheetLoaded = true;
-    toast(`✅ เชื่อมต่อสำเร็จ พบ ${data.length} รายชื่อ`);
-    document.getElementById('sheetStatus').textContent = `✅ ${data.length} คน Active: ${data.filter(e=>e.active).length}`;
-    document.getElementById('sheetStatus').style.color = 'var(--accent-green)';
-    localStorage.setItem('qc_sheet_url', url);
-  } else {
-    toast('❌ เชื่อมต่อไม่ได้ — ตรวจสอบ URL และการ Publish');
-    document.getElementById('sheetStatus').textContent = '❌ เชื่อมต่อไม่ได้';
-    document.getElementById('sheetStatus').style.color = 'var(--accent-red)';
+// ---- USER MANAGEMENT (Supervisor only) ----
+function renderUserList(){
+  const box=document.getElementById('userListBox');
+  if(!box) return;
+  const cur=JSON.parse(localStorage.getItem('qc_current_user')||'null');
+  if(!cur || !cur.admin){
+    box.innerHTML='<div class="user-empty">🔒 เข้าสู่ระบบด้วย Master PIN เพื่อจัดการผู้ใช้</div>';
+    return;
   }
+  const us=getUsers();
+  if(!us.length){ box.innerHTML='<div class="user-empty">ยังไม่มีผู้ใช้ลงทะเบียน</div>'; return; }
+  box.innerHTML=us.map(u=>
+    `<div class="user-row"><span>👤 ${esc(u.name)}<span class="user-date"> · ${esc(u.created||'')}</span></span>`+
+    `<span><button class="user-mini-btn" title="รีเซ็ต PIN" onclick="resetUserPin('${u.id}')">🔑</button>`+
+    `<button class="user-mini-btn danger" title="ลบผู้ใช้" onclick="deleteUser('${u.id}')">🗑</button></span></div>`
+  ).join('');
 }
 
-function updatePinStatusUI() {
-  const user = JSON.parse(localStorage.getItem('qc_current_user') || 'null');
-  const el = document.getElementById('pinStatus');
-  if(el) {
-    el.textContent = user ? `👤 ${user.name} (${user.id})` : '—';
+function resetUserPin(id){
+  const cur=JSON.parse(localStorage.getItem('qc_current_user')||'null');
+  if(!cur || !cur.admin){ toast('⚠ ต้องเข้าด้วย Master PIN'); return; }
+  const u=getUsers().find(x=>x.id===id);
+  if(!u) return;
+  document.getElementById('pinOverlay').classList.remove('hidden');
+  document.getElementById('pinUnlockMode').classList.add('hidden');
+  document.getElementById('pinRegMode').classList.remove('hidden');
+  document.getElementById('regTitle').textContent='🔑 ตั้ง PIN ใหม่';
+  document.getElementById('regCancel').style.display='';
+  P.reg={ phase:'pin', name:u.name, pin:'', buf:'', editId:u.id };
+  renderRegStep();
+}
+
+function deleteUser(id){
+  const cur=JSON.parse(localStorage.getItem('qc_current_user')||'null');
+  if(!cur || !cur.admin){ toast('⚠ ต้องเข้าด้วย Master PIN'); return; }
+  const us=getUsers();
+  const u=us.find(x=>x.id===id);
+  if(!u) return;
+  if(!confirm(`ลบผู้ใช้ "${u.name}" ออกจากเครื่องนี้?\nเขาจะเข้าใช้งานไม่ได้จนกว่าจะลงทะเบียนใหม่`)) return;
+  saveUsers(us.filter(x=>x.id!==id));
+  toast('🗑 ลบ '+u.name+' แล้ว');
+  updatePinStatusUI();
+}
+
+function addUserFromSettings(){
+  const cur=JSON.parse(localStorage.getItem('qc_current_user')||'null');
+  if(!cur || !cur.admin){ toast('⚠ ต้องเข้าด้วย Master PIN'); return; }
+  document.getElementById('pinOverlay').classList.remove('hidden');
+  P.reg={ phase:'name', name:'', pin:'', buf:'', editId:'' };
+  document.getElementById('pinUnlockMode').classList.add('hidden');
+  document.getElementById('pinRegMode').classList.remove('hidden');
+  document.getElementById('regTitle').textContent='ลงทะเบียนผู้ใช้ใหม่';
+  document.getElementById('regCancel').style.display='';
+  const rn=document.getElementById('regName'); if(rn) rn.value='';
+  renderRegStep();
+}
+
+function changeMasterPIN(){
+  const cur=JSON.parse(localStorage.getItem('qc_current_user')||'null');
+  if(!cur || !cur.admin){ toast('⚠ ต้องเข้าด้วย Master PIN'); return; }
+  document.getElementById('pinOverlay').classList.remove('hidden');
+  document.getElementById('pinUnlockMode').classList.add('hidden');
+  document.getElementById('pinRegMode').classList.remove('hidden');
+  document.getElementById('regTitle').textContent='🔐 เปลี่ยน Master PIN';
+  document.getElementById('regCancel').style.display='';
+  P.reg={ phase:'newmaster', name:'', pin:'', buf:'', editId:'' };
+  renderRegStep();
+}
+
+function updatePinStatusUI(){
+  const user=JSON.parse(localStorage.getItem('qc_current_user')||'null');
+  const el=document.getElementById('pinStatus');
+  if(el){
+    el.textContent = user ? (user.admin ? '👑 '+user.name : '👤 '+user.name) : '—';
     el.style.color = user ? 'var(--accent-green)' : 'var(--accent-amber)';
   }
-  const ss = document.getElementById('sheetStatus');
-  if(ss && P.sheetLoaded) {
-    const active = P.sheetData ? P.sheetData.filter(e=>e.active).length : 0;
-    const total = P.sheetData ? P.sheetData.length : 0;
-    ss.textContent = `✅ ${active}/${total} Active`;
-    ss.style.color = 'var(--accent-green)';
-  } else if(ss) {
-    ss.textContent = P.sheetLoaded===false ? '⚠ ไม่ได้ตั้งค่า' : '—';
-    ss.style.color = 'var(--accent-amber)';
-  }
-  // Load sheet url into field
-  const su = document.getElementById('sheetUrl');
-  if(su) su.value = localStorage.getItem('qc_sheet_url') || '';
+  const cnt=document.getElementById('userCount');
+  if(cnt) cnt.textContent = getUsers().length + ' คน';
+  renderUserList();
 }
 
 window.addEventListener('DOMContentLoaded', ()=>{ initPinLock(); updatePinStatusUI(); });
@@ -1204,13 +1243,15 @@ function loadSettings() {
     const raw = localStorage.getItem('qc_settings');
     if (raw) {
       const s = JSON.parse(raw);
+      // v2.10: เปลี่ยนมาใช้ ΔE2000 — ค่าเกณฑ์เดิมที่ตั้งไว้สำหรับ ΔE76 ใช้ไม่ได้แล้ว รีเซ็ตครั้งเดียว
+      const _de00Done = localStorage.getItem('qc_th_de00_migrated');
+      if (!_de00Done) { delete s.thPass; delete s.thWarn; localStorage.setItem('qc_th_de00_migrated','1'); }
       if (s.thPass !== undefined) document.getElementById('thPass').value = s.thPass;
       if (s.thWarn !== undefined) document.getElementById('thWarn').value = s.thWarn;
       if (s.product !== undefined) document.getElementById('fieldProduct').value = s.product;
       if (s.lot !== undefined) document.getElementById('fieldLot').value = s.lot;
       if (s.supplier !== undefined) document.getElementById('fieldSupplier').value = s.supplier;
       if (s.inspector !== undefined) document.getElementById('fieldInspector').value = s.inspector;
-      if (s.sheetUrl !== undefined) { localStorage.setItem('qc_sheet_url', s.sheetUrl); }
     }
   } catch(e) {}
   updateSessionBadge();
@@ -1223,8 +1264,7 @@ function saveSettings() {
       product: document.getElementById('fieldProduct').value,
       lot: document.getElementById('fieldLot').value,
       supplier: document.getElementById('fieldSupplier').value,
-      inspector: document.getElementById('fieldInspector').value,
-      sheetUrl: document.getElementById('sheetUrl') ? document.getElementById('sheetUrl').value : localStorage.getItem('qc_sheet_url') || ''
+      inspector: document.getElementById('fieldInspector').value
     };
     localStorage.setItem('qc_settings', JSON.stringify(s));
   } catch(e) {}
@@ -1266,7 +1306,7 @@ function switchTab(t) {
   document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+t).classList.add('active');
-  document.querySelectorAll('.nav-btn')[{compare:0,history:1,settings:2}[t]].classList.add('active');
+  document.querySelectorAll('.nav-btn')[{compare:0,coa:1,history:2,settings:3}[t]].classList.add('active');
   if(t==='history') renderLogs();
   if(t==='settings') updateStorageInfo();
 }
@@ -1283,19 +1323,70 @@ function rgb2xyz(r,g,b){const lr=s2l(r),lg=s2l(g),lb=s2l(b);return[lr*.4124564+l
 function xyz2lab(x,y,z){const f=t=>t>.008856?Math.cbrt(t):7.787*t+16/116;return[116*f(y/1)-16,500*(f(x/.95047)-f(y/1)),200*(f(y/1)-f(z/1.08883))]}
 function rgb2lab(r,g,b){return xyz2lab(...rgb2xyz(r,g,b))}
 function dE76(a,b){return Math.sqrt((a[0]-b[0])**2+(a[1]-b[1])**2+(a[2]-b[2])**2)}
+// CIE ΔE2000 — สูตรมาตรฐานอุตสาหกรรม ถ่วงน้ำหนักตามการรับรู้ของสายตา
+function dE00(l1,l2,kL,kC,kH){
+  kL=kL||1;kC=kC||1;kH=kH||1;
+  const L1=l1[0],a1=l1[1],b1=l1[2],L2=l2[0],a2=l2[1],b2=l2[2];
+  const DEG=Math.PI/180,RAD=180/Math.PI,P25=Math.pow(25,7);
+  const C1=Math.sqrt(a1*a1+b1*b1),C2=Math.sqrt(a2*a2+b2*b2),Cb=(C1+C2)/2;
+  const Cb7=Math.pow(Cb,7);
+  const G=0.5*(1-Math.sqrt(Cb7/(Cb7+P25)));
+  const a1p=(1+G)*a1,a2p=(1+G)*a2;
+  const C1p=Math.sqrt(a1p*a1p+b1*b1),C2p=Math.sqrt(a2p*a2p+b2*b2);
+  let h1p=Math.atan2(b1,a1p)*RAD; if(h1p<0)h1p+=360;
+  let h2p=Math.atan2(b2,a2p)*RAD; if(h2p<0)h2p+=360;
+  const dLp=L2-L1,dCp=C2p-C1p;
+  let dhp=0;
+  if(C1p*C2p!==0){dhp=h2p-h1p; if(dhp>180)dhp-=360; else if(dhp<-180)dhp+=360;}
+  const dHp=2*Math.sqrt(C1p*C2p)*Math.sin((dhp/2)*DEG);
+  const Lbp=(L1+L2)/2,Cbp=(C1p+C2p)/2;
+  let hbp=h1p+h2p;
+  if(C1p*C2p!==0){
+    if(Math.abs(h1p-h2p)>180) hbp+=(hbp<360)?360:-360;
+    hbp/=2;
+  }
+  const T=1-0.17*Math.cos((hbp-30)*DEG)+0.24*Math.cos((2*hbp)*DEG)
+         +0.32*Math.cos((3*hbp+6)*DEG)-0.20*Math.cos((4*hbp-63)*DEG);
+  const dTh=30*Math.exp(-Math.pow((hbp-275)/25,2));
+  const Cbp7=Math.pow(Cbp,7);
+  const Rc=2*Math.sqrt(Cbp7/(Cbp7+P25));
+  const Sl=1+(0.015*Math.pow(Lbp-50,2))/Math.sqrt(20+Math.pow(Lbp-50,2));
+  const Sc=1+0.045*Cbp;
+  const Sh=1+0.015*Cbp*T;
+  const Rt=-Math.sin((2*dTh)*DEG)*Rc;
+  const tL=dLp/(kL*Sl),tC=dCp/(kC*Sc),tH=dHp/(kH*Sh);
+  return Math.sqrt(tL*tL+tC*tC+tH*tH+Rt*tC*tH);
+}
 function rgb2hsl(r,g,b){r/=255;g/=255;b/=255;const mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn;let h=0,s=0,l=(mx+mn)/2;if(d){s=l>.5?d/(2-mx-mn):d/(mx+mn);if(mx===r)h=((g-b)/d+(g<b?6:0))/6;else if(mx===g)h=((b-r)/d+2)/6;else h=((r-g)/d+4)/6}return[Math.round(h*360),Math.round(s*100),Math.round(l*100)]}
 function rgb2cmyk(r,g,b){if(!r&&!g&&!b)return[0,0,0,100];const c=1-r/255,m=1-g/255,y=1-b/255,k=Math.min(c,m,y);return[Math.round((c-k)/(1-k)*100),Math.round((m-k)/(1-k)*100),Math.round((y-k)/(1-k)*100),Math.round(k*100)]}
 function rgb2hex(r,g,b){return'#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('').toUpperCase()}
 
 function roiB(w,h){if(S.roi==='center50'){const rw=w*.5,rh=h*.5;return[~~((w-rw)/2),~~((h-rh)/2),~~rw,~~rh]}if(S.roi==='center25'){const rw=w*.25,rh=h*.25;return[~~((w-rw)/2),~~((h-rh)/2),~~rw,~~rh]}return[0,0,w,h]}
-function avgLab(c,x){const[rx,ry,rw,rh]=roiB(c.width,c.height);const d=x.getImageData(rx,ry,rw,rh).data;let tL=0,tA=0,tB=0,n=0;const st=d.length>400000?16:4;for(let i=0;i<d.length;i+=st){const[l,a,b]=rgb2lab(d[i],d[i+1],d[i+2]);tL+=l;tA+=a;tB+=b;n++}return[tL/n,tA/n,tB/n]}
+function avgLab(c,x){
+  const[rx,ry,rw,rh]=roiB(c.width,c.height);
+  const d=x.getImageData(rx,ry,rw,rh).data;
+  const total=d.length/4;
+  const step=Math.max(1,Math.floor(total/40000)); // สุ่มไม่เกิน 40,000 จุด กันแท็บเล็ตค้าง
+  const Ls=[],As=[],Bs=[];
+  let clip=0,n=0;
+  for(let p=0;p<total;p+=step){
+    const i=p*4,r=d[i],g=d[i+1],bl=d[i+2];
+    n++;
+    if(r>=250&&g>=250&&bl>=250) clip++;   // พิกเซลขาวตัน = แสงสะท้อน
+    const lab=rgb2lab(r,g,bl);
+    Ls.push(lab[0]);As.push(lab[1]);Bs.push(lab[2]);
+  }
+  const med=arr=>{arr.sort((p,q)=>p-q);const m=arr.length>>1;return arr.length%2?arr[m]:(arr[m-1]+arr[m])/2};
+  avgLab.lastGlare = n ? clip/n : 0;
+  return [med(Ls),med(As),med(Bs)];   // มัธยฐาน = ไม่โดนจุดสะท้อนดึงค่า
+}
 function avgRGB(c,x){const[rx,ry,rw,rh]=roiB(c.width,c.height);const d=x.getImageData(rx,ry,rw,rh).data;let r=0,g=0,b=0,n=0;const st=d.length>400000?16:4;for(let i=0;i<d.length;i+=st){r+=d[i];g+=d[i+1];b+=d[i+2];n++}return[Math.round(r/n),Math.round(g/n),Math.round(b/n)]}
 function hCorr(x1,w1,h1,x2,w2,h2){function bh(x,w,h){const[rx,ry,rw,rh]=roiB(w,h);const d=x.getImageData(rx,ry,rw,rh).data;const bi=32,hR=new Float64Array(bi),hG=new Float64Array(bi),hB=new Float64Array(bi);let n=0;const st=d.length>400000?16:4;for(let i=0;i<d.length;i+=st){hR[~~(d[i]/8)]++;hG[~~(d[i+1]/8)]++;hB[~~(d[i+2]/8)]++;n++}for(let j=0;j<bi;j++){hR[j]/=n;hG[j]/=n;hB[j]/=n}return{r:hR,g:hG,b:hB}}function cr(a,b){let s=0,a2=0,b2=0;const ma=a.reduce((s,v)=>s+v,0)/a.length,mb=b.reduce((s,v)=>s+v,0)/b.length;for(let i=0;i<a.length;i++){const da=a[i]-ma,db=b[i]-mb;s+=da*db;a2+=da*da;b2+=db*db}const dn=Math.sqrt(a2*b2);return dn?s/dn:0}const h1d=bh(x1,w1,h1),h2d=bh(x2,w2,h2);return(cr(h1d.r,h2d.r)+cr(h1d.g,h2d.g)+cr(h1d.b,h2d.b))/3*100}
 
 function getSessionMeta() {
   const user = JSON.parse(localStorage.getItem('qc_current_user') || 'null');
   const inspector = document.getElementById('fieldInspector').value.trim() ||
-    (user ? user.name + ' (' + user.id + ')' : '');
+    (user ? user.name : '');
   return {
     product: document.getElementById('fieldProduct').value.trim() || '',
     lot: document.getElementById('fieldLot').value.trim() || '',
@@ -1343,7 +1434,7 @@ function descriptorTagsHTML(desc, verdictCls) {
   </div>`;
 }
 
-function getTh(){return{pass:parseFloat(document.getElementById('thPass').value)||5,warn:parseFloat(document.getElementById('thWarn').value)||10}}
+function getTh(){return{pass:parseFloat(document.getElementById('thPass').value)||2,warn:parseFloat(document.getElementById('thWarn').value)||3}}
 function getV(dE){const th=getTh();if(dE<=th.pass)return{text:'✅ PASS',cls:'verdict-pass',color:'var(--accent-green)'};if(dE<=th.warn)return{text:'⚠️ WARNING',cls:'verdict-warning',color:'var(--accent-amber)'};return{text:'❌ FAIL',cls:'verdict-fail',color:'var(--accent-red)'}}
 
 // ===== AREA IMAGE =====
@@ -1447,7 +1538,7 @@ function checkPt(){
   // Apply calibration offset before comparison
   const labStdCal = applyCalibration(S.pStdLab);
   const labSmpCal = applyCalibration(S.pSmpLab);
-  const dE=dE76(labStdCal,labSmpCal),sim=Math.max(0,Math.min(100,100-dE)),v=getV(dE);
+  const dE=dE00(labStdCal,labSmpCal),sim=Math.max(0,Math.min(100,100-dE)),v=getV(dE);
   const _pdesc=getDeltaDescriptor(labStdCal,labSmpCal);
   // ---- UPDATE PICKER SUMMARY CARD (top) ----
   const card=document.getElementById('pickerSummaryCard');
@@ -1521,13 +1612,16 @@ function analyzeArea(){
       const c2=document.getElementById('cB'),x2=c2.getContext('2d',{willReadFrequently:true,colorSpace:'srgb'});
       c2.width=bmpSmp.width||bmpSmp.naturalWidth;c2.height=bmpSmp.height||bmpSmp.naturalHeight;x2.drawImage(bmpSmp,0,0);
       if(bmpStd.close)bmpStd.close();if(bmpSmp.close)bmpSmp.close();
-      const lSraw=avgLab(c1,x1),lMraw=avgLab(c2,x2),lS=applyCalibration(lSraw),lM=applyCalibration(lMraw),dE=dE76(lS,lM),sim=Math.max(0,Math.min(100,100-dE));
+      const lSraw=avgLab(c1,x1),_glareS=avgLab.lastGlare,lMraw=avgLab(c2,x2),_glareM=avgLab.lastGlare,lS=applyCalibration(lSraw),lM=applyCalibration(lMraw),dE=dE00(lS,lM),sim=Math.max(0,Math.min(100,100-dE));
       const hS=hCorr(x1,c1.width,c1.height,x2,c2.width,c2.height),rS=avgRGB(c1,x1),rM=avgRGB(c2,x2);
       const v=getV(dE);const now=new Date();
       const ts=now.toLocaleString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
       S.lastR={similarity:sim.toFixed(1),deltaE:dE.toFixed(2),histSim:hS.toFixed(1),verdict:v.text,verdictClass:v.cls,labStd:lS,labSample:lM,rgbStd:rS,rgbSample:rM,timestamp:ts,roi:S.roi};
       const _desc=getDeltaDescriptor(lS,lM);const _descHTML=descriptorTagsHTML(_desc,v.cls);
-      document.getElementById('areaResults').innerHTML=`<div class="results-card"><div class="results-header"><span class="results-title">📊 ผลวิเคราะห์</span><span class="result-timestamp">${ts}</span></div><div class="score-display"><div class="score-value" style="color:${v.color}">${sim.toFixed(1)}<span class="score-unit">%</span></div><div class="score-label">Color Similarity (LAB ΔE*76)</div><span class="verdict-badge ${v.cls}">${v.text}</span>${_descHTML}</div><div class="color-swatches"><div class="swatch-group"><span class="swatch-label">STD</span><div class="swatch-color" style="background:rgb(${rS.join(',')})"></div></div><span class="swatch-arrow">→</span><div class="swatch-group"><div class="swatch-color" style="background:rgb(${rM.join(',')})"></div><span class="swatch-label">Sample</span></div></div><div class="detail-grid"><div class="detail-item"><div class="detail-label">ΔE</div><div class="detail-value">${dE.toFixed(2)}</div></div><div class="detail-item"><div class="detail-label">Histogram</div><div class="detail-value">${hS.toFixed(1)}%</div></div><div class="detail-item"><div class="detail-label">STD LAB</div><div class="detail-value" style="font-size:11px">${lS.map(v=>v.toFixed(1)).join(' / ')}</div></div><div class="detail-item"><div class="detail-label">Sample LAB</div><div class="detail-value" style="font-size:11px">${lM.map(v=>v.toFixed(1)).join(' / ')}</div></div><div class="detail-item"><div class="detail-label">ΔL* / Δa* / Δb*</div><div class="detail-value" style="font-size:11px">${_desc.dL} / ${_desc.da} / ${_desc.db}</div></div><div class="detail-item"><div class="detail-label">ROI</div><div class="detail-value">${S.roi}</div></div><div class="detail-item"><div class="detail-label">Descriptor</div><div class="detail-value" style="font-size:10px;line-height:1.4">${_desc.text}</div></div><div class="detail-item"><div class="detail-label">Method</div><div class="detail-value">CIE76</div></div></div></div>`;
+      const _glareMax=Math.max(_glareS,_glareM);
+      const _glareHTML=_glareMax>0.02?`<div class="glare-warn">⚠️ พบแสงสะท้อน/จุดขาวตัน ${(_glareMax*100).toFixed(1)}% ของพื้นที่วัด — ค่าที่ได้อาจคลาดเคลื่อน แนะนำถ่ายใหม่โดยเลี่ยงแสงตกกระทบตรงๆ</div>`:'';
+      if(_glareMax>0.02) toast('⚠️ ระวังแสงสะท้อนในภาพ');
+      document.getElementById('areaResults').innerHTML=`<div class="results-card"><div class="results-header"><span class="results-title">📊 ผลวิเคราะห์</span><span class="result-timestamp">${ts}</span></div>${_glareHTML}<div class="score-display"><div class="score-value" style="color:${v.color}">${sim.toFixed(1)}<span class="score-unit">%</span></div><div class="score-label">Color Similarity (LAB ΔE2000)</div><span class="verdict-badge ${v.cls}">${v.text}</span>${_descHTML}</div><div class="color-swatches"><div class="swatch-group"><span class="swatch-label">STD</span><div class="swatch-color" style="background:rgb(${rS.join(',')})"></div></div><span class="swatch-arrow">→</span><div class="swatch-group"><div class="swatch-color" style="background:rgb(${rM.join(',')})"></div><span class="swatch-label">Sample</span></div></div><div class="detail-grid"><div class="detail-item"><div class="detail-label">ΔE</div><div class="detail-value">${dE.toFixed(2)}</div></div><div class="detail-item"><div class="detail-label">Histogram</div><div class="detail-value">${hS.toFixed(1)}%</div></div><div class="detail-item"><div class="detail-label">STD LAB</div><div class="detail-value" style="font-size:11px">${lS.map(v=>v.toFixed(1)).join(' / ')}</div></div><div class="detail-item"><div class="detail-label">Sample LAB</div><div class="detail-value" style="font-size:11px">${lM.map(v=>v.toFixed(1)).join(' / ')}</div></div><div class="detail-item"><div class="detail-label">ΔL* / Δa* / Δb*</div><div class="detail-value" style="font-size:11px">${_desc.dL} / ${_desc.da} / ${_desc.db}</div></div><div class="detail-item"><div class="detail-label">ROI</div><div class="detail-value">${S.roi}</div></div><div class="detail-item"><div class="detail-label">Descriptor</div><div class="detail-value" style="font-size:10px;line-height:1.4">${_desc.text}</div></div><div class="detail-item"><div class="detail-label">Method</div><div class="detail-value">CIE2000</div></div></div></div>`;
       document.getElementById('areaActions').classList.remove('hidden');
       const _sm=getSessionMeta();S.logs.unshift({id:Date.now(),type:'area',timestamp:now.toISOString(),displayTime:ts,similarity:sim.toFixed(1),deltaE:dE.toFixed(2),histSim:hS.toFixed(1),verdict:v.text.replace(/[✅⚠️❌]\s?/g,''),verdictRaw:v.text,labStd:lS.map(v=>v.toFixed(2)),labSample:lM.map(v=>v.toFixed(2)),roi:S.roi,product:_sm.product,lot:_sm.lot,supplier:_sm.supplier,inspector:_sm.inspector,descriptor:_desc.text,dL:_desc.dL,da:_desc.da,db:_desc.db});saveLogs();
     }catch(e){toast('❌ เกิดข้อผิดพลาด');console.error(e)}
@@ -1560,11 +1654,223 @@ function saveResultImage(){
   x.fillStyle='#111827';x.fillRect(0,h-32,w,32);
   x.fillStyle='#64748b';x.font='10px JetBrains Mono';const _smr=getSessionMeta();const footerLeft=r.timestamp+' | Wann Cosmetics QC';const footerRight=(_smr.product||'')+(_smr.lot?' LOT:'+_smr.lot:'');x.fillText(footerLeft,16,h-12);if(footerRight){x.fillStyle='#94a3b8';x.fillText(footerRight,w-x.measureText(footerRight).width-16,h-12);}
 
-  // Show in modal for long-press save
-  const dataUrl = c.toDataURL('image/png');
-  document.getElementById('savePreviewImg').src = dataUrl;
-  document.getElementById('saveModal').classList.remove('hidden');
-  toast('📱 กดค้างที่ภาพเพื่อบันทึก');
+  // Build blob once, show preview modal with real save buttons
+  c.toBlob(function(blob){
+    if(!blob){ toast('❌ สร้างรูปไม่สำเร็จ'); return; }
+    if(SAVEIMG.url) URL.revokeObjectURL(SAVEIMG.url);
+    const _sm=getSessionMeta();
+    const stamp=new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');
+    SAVEIMG.blob=blob;
+    SAVEIMG.name=`PackColorQC_${(_sm.product||'result').replace(/[^\w\u0E00-\u0E7F]/g,'_')}_${stamp}.png`;
+    SAVEIMG.url=URL.createObjectURL(blob);
+    document.getElementById('savePreviewImg').src=SAVEIMG.url;
+    document.getElementById('btnShareImg').style.display=
+      (navigator.canShare && navigator.canShare({files:[new File([blob],'t.png',{type:'image/png'})]})) ? '' : 'none';
+    document.getElementById('saveModal').classList.remove('hidden');
+  },'image/png');
+}
+
+// ===== SAVE IMAGE: real download / share =====
+const SAVEIMG={blob:null,url:null,name:'PackColorQC.png'};
+
+function doSaveImage(mode){
+  if(!SAVEIMG.blob){ toast('❌ ยังไม่มีรูป'); return; }
+  if(mode==='share'){
+    const file=new File([SAVEIMG.blob],SAVEIMG.name,{type:'image/png'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      navigator.share({files:[file],title:'PackColor QC Result'})
+        .then(()=>closeSaveModal())
+        .catch(err=>{ if(err.name!=='AbortError') toast('⚠️ แชร์ไม่สำเร็จ'); });
+    }else{
+      toast('⚠️ เครื่องนี้ไม่รองรับการแชร์ไฟล์');
+    }
+    return;
+  }
+  try{
+    const a=document.createElement('a');
+    a.href=SAVEIMG.url; a.download=SAVEIMG.name;
+    document.body.appendChild(a); a.click(); a.remove();
+    toast('✅ บันทึกแล้ว — ดูในโฟลเดอร์ Download');
+  }catch(err){
+    console.error(err); toast('❌ บันทึกไม่สำเร็จ ลองปุ่มแชร์แทน');
+  }
+}
+
+function closeSaveModal(){
+  document.getElementById('saveModal').classList.add('hidden');
+}
+
+// ===== COA CHECK MODULE =====
+function handleCoaFile(i,t){
+  const f=i.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=e=>{
+    COA[t+'Img']=e.target.result;
+    const imgEl=document.getElementById('img-'+(t==='coa'?'coadoc':'mlabeldoc'));
+    const phEl=document.getElementById('ph-'+(t==='coa'?'coadoc':'mlabeldoc'));
+    imgEl.src=e.target.result; imgEl.classList.remove('hidden'); phEl.classList.add('hidden');
+    updateCoaOcrBtn();
+  };
+  r.readAsDataURL(f); i.value='';
+}
+function clearCoaImage(t){
+  COA[t+'Img']=null;
+  const imgEl=document.getElementById('img-'+(t==='coa'?'coadoc':'mlabeldoc'));
+  const phEl=document.getElementById('ph-'+(t==='coa'?'coadoc':'mlabeldoc'));
+  imgEl.src=''; imgEl.classList.add('hidden'); phEl.classList.remove('hidden');
+  updateCoaOcrBtn();
+}
+function updateCoaOcrBtn(){
+  const btn=document.getElementById('coaOcrBtn');
+  const ready=COA.coaImg && COA.mlabelImg;
+  btn.disabled=!ready;
+  btn.classList.toggle('ready',ready);
+  btn.classList.toggle('disabled',!ready);
+}
+
+async function runCoaOCR(){
+  if(!COA.coaImg || !COA.mlabelImg){toast('⚠️ กรุณาอัปโหลดภาพให้ครบทั้งสองช่อง');return}
+  const wrap=document.getElementById('coaProgressWrap');
+  const fill=document.getElementById('coaProgressFill');
+  const pct=document.getElementById('coaProgressPct');
+  const txt=document.getElementById('coaProgressText');
+  wrap.classList.remove('hidden');
+  document.getElementById('coaFieldsWrap').classList.add('hidden');
+  document.getElementById('coaSummaryWrap').classList.add('hidden');
+  const btn=document.getElementById('coaOcrBtn'); btn.disabled=true; btn.classList.add('disabled');
+
+  try{
+    txt.textContent='กำลังอ่าน COA...';
+    const r1=await Tesseract.recognize(COA.coaImg,'eng+tha',{
+      logger:m=>{ if(m.status==='recognizing text'){const p=Math.round(m.progress*50);fill.style.width=p+'%';pct.textContent=p+'%';} }
+    });
+    COA.coaText=r1.data.text||'';
+    document.getElementById('coaRawText-coa').value=COA.coaText;
+
+    txt.textContent='กำลังอ่านฉลากวัตถุดิบ...';
+    const r2=await Tesseract.recognize(COA.mlabelImg,'eng+tha',{
+      logger:m=>{ if(m.status==='recognizing text'){const p=50+Math.round(m.progress*50);fill.style.width=p+'%';pct.textContent=p+'%';} }
+    });
+    COA.mlabelText=r2.data.text||'';
+    document.getElementById('coaRawText-mlabel').value=COA.mlabelText;
+
+    fill.style.width='100%'; pct.textContent='100%'; txt.textContent='เสร็จสิ้น — กำลังดึงข้อมูล...';
+
+    const extCoa=coaExtractFields(COA.coaText);
+    const extLabel=coaExtractFields(COA.mlabelText);
+    COA.fields.forEach(f=>{
+      document.getElementById('coaVal-'+f+'-coa').value=extCoa[f]||'';
+      document.getElementById('coaVal-'+f+'-mlabel').value=extLabel[f]||'';
+    });
+
+    setTimeout(()=>{wrap.classList.add('hidden')},600);
+    document.getElementById('coaFieldsWrap').classList.remove('hidden');
+    document.getElementById('coaSummaryWrap').classList.remove('hidden');
+    COA.fields.forEach(f=>coaCompareField(f));
+    toast('✅ อ่าน OCR เสร็จแล้ว — กรุณาตรวจสอบความถูกต้อง');
+  }catch(e){
+    console.error(e);
+    toast('❌ OCR ผิดพลาด — กรุณาลองใหม่หรือกรอกมือ');
+    wrap.classList.add('hidden');
+    document.getElementById('coaFieldsWrap').classList.remove('hidden');
+    document.getElementById('coaSummaryWrap').classList.remove('hidden');
+  }finally{
+    btn.disabled=false; btn.classList.remove('disabled');
+  }
+}
+
+// Extract candidate fields from raw OCR text using label keyword + pattern heuristics
+function coaExtractFields(text){
+  const out={name:'',lot:'',mfg:'',exp:'',supplier:''};
+  if(!text) return out;
+  const lines=text.split('\n').map(l=>l.trim()).filter(Boolean);
+  const full=text.replace(/\r/g,'');
+
+  // Lot No. — look for "lot" keyword followed by alnum code
+  let m=full.match(/lot\s*(?:no\.?|number)?\s*[:\-]?\s*([A-Za-z0-9\-\/]{3,20})/i);
+  if(m) out.lot=m[1].trim();
+
+  // Dates — dd/mm/yyyy, dd-mm-yyyy, or yyyy-mm-dd patterns near mfg/production keyword
+  const datePattern='(\\d{1,2}[\\/\\-.]\\d{1,2}[\\/\\-.]\\d{2,4}|\\d{4}[\\/\\-.]\\d{1,2}[\\/\\-.]\\d{1,2})';
+  let mfgM=full.match(new RegExp('(?:mfg|manufactur(?:e|ing)|production|วันที?่?ผลิต)\\D{0,15}'+datePattern,'i'));
+  if(mfgM) out.mfg=mfgM[1];
+  let expM=full.match(new RegExp('(?:exp|expiry|expiration|วันหมดอายุ|วันสิ้นอายุ)\\D{0,15}'+datePattern,'i'));
+  if(expM) out.exp=expM[1];
+  if(!out.mfg || !out.exp){
+    const allDates=[...full.matchAll(new RegExp(datePattern,'g'))].map(x=>x[0]);
+    if(!out.mfg && allDates[0]) out.mfg=allDates[0];
+    if(!out.exp && allDates[1]) out.exp=allDates[1];
+  }
+
+  // Supplier / Manufacturer name
+  let supM=full.match(/(?:manufacturer|supplier|produced by|ผู้ผลิต|จำหน่ายโดย)\s*[:\-]?\s*([^\n]{3,60})/i);
+  if(supM) out.supplier=supM[1].trim();
+
+  // Product / material name — look for "product name" / "material" / "ชื่อ" keyword
+  let nameM=full.match(/(?:product name|material name|item name|ชื่อสินค้า|ชื่อวัตถุดิบ)\s*[:\-]?\s*([^\n]{2,60})/i);
+  if(nameM) out.name=nameM[1].trim();
+  else if(lines[0]) out.name=lines[0].slice(0,60); // fallback: first line, often the title
+
+  return out;
+}
+
+function coaNormalize(s){
+  return (s||'').toLowerCase().replace(/[^a-z0-9ก-๙]/g,'');
+}
+function coaCompareField(f){
+  const a=document.getElementById('coaVal-'+f+'-coa');
+  const b=document.getElementById('coaVal-'+f+'-mlabel');
+  const icon=document.getElementById('coaMatchIcon-'+f);
+  a.classList.remove('match','mismatch'); b.classList.remove('match','mismatch');
+  const av=a.value.trim(), bv=b.value.trim();
+  if(!av || !bv){ icon.textContent='⚠️'; coaUpdateSummary(); return; }
+  const match=coaNormalize(av)===coaNormalize(bv);
+  a.classList.add(match?'match':'mismatch'); b.classList.add(match?'match':'mismatch');
+  icon.textContent=match?'✅':'❌';
+  coaUpdateSummary();
+}
+function coaUpdateSummary(){
+  const verdictEl=document.getElementById('coaSummaryVerdict');
+  const subEl=document.getElementById('coaSummarySub');
+  if(!document.getElementById('coaFieldsWrap') || document.getElementById('coaFieldsWrap').classList.contains('hidden')) return;
+  let pass=0,fail=0,pending=0;
+  COA.fields.forEach(f=>{
+    const t=document.getElementById('coaMatchIcon-'+f).textContent;
+    if(t==='✅') pass++; else if(t==='❌') fail++; else pending++;
+  });
+  if(fail>0){
+    verdictEl.textContent='❌ FAIL — พบข้อมูลไม่ตรงกัน';
+    verdictEl.className='verdict-badge coa-summary-verdict verdict-fail';
+    subEl.textContent=`ไม่ตรงกัน ${fail} รายการ จากทั้งหมด ${COA.fields.length} รายการ — ห้ามรับวัตถุดิบจนกว่าจะตรวจสอบ`;
+  }else if(pending>0){
+    verdictEl.textContent='⚠️ รอตรวจสอบ';
+    verdictEl.className='verdict-badge coa-summary-verdict verdict-warning';
+    subEl.textContent=`กรอกข้อมูลให้ครบ ${pending} รายการที่เหลือ เพื่อสรุปผล`;
+  }else{
+    verdictEl.textContent='✅ PASS — ข้อมูลตรงกันทั้งหมด';
+    verdictEl.className='verdict-badge coa-summary-verdict verdict-pass';
+    subEl.textContent=`ตรงกันครบทั้ง ${COA.fields.length} รายการ`;
+  }
+}
+
+function saveCoaLog(){
+  const now=new Date();
+  const rec={id:Date.now(),type:'coa',timestamp:now.toISOString(),displayTime:now.toLocaleString('th-TH')};
+  let fail=0,pending=0;
+  COA.fields.forEach(f=>{
+    rec[f+'_coa']=document.getElementById('coaVal-'+f+'-coa').value.trim();
+    rec[f+'_mlabel']=document.getElementById('coaVal-'+f+'-mlabel').value.trim();
+    const t=document.getElementById('coaMatchIcon-'+f).textContent;
+    rec[f+'_match']=t==='✅'?'MATCH':t==='❌'?'MISMATCH':'PENDING';
+    if(t==='❌') fail++; else if(t!=='✅') pending++;
+  });
+  rec.verdict = fail>0?'FAIL':pending>0?'WARNING':'PASS';
+  rec.verdictRaw = fail>0?'❌ FAIL':pending>0?'⚠️ PENDING':'✅ PASS';
+  const sm=getSessionMeta();
+  rec.product=sm.product; rec.lot=rec.lot_coa||sm.lot; rec.supplier=rec.supplier_coa||sm.supplier; rec.inspector=sm.inspector;
+  S.logs.unshift(rec);
+  saveLogs();
+  toast('💾 บันทึกผลตรวจ COA แล้ว');
 }
 
 // ===== LOGS =====
@@ -1572,6 +1878,14 @@ function renderLogs(){
   const c=document.getElementById('logList'),cnt=document.getElementById('logCount');cnt.textContent=S.logs.length+' records';
   if(!S.logs.length){c.innerHTML='<div class="log-empty">📋 ยังไม่มีประวัติ</div>';return}
   c.innerHTML=S.logs.map(l=>{
+    if(l.type==='coa'){
+      const sc=l.verdict==='PASS'?'var(--accent-green)':l.verdict==='WARNING'?'var(--accent-amber)':'var(--accent-red)';
+      const vc=l.verdict==='PASS'?'verdict-pass':l.verdict==='WARNING'?'verdict-warning':'verdict-fail';
+      const tb='<span class="log-type-badge type-point">COA</span>';
+      const meta=[l.product,l.lot].filter(Boolean).join(' | ');
+      const fieldSummary=COA.fields.map(f=>(l[f+'_match']==='MISMATCH'?'❌':l[f+'_match']==='MATCH'?'✅':'⚠️')+COA.fieldLabels[f]).join(' ');
+      return `<div class="log-item"><div class="log-score" style="color:${sc};font-size:20px">📄</div><div class="log-info"><div class="log-time">${l.displayTime} ${tb}</div><div class="log-method">${meta?'<span style="color:var(--accent-cyan)">'+meta+'</span>':''}</div><span style="font-size:9px;color:var(--text-muted);display:block;margin-top:2px">${fieldSummary}</span></div><span class="log-verdict ${vc}">${l.verdictRaw||l.verdict}</span></div>`;
+    }
     const sc=l.verdict==='PASS'?'var(--accent-green)':l.verdict==='WARNING'?'var(--accent-amber)':'var(--accent-red)';
     const vc=l.verdict==='PASS'?'verdict-pass':l.verdict==='WARNING'?'verdict-warning':'verdict-fail';
     const tb=l.type==='point'?'<span class="log-type-badge type-point">POINT</span>':'<span class="log-type-badge type-area">AREA</span>';
@@ -1580,9 +1894,25 @@ function renderLogs(){
 }
 function exportCSV(){
   if(!S.logs.length){toast('ℹ️ ไม่มีข้อมูล');return}
-  const h=['Timestamp','Type','Product','Lot','Supplier','Inspector','Similarity(%)','DeltaE','HistCorr(%)','Verdict','Descriptor','dL*','da*','db*','ROI','STD_L','STD_a','STD_b','Sample_L','Sample_a','Sample_b'];
+  const h=['Timestamp','Type','Product','Lot','Supplier','Inspector','Similarity(%)','DeltaE','HistCorr(%)','Verdict','Descriptor','dL*','da*','db*','ROI','STD_L','STD_a','STD_b','Sample_L','Sample_a','Sample_b','COA_Name','Label_Name','Name_Match','COA_Lot','Label_Lot','Lot_Match','COA_Mfg','Label_Mfg','Mfg_Match','COA_Exp','Label_Exp','Exp_Match','COA_Supplier','Label_Supplier','Supplier_Match'];
   let csv='\uFEFF'+h.join(',')+'\n';
-  S.logs.forEach(l=>{const prd=(l.product||'').replace(/,/g,' '),lot=(l.lot||'').replace(/,/g,' '),sup=(l.supplier||'').replace(/,/g,' '),ins=(l.inspector||'').replace(/,/g,' '),desc=(l.descriptor||'').replace(/,/g,' ');csv+=[l.timestamp,l.type||'area',prd,lot,sup,ins,l.similarity,l.deltaE,l.histSim,l.verdict,desc,l.dL||'',l.da||'',l.db||'',l.roi,...(l.labStd||['','','']),...(l.labSample||['','',''])].join(',')+'\n'});
+  S.logs.forEach(l=>{
+    const prd=(l.product||'').replace(/,/g,' '),lot=(l.lot||'').replace(/,/g,' '),sup=(l.supplier||'').replace(/,/g,' '),ins=(l.inspector||'').replace(/,/g,' ');
+    if(l.type==='coa'){
+      const desc=(l.descriptor||'').replace(/,/g,' ');
+      const clean=v=>(v||'').replace(/,/g,' ');
+      csv+=[l.timestamp,'coa',prd,lot,sup,ins,'','','',l.verdict,desc,'','','','','','','','','','',
+        clean(l.name_coa),clean(l.name_mlabel),l.name_match||'',
+        clean(l.lot_coa),clean(l.lot_mlabel),l.lot_match||'',
+        clean(l.mfg_coa),clean(l.mfg_mlabel),l.mfg_match||'',
+        clean(l.exp_coa),clean(l.exp_mlabel),l.exp_match||'',
+        clean(l.supplier_coa),clean(l.supplier_mlabel),l.supplier_match||''
+      ].join(',')+'\n';
+      return;
+    }
+    const desc=(l.descriptor||'').replace(/,/g,' ');
+    csv+=[l.timestamp,l.type||'area',prd,lot,sup,ins,l.similarity,l.deltaE,l.histSim,l.verdict,desc,l.dL||'',l.da||'',l.db||'',l.roi,...(l.labStd||['','','']),...(l.labSample||['','',''])].join(',')+'\n';
+  });
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
   const u=URL.createObjectURL(blob);
   const a=document.createElement('a');a.href=u;a.download=`QC_Log_${new Date().toISOString().slice(0,10)}.csv`;
